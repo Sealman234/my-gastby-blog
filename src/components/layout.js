@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'gatsby';
+import { Link, useStaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -8,8 +8,11 @@ const Container = styled.div`
   font-family: sans-serif;
 `;
 
-const Heading = styled.h1`
-  color: rebeccapurple;
+const SiteTitle = styled.header`
+  font-size: 3rem;
+  color: gray;
+  font-weight: 700;
+  margin: 3rem 0;
 `;
 
 const NavLinks = styled.ul`
@@ -26,10 +29,28 @@ const NavLinkText = styled(Link)`
   color: #000;
 `;
 
+const Heading = styled.h1`
+  color: rebeccapurple;
+`;
+
 const Layout = ({ pageTitle, children }) => {
+  // useStaticQuery
+  const data = useStaticQuery(graphql`
+    query {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `);
+
   return (
     <Container>
-      <title>{pageTitle}</title>
+      <title>
+        {pageTitle} | {data.site.siteMetadata.title}
+      </title>
+      <SiteTitle>{data.site.siteMetadata.title}</SiteTitle>
       <nav>
         <NavLinks>
           <NavLinkItem>
@@ -37,6 +58,9 @@ const Layout = ({ pageTitle, children }) => {
           </NavLinkItem>
           <NavLinkItem>
             <NavLinkText to="/about">About</NavLinkText>
+          </NavLinkItem>
+          <NavLinkItem>
+            <NavLinkText to="/blog">Blog</NavLinkText>
           </NavLinkItem>
         </NavLinks>
       </nav>
