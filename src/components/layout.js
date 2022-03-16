@@ -4,6 +4,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { StaticImage } from 'gatsby-plugin-image';
 import footerImage from '../images/footer-ground.png';
 
+// Global Style
 const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
@@ -15,14 +16,13 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Container = styled.div`
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 1.25rem;
-  min-height: calc(100vh - 148px);
-  height: 100%;
+// Header
+const Header = styled.header`
+  background-image: linear-gradient(to bottom right, #395877, #c5e2f7);
 `;
-
+const HeaderWrapper = styled.div`
+  padding: 1rem;
+`;
 const SiteTitle = styled.h1`
   font-size: 2rem;
   font-weight: bold;
@@ -30,7 +30,7 @@ const SiteTitle = styled.h1`
   text-align: center;
   a {
     text-decoration: none;
-    color: #c1170c;
+    color: #fff;
   }
 `;
 const SiteAvatarWrapper = styled.div`
@@ -44,6 +44,7 @@ const SiteAvatar = styled.div`
   overflow: hidden;
 `;
 const SiteDescription = styled.p`
+  color: #efefef;
   text-align: center;
   font-style: italic;
 `;
@@ -60,31 +61,46 @@ const SiteLinks = styled.div`
     overflow: hidden;
   }
 `;
-
+const HeaderBanner = styled.nav`
+  background-color: #333;
+  max-width: 760px;
+  margin: 0 auto;
+`;
 const NavLinks = styled.ul`
+  margin: 0;
+  padding: 0;
   display: flex;
-  justify-content: center;
   list-style: none;
-  padding-left: 0;
 `;
 const NavLinkItem = styled.li`
-  padding-right: 2rem;
-  &:last-of-type {
-    padding-right: 0;
-  }
-`;
-const NavLinkText = styled(Link)`
-  text-decoration: none;
-  color: #000;
-  &.active {
-    color: #c1170c;
+  padding: 0;
+  > a {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.625rem 0.9375rem;
+    color: #efefef;
+    &.active {
+      background-color: #c1170c;
+    }
   }
 `;
 
+// Main
+const Container = styled.div`
+  max-width: 792px;
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: calc(100vh - 148px);
+  height: 100%;
+`;
 const Heading = styled.h2`
   color: rebeccapurple;
 `;
 
+// Footer
 const Footer = styled.footer`
   height: 148px;
   background-image: url(${footerImage});
@@ -132,11 +148,11 @@ const Layout = ({ pageTitle, children }) => {
   return (
     <Fragment>
       <GlobalStyle />
-      <Container>
-        <title>
-          {pageTitle} | {data.site.siteMetadata.title}
-        </title>
-        <header>
+      <title>
+        {pageTitle} | {data.site.siteMetadata.title}
+      </title>
+      <Header>
+        <HeaderWrapper>
           <SiteTitle>
             <Link to="/">海豹人的第一個家</Link>
           </SiteTitle>
@@ -197,31 +213,38 @@ const Layout = ({ pageTitle, children }) => {
               />
             </a>
           </SiteLinks>
-          <nav>
-            <NavLinks>
-              <NavLinkItem>
-                <NavLinkText activeClassName="active" to="/">
-                  首頁
-                </NavLinkText>
-              </NavLinkItem>
-              <NavLinkItem>
-                <NavLinkText activeClassName="active" to="/blog">
-                  歸檔
-                </NavLinkText>
-              </NavLinkItem>
-              <NavLinkItem>
-                <NavLinkText activeClassName="active" to="/blog">
-                  標籤
-                </NavLinkText>
-              </NavLinkItem>
-              <NavLinkItem>
-                <NavLinkText activeClassName="active" to="/about">
-                  關於我
-                </NavLinkText>
-              </NavLinkItem>
-            </NavLinks>
-          </nav>
-        </header>
+        </HeaderWrapper>
+        <HeaderBanner>
+          <NavLinks>
+            <NavLinkItem>
+              <Link activeClassName="active" to="/">
+                首頁
+              </Link>
+            </NavLinkItem>
+            <NavLinkItem>
+              <Link activeClassName="active" to="/archives">
+                歸檔
+              </Link>
+            </NavLinkItem>
+            <NavLinkItem>
+              <Link activeClassName="active" to="/tags">
+                標籤列表
+              </Link>
+            </NavLinkItem>
+            <NavLinkItem>
+              <Link activeClassName="active" to="/projects">
+                Projects
+              </Link>
+            </NavLinkItem>
+            <NavLinkItem>
+              <Link activeClassName="active" to="/about">
+                關於我
+              </Link>
+            </NavLinkItem>
+          </NavLinks>
+        </HeaderBanner>
+      </Header>
+      <Container>
         <main>
           <Heading>{pageTitle}</Heading>
           {children}
