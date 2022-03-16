@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, Link } from 'gatsby';
 import Layout from '../components/layout';
 
-const BlogPage = ({ data }) => {
+const Home = ({ data }) => {
   return (
     <Layout pageTitle="My Blog Posts">
       <ul>
@@ -41,4 +41,4 @@ export const query = graphql`
   }
 `;
 
-export default BlogPage;
+export default Home;
