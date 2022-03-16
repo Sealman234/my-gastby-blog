@@ -96,9 +96,6 @@ const Container = styled.div`
   min-height: calc(100vh - 148px);
   height: 100%;
 `;
-const Heading = styled.h2`
-  color: rebeccapurple;
-`;
 
 // Footer
 const Footer = styled.footer`
@@ -245,10 +242,7 @@ const Layout = ({ pageTitle, children }) => {
         </HeaderBanner>
       </Header>
       <Container>
-        <main>
-          <Heading>{pageTitle}</Heading>
-          {children}
-        </main>
+        <main>{children}</main>
       </Container>
       <Footer>
         <Copyright>

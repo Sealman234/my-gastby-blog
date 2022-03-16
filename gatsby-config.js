@@ -1,10 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: "Sealman's Blog",
-    titleTemplate: "%s | Sealman's Blog",
-    description:
-      '前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記。',
+    siteDescription:
+      '前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記',
     siteUrl: `https://blog.sealman.tw`,
+    author: 'Sealman',
     icon: './src/images/favicon.png',
     twitterUsername: '@castle2668',
   },

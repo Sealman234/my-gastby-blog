@@ -1,18 +1,44 @@
-import * as React from 'react';
+import React from 'react';
+import { graphql, Link } from 'gatsby';
 import Layout from '../components/layout';
-import { StaticImage } from 'gatsby-plugin-image';
 
-const IndexPage = () => {
+const BlogPage = ({ data }) => {
   return (
-    <Layout pageTitle="海豹人的第一個家">
-      <p>I'm making this by following the Gatsby Tutorial.</p>
-      <StaticImage
-        alt="Clifford, a reddish-brown pitbull, posing on a couch and looking stoically at the camera"
-        src="https://pbs.twimg.com/media/E1oMV3QVgAIr1NT?format=jpg&name=large"
-      />
-      <StaticImage src="../images/eightysix-shin.jpeg" alt="Shin" />
+    <Layout pageTitle="My Blog Posts">
+      <ul>
+        {data.allMdx.nodes.map((node) => (
+          <article key={node.id}>
+            <h2>
+              <Link to={`/${node.slug}`}>{node.frontmatter.title}</Link>
+            </h2>
+            <p>Posted: {node.frontmatter.date}</p>
+            <p>Modified: {node.parent.modifiedTime}</p>
+          </article>
+        ))}
+      </ul>
     </Layout>
   );
 };
 
-export default IndexPage;
+// page query
+export const query = graphql`
+  query {
+    allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+      nodes {
+        frontmatter {
+          title
+          date(formatString: "YYYY-MM-DD")
+        }
+        id
+        slug
+        parent {
+          ... on File {
+            modifiedTime(formatString: "YYYY-MM-DD")
+          }
+        }
+      }
+    }
+  }
+`;
+
+export default BlogPage;
