@@ -131,7 +131,6 @@ const Copyright = styled.div`
 `;
 
 const Layout = ({ pageTitle, children }) => {
-  // useStaticQuery
   const data = useStaticQuery(graphql`
     query {
       site {
