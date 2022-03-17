@@ -88,12 +88,12 @@ const NavLinkItem = styled.li`
   }
 `;
 
-// Main
+// Main Container
 const Container = styled.div`
   max-width: 792px;
   margin: 0 auto;
   padding: 1rem;
-  min-height: calc(100vh - 148px);
+  min-height: calc(100vh - 548px);
   height: 100%;
 `;
 
