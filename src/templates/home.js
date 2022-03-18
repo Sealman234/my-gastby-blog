@@ -80,7 +80,7 @@ const Pagination = styled.div`
     }
   }
   span {
-    color: #999;
+    color: #333;
   }
   > *:first-child {
     border-right: 1px solid #eee;
