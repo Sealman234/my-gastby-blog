@@ -58,7 +58,43 @@ const PostTags = styled.div`
   }
 `;
 
-const Home = ({ data }) => {
+const Pagination = styled.div`
+  border: 1px solid #eee;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  a,
+  span {
+    display: inline-block;
+    padding: 1rem;
+    width: 50%;
+    text-align: center;
+  }
+  a {
+    color: #c1170c;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+      background-color: #eee;
+    }
+  }
+  span {
+    color: #999;
+  }
+  > *:first-child {
+    border-right: 1px solid #eee;
+  }
+  > *:last-child {
+    margin-left: -1px;
+  }
+`;
+
+const Home = ({ data, pageContext }) => {
+  const { currentPage, numPages } = pageContext;
+  const isFirst = currentPage === 1;
+  const isLast = currentPage === numPages;
+  const prevPage = currentPage - 1 === 1 ? '/' : `/page${currentPage - 1}`;
+  const nextPage = `/page${currentPage + 1}`;
+
   return (
     <Layout pageTitle="My Blog Posts">
       {data.allMdx.nodes.map((node) => (
@@ -80,13 +116,33 @@ const Home = ({ data }) => {
           </PostTags>
         </Post>
       ))}
+      <Pagination>
+        {!isFirst ? (
+          <Link to={prevPage} rel="prev">
+            ← 較新文章
+          </Link>
+        ) : (
+          <span>← 較新文章</span>
+        )}
+        {!isLast ? (
+          <Link to={nextPage} rel="next">
+            較舊文章 →
+          </Link>
+        ) : (
+          <span>較舊文章 →</span>
+        )}
+      </Pagination>
     </Layout>
   );
 };
 
 export const query = graphql`
-  query {
-    allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+  query ($skip: Int!, $limit: Int!) {
+    allMdx(
+      sort: { fields: frontmatter___date, order: DESC }
+      limit: $limit
+      skip: $skip
+    ) {
       nodes {
         frontmatter {
           title

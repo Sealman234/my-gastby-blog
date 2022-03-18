@@ -31,6 +31,9 @@ const SiteTitle = styled.h1`
   a {
     text-decoration: none;
     color: #fff;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 const SiteAvatarWrapper = styled.div`
@@ -229,11 +232,6 @@ const Layout = ({ pageTitle, children }) => {
             <NavLinkItem>
               <Link activeClassName="active" to="/tags">
                 標籤列表
-              </Link>
-            </NavLinkItem>
-            <NavLinkItem>
-              <Link activeClassName="active" to="/projects">
-                Projects
               </Link>
             </NavLinkItem>
             <NavLinkItem>

@@ -66,7 +66,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   // Make post pages
   const blogPostTemplate = path.resolve(`src/templates/post.js`);
-
   resultPosts.data.allMdx.edges.forEach(({ node }) => {
     const path = node.slug;
     const data = node;
@@ -92,6 +91,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         tag,
         totalCount,
         posts,
+      },
+    });
+  });
+
+  // Make home pages
+  const homePages = resultPosts.data.allMdx.edges;
+  const postsPerPage = 10;
+  const numPages = Math.ceil(homePages.length / postsPerPage);
+  Array.from({ length: numPages }).forEach((_, i) => {
+    createPage({
+      path: i === 0 ? `/` : `/page${i + 1}`,
+      component: path.resolve('./src/templates/home.js'),
+      context: {
+        limit: postsPerPage,
+        skip: i * postsPerPage,
+        numPages,
+        currentPage: i + 1,
       },
     });
   });
