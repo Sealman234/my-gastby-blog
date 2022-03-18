@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 import styled from 'styled-components';
 
 import Layout from '../components/layout';
@@ -71,8 +71,9 @@ const PostTags = styled.div`
   }
 `;
 
-const tag = ({ pageContext }) => {
-  const { posts, tag } = pageContext;
+const tag = ({ data, pageContext }) => {
+  const { nodes: posts } = data.allMdx;
+  const { tag } = pageContext;
 
   return (
     <Layout>
@@ -100,5 +101,28 @@ const tag = ({ pageContext }) => {
     </Layout>
   );
 };
+
+export const query = graphql`
+  query ($tag: String!) {
+    allMdx(
+      filter: {
+        fileAbsolutePath: { glob: "**/blog/**/*" }
+        frontmatter: { tags: { in: [$tag] } }
+      }
+      sort: { fields: frontmatter___date, order: DESC }
+    ) {
+      nodes {
+        id
+        slug
+        frontmatter {
+          title
+          date(formatString: "YYYY-MM-DD")
+          excerpt
+          tags
+        }
+      }
+    }
+  }
+`;
 
 export default tag;

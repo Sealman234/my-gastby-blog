@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
@@ -25,6 +25,7 @@ const PostTags = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  margin-bottom: 1rem;
 
   a {
     text-decoration: none;
@@ -39,25 +40,32 @@ const PostTags = styled.div`
   }
 `;
 
-const BlogPost = ({ pageContext }) => {
-  const data = pageContext.data;
-  const image = getImage(data.frontmatter.hero_image);
+const BlogPost = ({ data }) => {
+  const post = data.allMdx.nodes[0];
+  const image = getImage(post.frontmatter.hero_image);
+  const metaImage = image
+    ? {
+        src: image.images.sources[0].srcSet,
+        width: image.width,
+        height: image.height,
+      }
+    : null;
 
   return (
     <Layout>
       <Seo
-        title={data.frontmatter.title}
-        description={data.frontmatter.excerpt}
-        image={image}
-        pathname={data.slug}
+        title={post.frontmatter.title}
+        description={post.frontmatter.excerpt}
+        image={metaImage}
+        pathname={post.slug}
       />
       <article className="blog-post">
-        <PostTitle>{data.frontmatter.title}</PostTitle>
-        <PostDate>{data.frontmatter.date}</PostDate>
-        <p>{data.frontmatter.excerpt}</p>
+        <PostTitle>{post.frontmatter.title}</PostTitle>
+        <PostDate>{post.frontmatter.date}</PostDate>
+        <p>{post.frontmatter.excerpt}</p>
         <PostTags>
-          {data.frontmatter.tags.length > 0 &&
-            data.frontmatter.tags.map((tag) => (
+          {post.frontmatter.tags.length > 0 &&
+            post.frontmatter.tags.map((tag) => (
               <Link key={tag} to={`/tags/${slugify(tag)}`}>
                 #{tag}
               </Link>
@@ -65,19 +73,47 @@ const BlogPost = ({ pageContext }) => {
         </PostTags>
         {image && (
           <Fragment>
-            <GatsbyImage image={image} alt={data.frontmatter.hero_image_alt} />
+            <GatsbyImage image={image} alt={post.frontmatter.hero_image_alt} />
             <p>
               Photo Credit:{' '}
-              <a href={data.frontmatter.hero_image_credit_link}>
-                {data.frontmatter.hero_image_credit_text}
+              <a href={post.frontmatter.hero_image_credit_link}>
+                {post.frontmatter.hero_image_credit_text}
               </a>
             </p>
           </Fragment>
         )}
-        <MDXRenderer>{data.body}</MDXRenderer>
+        <MDXRenderer>{post.body}</MDXRenderer>
       </article>
     </Layout>
   );
 };
+
+export const query = graphql`
+  query ($id: String) {
+    allMdx(
+      filter: { fileAbsolutePath: { glob: "**/blog/**/*" }, id: { eq: $id } }
+    ) {
+      nodes {
+        id
+        slug
+        body
+        frontmatter {
+          title
+          date(formatString: "YYYY-MM-DD")
+          excerpt
+          tags
+          hero_image_alt
+          hero_image_credit_link
+          hero_image_credit_text
+          hero_image {
+            childImageSharp {
+              gatsbyImageData
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export default BlogPost;

@@ -12,21 +12,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             node {
               id
               slug
-              body
-              frontmatter {
-                title
-                date(formatString: "YYYY-MM-DD")
-                excerpt
-                tags
-                hero_image_alt
-                hero_image_credit_link
-                hero_image_credit_text
-                hero_image {
-                  childImageSharp {
-                    gatsbyImageData
-                  }
-                }
-              }
             }
           }
         }
@@ -43,16 +28,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           group(field: frontmatter___tags) {
             tag: fieldValue
             totalCount
-            nodes {
-              id
-              slug
-              frontmatter {
-                title
-                date(formatString: "YYYY-MM-DD")
-                excerpt
-                tags
-              }
-            }
           }
         }
       }
@@ -69,29 +44,27 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const blogPostTemplate = path.resolve(`src/templates/post.js`);
   resultPosts.data.allMdx.edges.forEach(({ node }) => {
     const path = node.slug;
-    const data = node;
+    const id = node.id;
     createPage({
       path,
       component: blogPostTemplate,
       context: {
-        data,
+        id,
       },
     });
   });
 
   // Make tag pages
   const TagTemplate = path.resolve(`src/templates/tag.js`);
-  resultTags.data.allMdx.group.forEach(async ({ tag, totalCount, nodes }) => {
+  resultTags.data.allMdx.group.forEach(async ({ tag, totalCount }) => {
     const kebab = tag.replace(/\s+/g, '-').toLowerCase();
     const path = `/tags/${kebab}`;
-    const posts = nodes;
     createPage({
       path,
       component: TagTemplate,
       context: {
         tag,
         totalCount,
-        posts,
       },
     });
   });
