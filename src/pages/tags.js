@@ -1,7 +1,9 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import styled from 'styled-components';
+
 import Layout from '../components/layout';
+import Seo from '../components/seo';
 
 const Heading = styled.h2`
   margin-top: 0.5rem;
@@ -30,7 +32,8 @@ const Tags = ({ data }) => {
   });
 
   return (
-    <Layout pageTitle="Tags">
+    <Layout>
+      <Seo title="標籤列表" pathname="tags" />
       <Heading>Tags</Heading>
       <p>目前總共有 {tags.length} 個標籤 (`・ω・´)</p>
       <ul>

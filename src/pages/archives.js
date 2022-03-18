@@ -1,7 +1,9 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import styled from 'styled-components';
+
 import Layout from '../components/layout';
+import Seo from '../components/seo';
 
 const currentYear = new Date().getFullYear();
 const yearList = [];
@@ -21,7 +23,8 @@ const PostLink = styled(Link)`
 
 const Archives = ({ data }) => {
   return (
-    <Layout pageTitle="歸檔">
+    <Layout>
+      <Seo title="歸檔" pathname="archives" />
       <Heading>Archives</Heading>
       <p>目前總共有 {data.allMdx.totalCount} 篇文章 d(`･∀･)b</p>
       {yearList.map((year) => (

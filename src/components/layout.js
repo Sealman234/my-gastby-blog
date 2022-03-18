@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link, useStaticQuery, graphql } from 'gatsby';
+import { Link } from 'gatsby';
 import styled, { createGlobalStyle } from 'styled-components';
 import { StaticImage } from 'gatsby-plugin-image';
 import footerImage from '../images/footer-ground.png';
@@ -194,23 +194,10 @@ const Copyright = styled.div`
   }
 `;
 
-const Layout = ({ pageTitle, children }) => {
-  const data = useStaticQuery(graphql`
-    query {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `);
-
+const Layout = ({ children }) => {
   return (
     <Fragment>
       <GlobalStyle />
-      <title>
-        {pageTitle} | {data.site.siteMetadata.title}
-      </title>
       <Header>
         <HeaderWrapper>
           <SiteTitle>

@@ -2,7 +2,9 @@ import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
+
 import Layout from '../components/layout';
+import Seo from '../components/seo';
 
 const Heading = styled.h2`
   margin-top: 0.5rem;
@@ -14,14 +16,15 @@ const About = () => {
     query {
       site {
         siteMetadata {
-          siteDescription
+          description
         }
       }
     }
   `);
 
   return (
-    <Layout pageTitle="關於我">
+    <Layout>
+      <Seo title="關於我" pathname="about" />
       <Heading>🍔 About Me | 關於我</Heading>
       <p>
         前端工程師，喜歡 San-X
@@ -46,7 +49,7 @@ const About = () => {
       <ul>
         <li>網站名稱：海豹人的第一個家</li>
         <li>網站類型：部落格</li>
-        <li>網站描述：{data.site.siteMetadata.siteDescription}</li>
+        <li>網站描述：{data.site.siteMetadata.description}</li>
         <li>網站網址：https://blog.sealman.tw</li>
         <li>網站狀態：持續更新中</li>
       </ul>

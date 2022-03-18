@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
+
 import Layout from '../components/layout';
+import Seo from '../components/seo';
 
 const slugify = (str) => {
   return str.replace(/\s+/g, '-').toLowerCase();
@@ -73,7 +75,8 @@ const tag = ({ pageContext }) => {
   const { posts, tag } = pageContext;
 
   return (
-    <Layout pageTitle={tag}>
+    <Layout>
+      <Seo title={tag} pathname={`tags/${slugify(tag)}`} />
       <Heading>#{tag}</Heading>
       {posts.map((post) => (
         <Post key={post.id}>

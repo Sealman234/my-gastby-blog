@@ -1,7 +1,9 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
-import Layout from '../components/layout';
 import styled from 'styled-components';
+
+import Layout from '../components/layout';
+import Seo from '../components/seo';
 
 const slugify = (str) => {
   return str.replace(/\s+/g, '-').toLowerCase();
@@ -96,7 +98,8 @@ const Home = ({ data, pageContext }) => {
   const nextPage = `/page${currentPage + 1}`;
 
   return (
-    <Layout pageTitle="My Blog Posts">
+    <Layout>
+      <Seo title="首頁" />
       {data.allMdx.nodes.map((node) => (
         <Post key={node.id}>
           <PostTitle>
