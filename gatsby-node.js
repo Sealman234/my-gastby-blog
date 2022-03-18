@@ -16,6 +16,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               frontmatter {
                 title
                 date(formatString: "YYYY-MM-DD")
+                excerpt
                 hero_image_alt
                 hero_image_credit_link
                 hero_image_credit_text
@@ -47,6 +48,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               frontmatter {
                 title
                 date(formatString: "YYYY-MM-DD")
+                excerpt
                 tags
               }
             }

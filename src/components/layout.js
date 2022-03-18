@@ -47,6 +47,10 @@ const SiteDescription = styled.p`
   color: #efefef;
   text-align: center;
   font-style: italic;
+  a {
+    color: #efefef;
+    text-decoration: none;
+  }
 `;
 const SiteLinks = styled.div`
   display: flex;
