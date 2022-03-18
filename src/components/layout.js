@@ -9,10 +9,67 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+
   body {
     padding: 0;
     margin: 0;
     font-family: sans-serif;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+
+  .blog-post {
+    a {
+      text-decoration: none;
+      color: #c1170c;
+    }
+
+    code.language-text {
+      background-color: rgba(27,31,35,.06);
+      color: #304d92;
+      font-size: 0.875rem;
+      padding: 0.1875rem 0.5rem;
+    }
+
+    .gatsby-highlight pre[class*="language-"] {
+      position: relative;
+      padding: 2em 1em 1em 1em;
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 1rem;
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0 0 0.25rem 0.25rem;
+        font-size: 0.875rem;
+        line-height: 1;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      &.language-javascript::before, &.language-js::before, &.language-jsx::before {
+        content: "js";
+        background: #f7df1e;
+        color: #000;
+      }
+      &.language-html::before {
+        content: "html";
+        background: #005a9c;
+        color: #fff;
+      }
+      &.language-css::before {
+        content: "css";
+        background: #ff9800;
+        color: #fff;
+      }
+    }
+
+    blockquote {
+      border-left: 4px solid #fe5c71;
+      line-height: 1.8;
+      padding-left: 1rem;
+    }
   }
 `;
 
