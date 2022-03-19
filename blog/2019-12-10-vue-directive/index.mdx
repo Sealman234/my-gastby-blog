@@ -1,0 +1,253 @@
+---
+title: 'Vue 初心者筆記 #19 Directive（自定義指令）'
+excerpt: 'Vue 除了提供默認的指令之外，也允許註冊自定義指令，我們來看看如何註冊與使用自定義指令吧。'
+tags: ['Vue']
+date: '2019-12-10'
+---
+
+## 什麼是 Directive 自定義指令
+
+除了像是 `v-model` 與 `v-show` 這些 Vue 已經默認預設的指令之外，Vue 也允許註冊自定義指令。
+
+我們可以透過 Directive 註冊自定義指令來完成許多功能。例如：製作輸入框自動 Focus 的效果。
+我們希望使用者只要打開頁面，就算還沒有點擊任何內容，輸入框就會直接進入聚焦的狀態。
+
+```javascript
+// 註冊一個全域的自定義指令 v-focus
+Vue.directive('focus', {
+  // 當被綁定的元素 el 插入到 DOM 中的時候
+  inserted: function (el) {
+    // 就聚焦元素
+    el.focus();
+  },
+});
+```
+
+完成功能撰寫後，我們就可以把自定義的 `v-focus` 指令綁定到 `<input>` 上面去做使用了。
+
+```html
+<div id="app">
+  <input type="text" v-model="email" v-focus />
+</div>
+```
+
+完成後存檔並重新整理網頁，就會出現自動 Focus 輸入框的效果哩！
+
+> 詳細介紹可參考 [官方文件](https://cn.vuejs.org/v2/guide/custom-directive.html) 的說明
+
+## 透過 Directive 製作 Email 驗證器
+
+我們再來透過 Directive 實作出一個 Email 的驗證功能，這裡會使用到 Directive 的生命週期，也就是鉤子函數。
+
+### STEP 1：新增 input 初始化樣式
+
+首先新宣告一個 Directive，後方參數接「名稱」與一個「物件」。
+
+#### 鉤子函數 (Hook)：bind
+
+在物件裡面我們首先會使用到 `bind` 這個鉤子，`bind` 是在第一次綁定時調用的，通常會用來做一次性的初始化設定。
+
+鉤子函數可以帶參數，我們主要會使用 `el`、`binding`，以及 `vnode`：
+
+- `el`：Directive 綁定的元素，等同於 JavaScript 的 `document.querySelector('input')` 所指的原生 HTML
+- `binding`：一個物件，包含 Directive 自帶的一些屬性與其餘的細節資料
+- `vnode`：綁定了 Directive 的那個元素的虛擬節點
+
+範例程式碼：
+
+```html
+<div id="app">
+  <input type="text" v-model="email" v-focus v-validation />
+</div>
+```
+
+```javascript
+Vue.directive('validation', {
+  bind: function(el, binding, vnode){
+    console.log('binding', el, binding, vnode);
+})
+```
+
+![bind](https://i.imgur.com/rJroWwy.png)
+
+瞭解鉤子函數的 `bind` 之後，我們可以對 `el` 做初始化設定，像是調整它的 `className` 使其套用 Bootstrap 的樣式。
+
+```javascript
+Vue.directive('validation', {
+  bind: function (el, binding, vnode) {
+    console.log('binding', el, binding, vnode);
+    el.className = 'form-control'; // 套用 BS4 樣式
+  },
+});
+```
+
+### STEP 2：新增 Email 驗證功能
+
+驗證功能就是每次 "更新" `<input>` 的內容時，輸入框的樣式會跟著改變。
+例如：Email 格式正確時是綠色，格式錯誤時變成紅色。
+
+#### 鉤子函數 (Hook)：update
+
+每一次更新 `<input>` 的內容時，會觸發 `update` 這個 Hook。
+同樣地，`update` 也能帶參數，它所帶的參數內容與 `bind` 一樣。
+
+我們先試個水溫，讓輸入框每次有更新 `value` 的時候，就在 Console 回傳結果。
+
+```javascript
+Vue.directive('validation', {
+  update: function (el, binding, vnode) {
+    console.log('update', el, binding, vnode);
+    var value = el.value;
+    console.log(value); // 輸入的 value
+  },
+  bind: function (el, binding, vnode) {
+    // omit
+  },
+});
+```
+
+![value](https://i.imgur.com/8TgxI0v.png)
+
+看起來運行得很順利，那我們就可以來加上 "驗證" 的方法，把 `value` 放進去做驗證了！
+
+> Email 驗證的方法可以上網找，像我是使用 [regex - How to validate an email address in JavaScript - Stack Overflow](https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript) 這篇文章底下的一個方法
+
+#### Email 結構驗證（正規式）
+
+下面這個 `re` 就是 Email 結構的正規式，我們把輸入的文字結構 `value` 放進去測試，看看是否有符合 Email 的格式。
+
+```javascript
+Vue.directive('validation', {
+  update: function (el, binding, vnode) {
+    var value = el.value;
+    // 驗證 (正規式)
+    var re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    console.log(value, re.test(value));
+  },
+  bind: function (el, binding, vnode) {
+    // omit
+  },
+});
+```
+
+![update validation](https://i.imgur.com/YkKa4AG.png)
+
+> [JavaScript test() 方法](https://www.w3school.com.cn/js/jsref_test_regexp.asp)
+> 用於檢測一個字符串是否匹配某個模式
+
+### STEP 3：透過判斷決定 input 樣式
+
+接下來，我們可以透過上述 `true` 或 `false` 的判斷結果，來動態更改 `<input>` 的樣式。
+例如：結構正確就改為 `is-valid`，不正確就改為 `is-invalid`。
+
+範例程式碼：
+
+```javascript
+Vue.directive('validation', {
+  update: function (el, binding, vnode) {
+    var value = el.value; // 輸入的 value
+    // Email 驗證 (正規式)
+    var re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // 透過判斷決定 input 樣式
+    if (!re.test(value)) {
+      el.className = 'form-control is-invalid'; // 動態切換 BS4 樣式
+    } else {
+      el.className = 'form-control is-valid';
+    }
+  },
+  bind: function (el, binding, vnode) {
+    el.className = 'form-control'; // 初始化：套用 BS4 樣式
+  },
+});
+```
+
+這樣子我們就成功透過 Directive 製作 Email 驗證器哩 :P
+
+## 細節說明
+
+### Directive 還能傳遞其他參數
+
+除了 `el`、`binding`、`vnode` 之外，Directive 還能傳遞其他的參數。
+例如：我們可以透過 "物件" 的方式去定義，前面寫屬性名稱，後面寫值。
+
+```html
+v-validation="{ className: 'form-control'}"
+```
+
+我們把這個 `className` 替換上去，效果會跟原本直接寫 `form-control` 一樣。
+
+```javascript
+bind: function(el, binding, vnode){
+    console.log('binding', el, binding, vnode);
+    // el.className = 'form-control';
+    el.className = binding.value.className;
+}
+```
+
+### 取得 Vue 本身的資料內容
+
+這邊就以取得 `v-model` 的值為例。
+假設我們的 `email` 內容是 `test@gmail.com`，我們要如何取得這個值呢？
+
+```html
+<div id="app">
+  <input
+    type="text"
+    v-model="email"
+    v-focus
+    v-validation="{ className: 'form-control'}"
+  />
+</div>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    email: 'test@gmail.com',
+  },
+});
+```
+
+想要取得 `v-model` 的值，我們可以從 `vnode` 裡面一層一層往下找。
+像我的 `v-model` 是放在 `vnode/data/directives/0:expression` 這個位置下。
+
+因此，我們在 `directives` 下使用 `find()`，來尋找名稱為 `model` 的物件，然後用點存取來取得它的 `expression` 的值。
+
+```javascript
+bind: function(el, binding, vnode){
+    console.log('binding', el, binding, vnode);
+    el.className = binding.value.className;
+    // 找 vModel
+    var vModel = vnode.data.directives.find(function(item){
+        return item.name === 'model';
+    }).expression;
+    console.log('vModel', vModel); // vModel email
+}
+```
+
+那麼，如果要取得的是使用者輸入的 Email 的值，可以存取 `vnode/context/` 裡的 `email` 屬性。
+這個屬性的值就是我們透過 `v-model` 所定義的 `email` 的值了。
+
+因此，知道位置之後，我們一樣可以把這個值給取出來。
+
+```javascript
+bind: function(el, binding, vnode){
+    // ...omit
+    var vModel = vnode.data.directives.find(function(item){
+        return item.name === 'model';
+    }).expression;
+    // 找 v-model 的值
+    var value = vnode.context[vModel];
+    console.log('vModel', vModel, value); // vModel email test@gmail.com
+}
+```
+
+> 其實 `vnode` 是以 "傳參考" 的方式在傳遞（物件參考位置）的，所以 `vnode.context` 其實就是指 "當前元件" 的 `this`。
+> 換言之，`vnode.context` 就是指向該 `vnode` 是在哪個 Component 之下。
+
+另外，這裡使用 `[ ]` 來存取是因為我們不確定 `v-model` 的值，因為這個值不是固定的，所以建議使用 `[ ]` 來存取。
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

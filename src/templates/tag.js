@@ -22,7 +22,7 @@ const Post = styled.article`
     margin-top: 0;
   }
   &:last-of-type {
-    border-bottom: none;
+    margin-bottom: 1rem;
   }
 `;
 

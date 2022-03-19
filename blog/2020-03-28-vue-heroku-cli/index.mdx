@@ -1,0 +1,78 @@
+---
+title: 'Vue 初心者筆記 #37 透過 Heroku CLI 架設 Vue 靜態網站'
+excerpt: '最近製作的前端專案在部署 GitHub Pages 時遇到了一些政策問題，雖然可以再花時間研究處理，但是由於趕著要 Demo 時間緊迫，因此就試著尋找其他解決方案，最後透過 Heroku 來部署 Vue.js 的專案。'
+tags: ['Vue', 'Heroku']
+date: '2020-03-28'
+---
+
+## 開始前的準備
+
+- 對於 NPM、Git、Vue.js 有基本認識
+- 註冊 Heroku 帳號
+- 安裝 Node.js 環境
+
+## 本文涵蓋以下內容
+
+- Heroku CLI 工具
+- Express 框架
+- 部署 Vue CLI 靜態網站
+
+## 正文開始
+
+### STEP 1：創建 Heroku 專案
+
+首先要新增一個 Heroku App，我們可以在 Heroku 的網站上建立專案，或者使用 Heroku CLI 工具，我個人偏好使用 Heroku CLI，因為只要打一行 Code 就能輕鬆創好專案哩。
+指令：`heroku create <your-project-name>`
+
+![Heroku CLI](https://i.imgur.com/pEnujwc.png)
+
+> [Heroku CLI 下載頁面](https://devcenter.heroku.com/articles/heroku-cli#download-and-install)
+
+創建完成後，把待會要 Push 的 Vue.js 專案與剛剛創的 Heroku App 綁定起來。
+指令：`git remote add heroku "https://git.heroku.com/test.git"`
+
+### STEP 2：模擬 Express Server
+
+接著新增一個 `server.js` 檔案，它會模擬一個 Server 來跑 Express，而我們的 Vue.js 專案就會透過 Express 框架作為前端伺服器執行起來。
+
+```javascript
+// server.js
+var express = require('express');
+var path = require('path');
+var serveStatic = require('serve-static');
+app = express();
+app.use('/', serveStatic(path.join(__dirname, '/dist')));
+app.get(/.*/, function (req, res) {
+  res.sendFile(path.join(__dirname, '/dist/index.html'));
+});
+var port = process.env.PORT || 5000;
+app.listen(port);
+console.log('server started ' + port);
+```
+
+重點說明：
+
+1. 因為我的 server.js 是放在根目錄，所以 `serveStatic` 的資料夾路徑是使用 `/dist`
+2. `serveStatic` 會在 Express 中提供靜態檔案，它會到指定路徑下 Run 這些打包好的靜態檔案，像是 HTML、CSS、JavaScript 等等
+3. 使用 `res.sendFile` 方法來發送整個網頁文件
+
+新增完 `server.js` 檔案後，先執行 `npm run build` 打包專案，接著輸入 `node server.js` 就能在本地端啟動 Vue.js 專案哩。
+
+### STEP 3：部署至 Heroku
+
+剛剛在本地端使用 `node server.js` 確定專案可以正常運行之後，我們就可以來部署網站了！
+
+Push 到 Heroku 上面的方式就與 GitHub 相同，輸入 `add`、`commit`、`git push heroku master` 這些指令，就能將專案 Push 到 Heroku 上面了。Push 完成後，在終端機上會出現 Demo Page 的網址，使用 Ctrl + 右鍵就能打開了。
+
+> 如果在使用 `git push heroku master` 上傳專案時發生錯誤，很可能是你還沒綁定 Heroku 帳號到這個專案上。
+> 這時候可以透過 `git remote -v` 查看目前有沒有綁定到，如果沒有就登入 (`heroku login`) 並把 Heroku 透過 `git remote add <自定義遠端倉庫名稱> <倉庫地址>` 加進專案。
+
+到這裡就算是完成網站的部署了，之後也可以跟 GitHub Repository 的名稱做綁定，這樣子只要將專案推上 GitHub，它就會同步 Push 一份到 Heroku 上面去更新網站了，這也是一個很建議的做法喔。
+
+## 參考資料
+
+1. [超簡單三步驟在 Heroku 架設可跨域的 Vue 前端項目 - 企鵝也懂程式設計 - Medium](https://tinyurl.com/ybyvh4s4)
+2. [Easy 4 Steps: Auto Deploy Vue.js App on Heroku | Codementor](https://www.codementor.io/@ravianand1988/easily-4-steps-to-continuous-delivery-auto-deploy-vue-js-app-on-heroku-xljk977pq)
+3. [[长期更新][Git] 问题汇总 & 分析解决 | 开发者工具论坛](https://learnku.com/articles/4957/long-term-update-git-problem-summary-analysis-and-solution)
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

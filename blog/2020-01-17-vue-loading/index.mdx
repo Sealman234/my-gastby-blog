@@ -1,0 +1,74 @@
+---
+title: 'Vue 初心者筆記 #30 畫面讀取效果'
+excerpt: '這篇來介紹個輕鬆有趣一點的主題好了，是關於全畫面 Loading 與局部 Loading 效果的製作方式，除了可以增加使用者體驗，網頁也能更加炫泡喔！'
+tags: ['Vue']
+date: '2020-01-17'
+---
+
+## 全畫面讀取效果
+
+- 全畫面讀取效果：Vue Loading Overlay
+
+  > [vue-loading-overlay](https://github.com/ankurk91/vue-loading-overlay) : Vue.js component for full screen loading indicator
+
+在開始之前，首先要在 main.js 中加入以下程式碼，來全域啟用 Vue Loading Overlay。
+
+```javascript
+// import
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+// 全域啟用
+Vue.component('Loading', Loading);
+```
+
+### 實作方式
+
+使用變數 `isLoading` 作為開關，當 `isLoading` 是 `true` 就會啟用。
+
+1. 定義變數 `isLoading` 作為開關
+2. 將套件加入到 `<template>` 中：
+
+   ```html
+   <loading :active.sync="isLoading"></loading>
+   ```
+
+3. 在 `methods` 的 `getProducts` 中加入判斷，透過 `vm.isLoading = true` 讓資料讀取時出現轉圈效果
+4. 讀取完透過 `vm.isLoading = false` 移除效果
+
+## 局部讀取效果
+
+- 局部讀取效果：使用 [Font Awesome](https://fontawesome.com/) 的 [Animating Icons](https://tinyurl.com/u4u2bt4)
+
+開始實作前，要先在 index.html 中 CDN 加入 Font Awesome。
+
+```html
+<script
+  src="https://kit.fontawesome.com/b62129cf4c.js"
+  crossorigin="anonymous"
+></script>
+```
+
+### 實作步驟
+
+與剛才的實作方式相似，使用變數 `fileUploading` 決定是否顯示旋轉的 Icon。
+
+1. 在 `data` 中定義變數 `fileUploading` 作為控制是否顯示 Icon 的開關
+2. 將 Icon 加到畫面上：
+
+   ```html
+   <i class="fas fa-spinner fa-spin"></i>
+   ```
+
+3. 在 Icon 上使用 `v-if` 切換是否顯示：
+
+   ```html
+   <i class="fas fa-spinner fa-spin" v-if="status.fileUploading"></i>
+   ```
+
+4. 在 `uploadFile()` 中加入判斷，當點擊上傳後，透過 `vm.status.fileUploading = true` 顯示出 Icon
+
+5. 而當 AJAX 結束，即上傳完成後，就會透過 `vm.status.fileUploading = false` 與 `v-if` 將 Icon 隱藏
+
+最後，這兩個 Loading 效果除了套用在商品列表之外，也可以套用在訂單列表、優惠券列表、購物車...等地方，來增加用戶的使用體驗。
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

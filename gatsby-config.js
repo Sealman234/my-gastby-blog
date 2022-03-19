@@ -28,6 +28,7 @@ module.exports = {
             resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 760,
+              showCaptions: true,
             },
           },
           {
@@ -49,7 +50,7 @@ module.exports = {
         lang: `zh-Hant`,
         start_url: `/`,
         background_color: `#fff`,
-        theme_color: `#c1170c`,
+        theme_color: `#333`,
         display: `standalone`,
         icon: `src/images/icon.png`,
       },

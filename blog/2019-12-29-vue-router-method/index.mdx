@@ -1,0 +1,112 @@
+---
+title: 'Vue 初心者筆記 #26 透過自定義事件切換 Router'
+excerpt: '除了使用 router-link 建立連結來切換路由外，我們也能使用 Router 的一些自定義方法，直接通過 a 標籤來切換頁面路由。'
+tags: ['Vue']
+date: '2019-12-29'
+---
+
+## STEP 1：改成 a 連結
+
+我們把 `<router-link>` 改為 `<a>` 連結標籤，並使用 `@click.prevent` 綁上自訂的事件 `updatePath`。
+
+```html
+<a href="#" class="nav-link" @click.prevent="updatePath">切換到指定頁面</a>
+```
+
+並且把這個事件加到 `methods` 裡面：
+
+```javascript
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    updatePath() {
+      // ...
+    },
+  },
+};
+```
+
+## STEP 2：自定義事件
+
+[Vue 官方文件](https://router.vuejs.org/zh/api/#router-push)中有提到許多"取代路徑"的方式，下方會一一做介紹。
+
+不過以下的寫法會跟官方文件看到的不太一樣，因為我們是在 Vue CLI 內運行的，前方有先執行了 `vue.use(...)`，因此外部資源會被掛載到 Vue 內。
+所以我們就可以使用 `this` 來呼叫這些資源，而其他包含像是 `router` 與 `axios` 也都是這個概念。
+
+### router.push
+
+這裡我們在 `.push` 後面加上 `child2` 這個分頁的路徑，按下去之後就會直接切換到這個指定的頁面了。
+
+```javascript
+methods: {
+  updatePath(){
+    this.$router.push('/page/child2');
+  },
+}
+```
+
+> 有使用 `Vue.use` 的情況下，就可以使用 `this.$router` 來運作！
+
+### router.back
+
+`.back` 就是回到前一頁的功能，`()` 裡面不需要帶路徑。
+
+```html
+<a href="#" class="nav-link" @click.prevent="beforePath">回到前頁</a>
+```
+
+```javascript
+methods: {
+  beforePath(){
+    this.$router.back();
+  },
+}
+```
+
+### router.forward
+
+`.forward` 的使用概念與 `.back` 相同，功能就是回到下一頁。
+
+```javascript
+methods: {
+  beforePath(){
+    this.$router.forward();
+  },
+}
+```
+
+### router.go
+
+`.go` 是基於目前的位置，可以往前或往後做切換。
+例如：`.go(-1)` 即為往前上一頁，效果就與 `.back()` 相同。
+
+```javascript
+methods: {
+  beforePath(){
+    this.$router.go(-1);
+  },
+}
+```
+
+### router.replace
+
+最後這個 `.replace` 其實概念與 `.push` 有些類似。
+我們剛才之所以可以回到前一頁，是因為瀏覽器會有紀錄，讓我們可以用 `.back` 或其他方式來切換到上一頁。
+但是當我們使用 `.replace` 時，瀏覽器不會留下紀錄，它會直接取代目前的頁面。
+
+> 白話來說，畫面上呈現的是別的頁面內容，但瀏覽器紀錄中，卻還在之前的頁面，像是沒切換過頁面似的。
+
+```javascript
+methods: {
+  updatePath(){
+    this.$router.replace('/page/child2');
+  },
+}
+```
+
+透過 `.replace` 切換頁面後，如果按下"上一頁"，對瀏覽器來說是回到上一頁，但對我們來說會是回到上上一頁的內容。
+那麼以上這些就是透過 Method 來操作 Router 的方法了！
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

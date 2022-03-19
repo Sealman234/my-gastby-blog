@@ -1,0 +1,101 @@
+---
+title: 'Vue 初心者筆記 #32 製作商品列表的分頁功能'
+excerpt: '本篇筆記介紹如何製作 Pagination 分頁元件，並且將其元件化再引入父元件中使用，過程中主要會使用到 props 與 emit 父子元件雙向溝通的重要概念。'
+tags: ['Vue']
+date: '2020-01-28'
+---
+
+## 使用 props 與 emit 製作 Pagination 元件
+
+### STEP 1：製作 Pagination 元件
+
+#### 1. 動態加入 active 與 disabled 屬性
+
+如果 `pagination.current_page === page` 就加上 `active` 這個 Class，來套用"當前頁面"的樣式；
+如果 `pagination.has_pre` 為 `false`，就加上 `disabled`，代表沒有上一頁；
+而 `pagination.has_next` 如果為 `false`，一樣是加上 `disabled`，代表沒有下一頁的意思。
+
+#### 2. 換頁功能
+
+點擊頁碼可切換至指定的頁數 (`page`)，而透過 `getCurrentPage()` 的參數 `current_page` 的 -1 或 +1 可以決定前往上一頁或下一頁。
+
+### STEP 2：使用 props & emit 做父子元件的溝通
+
+這個部份我們分為兩大步驟來進行：
+第一步，是利用 `props` 將資料傳給 Components 使用（父元件 → 子元件）。
+第二步，是利用 `emit` 將 Components 的資料回傳（子元件 → 父元件）。
+
+#### 1. 利用 props 接受外部傳入的資料
+
+##### 子元件的設定
+
+我們在子元件 (Pagination.vue) 設定一個 `props` 為 `childPaginations`，型態 (`type`) 為 Object。
+這個 `childPaginations` 會接收從外部傳入的資料 (`pagination`)，之後會用來完成雙向溝通的概念。
+
+```javascript
+props:{
+  childPaginations:{
+    type: Object,
+  }
+},
+```
+
+> 對了，父元件的 `pagination: {}` 要先預定義喔
+
+##### 父元件的設定
+
+在外層 `<template>` 裡，則是用 `:childPaginations="pagination"` 把內層的 `childPaginations` 這個參數的值傳過去給 `pagination`。
+
+```html
+<Pagination v-bind:childPaginations="pagination"></Pagination>
+```
+
+#### 2. 使用 emit 將子元件的資料回傳
+
+##### 子元件設定
+
+接著，我們在 `methods` 內新增 `getCurrentPage` 這個 Function，並透過 `@click.prvent="getCurrentPage(page)"` 事件行為來觸發此 Function 進行換頁。
+
+```javascript
+props:{
+  childPaginations:{
+    type: Object,
+  }
+},
+methods:{
+  getCurrentPage(page
+    //                事件名稱    , 傳出去的參數
+    this.$emit("changeCurrentPage", page);
+  }
+}
+```
+
+`getCurrentPage` 的 `$emit` 後面有兩個參數，第一個參數 (`"changeCurrentPage"`) 為事件名稱，代表設定一個名為 `changeCurrentPage` 的事件名稱，第二個參數是同時把 `page` 這個參數傳至外層。
+
+> 如果需要傳出更多參數，可以直接用逗號分隔接在後面
+
+##### 父元件設定
+
+最後在父元件使用原先 `getProducts(page = 1)` 的 Function 來接收子元件的資料。
+
+> 這個 `page = 1` 的參數是 ES6 參數預設值的概念，就是當我們使用函式時沒加上參數，則預設的參數 `page` 就是 1 的意思（這樣就可以不用回頭改以前的東西了）
+
+觸發步驟：
+當子元件觸發 `getCurrentPage` 事件想要換頁時，就會使用 `$emit` 觸發自定義的 `changeCurrentPage` 事件。
+觸發之後就會執行父元件的 `getProducts` 來接收從內層傳送過來的值，而這個值（參數）就是從子元件傳來的 `page`。
+
+> 如果有傳多個參數，這裡的 `getProducts` 也要接收相應數量的參數
+
+```html
+<Pagination
+  v-bind:childPaginations="pagination"
+  @changeCurrentPage="getProducts"
+></Pagination>
+```
+
+## 參考資料
+
+1. [一起唱 DoReMi: [Vue.js] 父子元件的雙向溝通，簡單的 props 和 emit 使用範例](https://chenuin.blogspot.com/2019/01/vuejs-propsemit.html)
+2. [[Vue] 跟著 Vue 闖蕩前端世界 - 06 父子組件溝通 pass props / emit event | 搞搞就懂 - 點部落](https://dotblogs.com.tw/wasichris/2017/03/04/021726)
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

@@ -1,0 +1,247 @@
+---
+title: 'Vue 初心者筆記 #5 Computed（計算屬性）'
+excerpt: '本文介紹 Vue.js 的 computed 計算屬性，並實作練習使用 computed 來呈現日期與時間格式。'
+tags: ['Vue']
+date: '2019-10-14'
+---
+
+## 如何使用 Computed
+
+1. 新增 computed 物件（在這裡面宣告的任何屬性都是 Function）
+2. 在 computed 裡面新增方法，方法裡面要 return 一個值（跟在 data 裡面使用的 return 有點類似，但是 computed 是把結果儲存在變數之中，並運用在畫面上）
+3. 在 HTML 中透過 Mustache 等方式將資料呈現到畫面上
+
+範例：
+
+```html
+<div id="app">
+  <!-- 將結果呈現於畫面上 -->
+  {{ reverseText }}
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {},
+    // 新增物件 computed
+    computed: {
+      reverseText: function () {
+        return 'aaa';
+      },
+    },
+  });
+</script>
+```
+
+### 實作練習：反轉字串
+
+知道如何使用 computed 之後，我們馬上就來練習一個題目，我們試著透過 computed 來完成反轉字串。
+
+1. 預先定義空字串 `text` 與 `newText`
+2. 把 `return` 的內容換成反轉字串的表達式：`.split('').reverse().join('')`
+3. 因為 `return` 並不知道我們要的 `text` 是哪個 `text`，所以我們應該要寫成 `this.text`，來指向 `data` 下面的 `text`
+
+```html
+<div id="app">
+  <input type="text" class="form-control" v-model="text" />
+  <div class="mt-3">{{ reverseText }}</div>
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      text: '',
+      newText: '',
+    },
+    // 新增物件 computed
+    computed: {
+      reverseText: function () {
+        return this.text.split('').reverse().join('');
+      },
+    },
+  });
+</script>
+```
+
+## Computed 的觸發條件
+
+除了以上的使用介紹外，這邊也要特別提醒，因為 computed 的觸發條件是當 `data` 裡面的值受到更動時，computed 的結果才會跟著做更動。
+因此，如果值不是在 `data` 內，也就是說它不是在 `this` 之下的話，更動是無法被觸發的。
+
+## Computed 函式不能傳參數
+
+特別注意在 computed 裡面的函式是**不能傳遞參數**的。
+
+以下提供一個錯誤範例，這個例子中的 `reverseText: function(count){..}` 是錯誤的，因為 computed 不能傳參數，這樣寫會發生錯誤。
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    text: '',
+    newText: '',
+  },
+  computed: {
+    reverseText: function (count) {
+      return this.text.split('').reverse().join('');
+    },
+  },
+});
+```
+
+## 實作練習：使用 Computed 呈現時間格式
+
+接著我們來實戰一波，試著利用 computed 加上 JavaScript 提供的 `Date` 物件來取得、操作日期與時間。
+
+> [Date 物件 - JavaScript | MDN](https://tinyurl.com/v5je2sb)
+
+### STEP 1：在 computed 中新增 Date 物件
+
+1. 新增 `computed` 物件與裡面的函式 `getDate`
+2. 在函式中宣告 `Date` 物件：`let today = new Date()`
+3. 在 `data` 中新增 `newDate` 空字串，用來儲存結果並呈現到畫面上
+4. 在 HTML 使用 Mustache 語法呈現 `getDate` 字串（直接寫方法名稱）
+
+關於步驟 2，因為 `Date()` 不是瀏覽器必然存在的物件，所以用 `new` 來產生它。
+`new Date()` 用於處理日期和時間，如果沒有指定參數，物件預設的值為產生物件的日期與本地時間，而本地時間是指執行 JavaScript `new Date()` 的用戶電腦的時間。
+
+範例程式碼：
+
+```html
+<div id="app">
+  <input type="text" class="form-control" v-model="text" />
+  <p>使用 Computed 來呈現時間格式。</p>
+  <div class="mt-3">
+    <p>使用 Computed 來呈現時間格式。</p>
+    <p>{{ getDate }}</p>
+  </div>
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      text: '',
+      newText: '',
+      newDate: '',
+    },
+    // 使用 Computed 呈現時間格式
+    computed: {
+      getDate: function () {
+        let today = new Date();
+        return today;
+      },
+    },
+  });
+</script>
+```
+
+這樣就能回傳 `"2019-10-14T07:39:15.903Z"` 這種格式的字串了！
+但是這還不是我們要的時間格式，所以接下來我們要整理 `Date` 物件產生的格式。
+
+### STEP 2：整理日期與時間的格式
+
+這邊我們利用 `Date` 物件的 `get` 方法，把需要的東西拿出來用，最後再組成字串呈現於畫面上。
+
+#### 日期 get 方法
+
+1. `getFullYear()`：取得年份，採用四位數西歷年
+
+   ```javascript
+   let year = today.getFullYear();
+   ```
+
+2. `getMonth()`：取得月份，從 0 開始算起
+
+   ```javascript
+   let month = today.getMonth();
+   ```
+
+3. `getDate()`：取得日（天），從 1 ~ 31
+
+   ```javascript
+   let day = today.getDay();
+   ```
+
+#### 時間 get 方法
+
+1. `getHours()`：取得時數 0 ~ 23，時區為台北標準時間 (GMT+8)
+
+   ```javascript
+   let hours = today.getHours();
+   ```
+
+2. `getMinutes()`：取得分鐘 0 ~ 59
+
+   ```javascript
+   let minutes = today.getMinutes();
+   ```
+
+3. `getSeconds()`：取得秒數 0 ~ 59
+
+   ```javascript
+   let seconds = today.getSeconds();
+   ```
+
+#### 組合字串
+
+最後把這些日期與時間組合成一個字串，並指向我們一開始在 `data` 裡面新增的空字串 `newDate`。
+
+```javascript
+let date = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+console.log(date); // 2019/9/1 16:48:20
+this.newDate = date;
+return this.newDate;
+```
+
+如此一來，回傳的就是我們常看到的時間字串格式哩 : )
+範例程式碼：
+
+```html
+<div id="app">
+  <input type="text" class="form-control" v-model="text" />
+  <div class="mt-3">
+    <p>使用 Computed 來呈現時間格式。</p>
+    <p>{{ getDate }}</p>
+  </div>
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      text: '',
+      newText: '',
+      newDate: '',
+    },
+    computed: {
+      getDate: function () {
+        let today = new Date();
+        let year = today.getFullYear();
+        let month = today.getMonth();
+        let day = today.getDay();
+        let hours = today.getHours();
+        let minutes = today.getMinutes();
+        let seconds = today.getSeconds();
+        let date = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+        console.log(date);
+        this.newDate = date;
+        return this.newDate;
+      },
+    },
+  });
+</script>
+```
+
+## 總結：比較 Computed 與 Methods 的差異
+
+在學習 computed 之前，我們使用之前學的 methods 也可以做出這些功能，但是兩者的概念不太一樣，因為 computed 是監控到資料更動後，就重新運算結果並呈現於畫面上。
+
+此外，一般來說 computed 不會修改資料，只會回傳資料到畫面呈現而已。
+這與 methods 就大不相同了，因為 methods 主要就是在互動的函式，需要觸發才會運作，因此 methods 通常都會用來修改資料內容。
+
+然而，如果資料量大，computed 自然會比較慢！因為只要資料變動，computed 就一定會觸發，無形之中執行次數就會增加。
+因此在處理大量資料時，通常就會建議透過 methods 來執行，減少不必要的運算哩 :P
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

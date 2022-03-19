@@ -1,0 +1,76 @@
+---
+title: 'Vue 初心者筆記 #15 使用 Extend 擴展單個元件'
+excerpt: '本文介紹 Vue.extend 的使用情境與使用方式。'
+tags: ['Vue']
+date: '2019-12-06'
+---
+
+## 使用情境
+
+假設有數個元件，它們的差異非常小，只有少部分的不同的話，可以使用 `Vue.extend()` 方法。
+
+## 使用方法
+
+### STEP 1：延伸使用
+
+1. 將原本 `childOne` 元件的內容貼到 `Vue.extend()` 裡面
+
+   ```javascript
+   var newExtend = Vue.extend({
+     // ....元件內容
+   });
+   ```
+
+2. 在 `childOne` 元件裡使用 `extends` 來延伸使用 `newExtend`
+
+   ```javascript
+   var childOne = {
+     props: ['item'],
+     extends: newExtend,
+   };
+   ```
+
+   `childOne` 就像是把 `newExtend` 作為基底，來延伸使用。
+
+### STEP 2：細部調整
+
+上述提到的延伸使用，當然也可以再做調整。
+當引入的元件也有同樣的屬性時，將會以 "元件" 的值為主喔。
+
+例如：`childTwo` 裡面已經有 `template` 了，而在延伸使用後，`template` 會以 `childTwo` 原先有的值為主。
+
+```javascript
+var childTwo = {
+  props: ['item'],
+  template: '#row-component-two',
+  extends: newExtend,
+};
+```
+
+除此之外，如果在生命週期內執行新的函式，新的函式同樣會執行。
+而使用 Extend 時，甚至也能插入新的 `data` 資料，範例如下：
+
+```javascript
+var childTwo = {
+  props: ['item'],
+  data() {
+    return {
+      childTwo: '元件2',
+      extendData: '這段文字是 元件 得到',
+    };
+  },
+  template: '#row-component-two',
+  extends: newExtend,
+  mounted() {
+    console.log('childTwo');
+  },
+};
+```
+
+這也是 Extend 的特色，不僅可以繼承舊的資料結構，還能再加上新的資料內容。
+
+而且新舊資料是可以同時並存的，像是 `mounted` 會執行兩次，`data` 的資料結構也是兩個一起存在。
+
+但是，如果我們在 Extend 模板裡宣告的變數或函式，剛好與元件內已有的變數或函式的名稱相同的話，元件原有的內容會覆寫過 Extend 模板裡的值喔，因為 Extend 的權重低於元件本身！
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

@@ -1,0 +1,156 @@
+---
+title: 'Vue 初心者筆記 #16 使用 Filter 自訂資料呈現格式'
+excerpt: 'Vue.js 提供的 Filter 過濾器，可用於自訂畫面資料的呈現格式，如果不是做複雜的資料處理，只是做簡單調整的話，就很適合使用 Filter。'
+tags: ['Vue']
+date: '2019-12-07'
+---
+
+## 前言：Filter 與 Computed
+
+Filter 與 Computed 有點類似，它們都可以用來做資料處理。
+不過 Filter 適合用於文字、數值格式的簡單處理，像是加上千分號、錢字號等等。
+Computed 則適合用於複雜的資料處理。
+
+## Get Started
+
+### STEP 1：在 Mustache 加上 Filter
+
+我們常在 Mustache 雙大括號裡使用 Filter 過濾器。
+使用方法：在數值後面加上一個直槓 「|」，然後再加上 Filter 的名稱。
+
+範例：
+
+```html
+<script type="text/x-template" id="row-component">
+  <tr>
+    <td>{{ item.icash | currency }}</td>
+  </tr>
+</script>
+```
+
+### STEP 2：定義元件內 Filter 物件的方法
+
+這裡示範如何替數值加上千分號與兩位小數點。
+
+```javascript
+var child = {
+  // ...
+  // 定義 Filter 的方法
+  filters: {
+    currency: function (n) {
+      return n.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    },
+  },
+  // ...
+};
+```
+
+Function 裡面有傳入一個值 `n`，這個 `n` 就是前面的那個 `item.icash`。
+
+接著，我們可以透過貨幣轉換的程式碼，把 `n` 加上千分號與兩位小數點。
+
+> 參考文章：[formatting - How can I format numbers as currency string in JavaScript? - Stack Overflow](https://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-currency-string-in-javascript)
+> 程式碼在底下的 Short and fast solution (works everywhere!)
+
+### STEP 3：加上多種 Filter
+
+如果覺得加上千分號與小數點還不夠看，想再加上一個 \$ 字號，Filter 也能再幫我們加上去。
+
+我們在 Filter 裡加一個 `dollarSign` 的 Function：
+
+```javascript
+var child = {
+  // ...
+  filters: {
+    dollarSign: function (n) {
+      return `$ ${n}`; // ES6 寫法
+    },
+    currency: function (n) {
+      return n.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    },
+  },
+  // ...
+};
+```
+
+#### 傳入參數
+
+要特別注意，Filter 傳入參數的順序是 **_由前往後_** 的。
+
+例如：
+
+```html
+<script type="text/x-template" id="row-component">
+  <tr>
+    <td>{{ item.name }}</td>
+    <td>{{ item.cash | currency | dollarSign }}</td>
+    <td>{{ item.icash | currency | dollarSign }}</td>
+  </tr>
+</script>
+```
+
+上述範例中， `item.icash` 就是傳入 `currency` 中，當作傳入參數 `n` 的值。
+
+而 `item.icash | currency` 完成後的結果，會再被當作另一個參數 `n` 傳進 `dollarSign` 函式中。
+
+### STEP 4：在 "外層" 也使用 Filter
+
+剛才都是在元件內層的模板上使用 Filter，那麼如果想在外層使用，我們該如何做呢？
+
+直接將 Filter 效果加上去嗎？我們發現這是沒辦法用的。
+原因是因為我們是把 Filter 寫在 "內層" 的元件上。
+
+```html
+<div id="app">
+  <!-- 元件的外層也想加上格式 -->
+  {{ data[1].cash | currency | dollarSign }}
+</div>
+```
+
+那我們該如何在外層，像是其他元件或是整個 Vue 應用程式，來去使用這個 Filter 呢？
+
+#### Filter 過濾器的全域註冊
+
+剛才我們都是使用 [局部註冊](https://tinyurl.com/vrhew2r)，如果想要在全部的環境下都能使用 Filter 的話，就要改為全域註冊。
+
+而 Filter 的全域註冊，其實就只是將元件內的函式，移到全域去做註冊。
+
+範例：
+
+```javascript
+Vue.filter('dollarSign', function (n) {
+  return `$ ${n}`;
+});
+
+Vue.filter('currency', function (n) {
+  return n.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+});
+```
+
+完成全域註冊之後，原本元件內的 Filter 函式就能刪掉哩。
+
+```javascript
+var child = {
+  props: ['item'],
+  template: '#row-component',
+  data: function () {
+    return {
+      data: {},
+    };
+  },
+  // 已經改成全域註冊了，因此以下可以刪掉囉
+  // filters: {
+  //     ...
+  // },
+  mounted: function () {
+    console.log('Component:', this);
+  },
+};
+```
+
+## 參考資料
+
+1. [Vue.js: Filter 過濾器 | Summer。桑莫。夏天](https://tinyurl.com/rac48j6)
+2. [Vue.js 初心者筆記：元件的註冊與使用 | 海豹人的第一個家](https://sealman234.github.io/vue/20191110/3664091819/)
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

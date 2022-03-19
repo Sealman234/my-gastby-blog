@@ -1,0 +1,208 @@
+---
+title: 'Vue 初心者筆記 #18 使用 Mixin 為元件加入多個功能'
+excerpt: '本文介紹 Mixin 的使用情境與使用方式，Mixin 與之前介紹過的 Extend 有點類似，也有其相異之處，使用上可以依情況選擇要使用 Extend 還是 Mixin。'
+tags: ['Vue']
+date: '2019-12-09'
+---
+
+## 如何使用 Mixin
+
+### STEP 1：製作 Mixin
+
+假設某一個元件上有幾個很棒的功能，我們也想要在其他元件上使用的話，可以把這些功能個別抓出來，再給各個不同的元件打包去做使用。
+
+當然是也能把 Function 的程式碼複製貼上幾次，但是這樣不夠優雅，太粗暴惹！
+使用 Mixin 避免重複的程式碼，這才是我們斯文人的寫法！
+
+範例：製作 Filter 功能的 Mixin
+
+```javascript
+Vue.component('row-component', {
+  props: ['item'],
+  data: function () {
+    return {
+      data: {},
+    };
+  },
+  template: '#row-component',
+  filters: {
+    dollarSign: function (n) {
+      return `$ ${n}`;
+    },
+    currency: function (n) {
+      return n.toFixed(2).replace(/./g, function (c, i, a) {
+        return i && c !== '.' && (a.length - i) % 3 === 0 ? ',' + c : c;
+      });
+    },
+  },
+  mounted() {
+    console.log('這段是 Mixin 產生');
+  },
+});
+```
+
+我們把 Filter 功能拉出來，製作成一個新的物件，並在元件上使用它，可以得到一樣的結果。
+
+```javascript
+// 製作新的 Mixin 物件
+var mixinFilter = {
+  template: '#row-component',
+  filters: {
+    dollarSign: function (n) {
+      return `$ ${n}`;
+    },
+    currency: function (n) {
+      return n.toFixed(2).replace(/./g, function (c, i, a) {
+        return i && c !== '.' && (a.length - i) % 3 === 0 ? ',' + c : c;
+      });
+    },
+  },
+};
+
+Vue.component('row-component', {
+  props: ['item'],
+  data: function () {
+    return {
+      data: {},
+    };
+  },
+  // Mixin 是陣列的格式
+  mixins: [mixinFilter],
+  mounted() {
+    console.log('這段是 Mixin 產生');
+  },
+});
+```
+
+### STEP 2：使用多個 Mixin
+
+Mixin 是 "陣列" 格式，因此我們可以透過 Mixin 一次使用多個功能。
+
+例如：我們把 `mounted` 的部分也拉出來製作成 Mixin，並與剛才的 Filter 一起使用到元件上。
+
+```javascript
+var mixinFilter = {
+  // ...同上個範例
+};
+
+var mixinMounted = {
+  mounted() {
+    console.log('這段是 Mixin 產生');
+  },
+};
+
+Vue.component('row-component', {
+  props: ['item'],
+  data: function () {
+    return {
+      data: {},
+    };
+  },
+  // 透過 Mixin 使用兩個功能
+  mixins: [mixinFilter, mixinMounted],
+});
+```
+
+### STEP 3：使用 Mixin 在多個元件上
+
+我們也可以在多個元件上，使用多個 Mixin。
+
+範例：除了剛才的 `row-component`，我們再新增一個 `row-component2`，並寫上一樣的 Mixin。
+
+```html
+<div id="app">
+  <table class="table">
+    <tbody>
+      <tr
+        is="row-component"
+        v-for="(item, key) in data"
+        :item="item"
+        :key="key"
+      ></tr>
+      <tr is="row-component2" v-for="(item, key) in data" :item="item"></tr>
+    </tbody>
+  </table>
+</div>
+<script type="text/x-template" id="row-component">
+  <!-- 模板內容就省略啦 -->
+</script>
+```
+
+> 特別注意，上面第二個 `<tr>` 的 `:key` 要先拿掉，不然會出錯，會被判定為重複的 Key。
+
+```javascript
+Vue.component('row-component2', {
+  props: ['item'],
+  data: function () {
+    return {
+      data: 'Two',
+    };
+  },
+  mixins: [mixinFilter, mixinMounted],
+});
+```
+
+### STEP 4：注意權重問題
+
+最後要特別注意，不管是 Extend 還是 Mixin，他們的權重都低於元件！
+如果 Extend 與 Mixin 裡的變數或函式的名稱，與元件原有的名稱相同的話，會優先採用元件內的值。
+
+```javascript
+var mixinData = {
+  data: function () {
+    return {
+      data: {
+        data: '我是 mixinData 產生的 data',
+      },
+    };
+  },
+};
+
+// 使用 Mixin 的 data 的值
+Vue.component('row-component', {
+  props: ['item'],
+  data: function () {
+    return {
+      data: {},
+    };
+  },
+  mixins: [mixinFilter, mixinMounted, mixinData],
+});
+
+// 沿用元件原有的 data 的值
+Vue.component('row-component2', {
+  props: ['item'],
+  data: function () {
+    return {
+      data: 'Two',
+    };
+  },
+  mixins: [mixinFilter, mixinMounted, mixinData],
+});
+```
+
+上述範例中，`row-component` 裡面沒有宣告 `data` 的值，因此最後會使用 Mixin 給的值。
+但是 `row-component2` 裡面原先就有 `data` 的值了，因此 Mixin 的值就被覆蓋掉哩！
+
+## 總結：比較 Extend 與 Mixin
+
+Extend 與 Mixin 的用法都是用於擴展，但是兩者所擴展的東西不同，一個是擴展模板，另一個是擴展功能。
+
+此外，Extend 與 Mixin 的權重皆 "低於" 元件本身。因此，如果在元件內撰寫的 Extend 或 Mixin 有涵蓋相同的變數或函式名稱，都會以元件的內容為主。
+
+### Extend 的使用時機
+
+- `extends`：用於擴展單個元件
+
+當需要 "相同模板重複使用" 的時候，可以透過 Extend 實現。
+
+> 關於 Extend 的介紹可參考之前的筆記：
+> [Vue.js 初心者筆記：使用 Extend 擴展單個元件 | 海豹人的第一個家](https://sealman234.github.io/vue/20191205/3656062179/)
+
+### Mixin 的使用時機
+
+- `mixins`：使用陣列加入多個功能
+
+當有零散功能需要套用到 "不同模板" 上的時候，可以透過 Mixin 去達成。
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

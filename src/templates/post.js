@@ -27,7 +27,7 @@ const PostTags = styled.div`
   gap: 1rem;
   margin-bottom: 1rem;
 
-  a {
+  a.tag {
     text-decoration: none;
     color: #666;
     background-color: #efefef;
@@ -35,6 +35,7 @@ const PostTags = styled.div`
     border-radius: 0.3125rem;
     white-space: nowrap;
     &:hover {
+      text-decoration: none;
       color: #c1170c;
     }
   }
@@ -66,7 +67,7 @@ const BlogPost = ({ data }) => {
         <PostTags>
           {post.frontmatter.tags.length > 0 &&
             post.frontmatter.tags.map((tag) => (
-              <Link key={tag} to={`/tags/${slugify(tag)}`}>
+              <Link key={tag} to={`/tags/${slugify(tag)}`} className="tag">
                 #{tag}
               </Link>
             ))}
@@ -74,12 +75,15 @@ const BlogPost = ({ data }) => {
         {image && (
           <Fragment>
             <GatsbyImage image={image} alt={post.frontmatter.hero_image_alt} />
-            <p>
-              Photo Credit:{' '}
-              <a href={post.frontmatter.hero_image_credit_link}>
-                {post.frontmatter.hero_image_credit_text}
-              </a>
-            </p>
+            {post.frontmatter.hero_image_credit_link &&
+              post.frontmatter.hero_image_credit_text && (
+                <p>
+                  Photo Credit:{' '}
+                  <a href={post.frontmatter.hero_image_credit_link}>
+                    {post.frontmatter.hero_image_credit_text}
+                  </a>
+                </p>
+              )}
           </Fragment>
         )}
         <MDXRenderer>{post.body}</MDXRenderer>

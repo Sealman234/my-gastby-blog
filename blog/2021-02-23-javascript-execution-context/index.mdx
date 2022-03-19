@@ -1,0 +1,320 @@
+---
+title: '克服 JavaScript 的奇怪部分 #2 程式碼底層處理與執行過程'
+excerpt: '本文主要內容為 JavaScript 運作簡介，在此可看到 JavaScript 底層在做的事情，知道程式碼處理與執行的過程，以及必須理解的各種專有名詞。'
+tags: ['Javascript Understanding The Weird Parts', 'JavaScript']
+date: '2021-02-23'
+---
+
+以下一一仔細跟大家說明 (๑•̀ㅂ•́)و✧
+
+![讓我們一起看下去](https://i.imgur.com/WybJvLc.png)
+
+## 語法解析器 (Syntax Parser)
+
+Parser 是指其他人寫的程式（直譯器和編譯器），透過 Parser 逐字地閱讀我們寫的程式碼，把我們寫的程式碼轉換成電腦看得懂的指令。
+
+### 直譯器 (Interpreter) 與編譯器 (Compiler)
+
+直譯器與編譯器都是將程式碼由上到下逐行轉為電腦可懂的命令，差別在於轉換的時機點：
+
+- 直譯 (Interpreter)：在程式執行「時」做轉換，然後直接產出運行結果。
+- 編譯 (Compiler)：在程式執行「前」做轉換，然後會產出編譯後的指令，之後執行的是這個編譯後的結果指令。
+
+那麼 JavaScript 是哪一種呢？
+
+在瀏覽器的實現下，JavaScript「看起來」像是直譯語言，但是它其實有編譯的步驟存在。
+JavaScript 引擎會在每次執行前「即時編譯」程式碼，接著立刻執行編譯後的指令。
+
+總而言之，如果以使用的案例來說，在瀏覽器上的 JavaScript 是直譯語言，但我們要知道它的背後是有即時編譯的。
+
+## 詞彙環境 (Lexical Environment)
+
+指程式碼被「寫在哪裡」，程式碼實際執行的位置。這個位置可以影響執行階段時，它所對應的記憶體位置，也能影響它和其他周圍的變數與函式的互動。
+
+## 執行環境 (Execution Context)
+
+程式碼會有很多詞彙環境，而執行環境會管理哪一個是正在執行的詞彙環境。
+
+- 依照範圍是否為全域來區分的話，有全域執行環境與該函式的執行環境。
+- 執行環境有兩個階段，分別是創造階段與執行階段。
+
+## 名稱/值配對 (Name/Value Pair) 與物件 (Object)
+
+**Name/Value Pair** 就是指「一個名稱會對應到一個值」，而這個值也可以是另一個 Name/Value Pair，並且以此類推，例如以下程式碼就是一個 Name/Value Pair。
+
+```javascript
+Address: '100 Main St.';
+```
+
+而**物件**其實就是 Name/Value Pairs 的集合 (Collection)，結構如下圖所示。
+
+![Collection of Name/Value Pairs](https://i.imgur.com/jZAGKi8.png)
+
+例如：Address 是 Name，後面的 Collection 是它的 Value。
+
+```javascript
+Address: {
+    Street: 'Main',
+    Number: 100,
+    Apartment: {
+        Floor: 3,
+        Number: 301
+    }
+}
+```
+
+## 全域執行環境 (Global Execution Context) 與全域物件 (Global Object)
+
+全域的意思就是我們可以在任何地方取用它，而在 JavaScript 中，**全域執行環境**會幫我們創造全域物件，以及一個特殊的變數「this」。
+
+> 全域 = 不在函式裡面，所以程式碼或變數不在函式裡面時，就是全域的。
+
+**全域物件**在瀏覽器中為 window，在伺服器上執行 Node.js 則為 global。
+在全域等級中，this 會參照到全域物件 (window/global)，此時的全域物件與 this 這兩者是相同的。
+
+> 此外，我們如果開另一個分頁，就會有另一個全域物件。因為一個視窗會有一個全域物件，每個視窗都有自己的執行環境和自己的全域物件。
+
+## 執行環境：創造階段與執行階段
+
+執行環境分為兩個階段，第一階段是創造階段 (Creation Phase)，第二階段是執行階段 (Execution Phase)。
+
+### 創造階段 (Creation Phase)
+
+在創造階段，語法解析器 (Parser) 會分析程式碼，然後用編譯器去編譯程式，來創造出全域執行環境。在全域執行環境裡面會有變數 (this) 與全域物件 (window/global)，並且會設定變數與函式的「記憶體位置」。
+
+### 提升 (Hoisting)
+
+在逐行執行程式碼之前（即進入執行階段之前），JavaScript 會幫我們把變數與函式都建立一個記憶體位置。如此一來，當程式碼被逐行執行時，才能找到這些東西，而這個時候會使用到提升 (Hoisting) 的動作。
+
+常見的 Hoisting 會用在變數與函式，而變數與函式的 Hoisting 會有點不同，因為變數有等號這種設值符號。通常在一開始，變數 (var) 會被設定為 undefined，函式則會完全被設定好並放進記憶體中。
+
+> 我們可以先把 undefined 理解為尚未設定 (not set) 的感覺，詳細介紹在下一篇筆記[克服奇怪的 JavaScript 吧！#3 型別 (Types)](https://sealman234.github.io/2021-02-24-javascript-types/)就會提到囉。
+
+### 執行階段 (Execution Phase)
+
+這個階段會逐行執行我們寫好的程式碼，例如我們寫好了以下這段程式碼，可以看到這邊有一個變數和一個函式，所以我們先把它進行提升 (Hoisting)。
+
+```javascript
+b();
+console.log(a);
+var a = 'Hello World!';
+function b() {
+  console.log('Called b');
+}
+console.log(a);
+```
+
+我們把宣告的函式移到最上面，接著宣告變數，這樣就能大概看出這段程式碼的執行結果囉。
+
+```javascript
+function b() {
+  console.log('Called b');
+}
+var a;
+b(); // Called b
+console.log(a); // undefined
+a = 'Hello World!';
+console.log(a); // Hello World!
+```
+
+## 單執行緒 (Single Threaded) 與同步執行 (Synchronous Execution)
+
+- 單執行緒 (Single Threaded)：一次只執行一個指令。
+- 同步執行 (Synchronous Execution)：程式碼會依照出現的順序，一次執行一行。
+
+JavaScript 就是單執行緒與同步執行的。
+
+> 非同步則是 Asynchronous，像是 JavaScript 網路應用中的非同步請求 (Asynchronous Requests)，其中 AJAX 的 A 就是 Asynchronous 的意思。
+
+## 函式呼叫與執行堆
+
+### 函式呼叫 (Function Invocation)
+
+Invocation 表示執行或呼叫函式，在 JavaScript 中是用括號 (parenthesis) 來執行函式。
+
+> 在 Stack Overflow 可以看到別人會說 invoke the function 或是 function invocation 等等，而這些英文用語的意思就是執行這個函式。
+
+### 執行堆 (The Execution Stack)
+
+每次呼叫執行函式的時候，都會創造一個新的執行環境，並且放入執行堆中，被堆疊在最上面。
+
+我們只要看是誰在執行堆的最上面，它就是正在執行的東西。
+這邊要注意，執行堆是以「呼叫的順序」來看的，而不是看程式碼宣告的位置（第幾行）。
+
+```javascript
+function b() {}
+
+function a() {
+  b();
+}
+
+a();
+```
+
+以上範例的執行堆順序，由上而下是「b 函式的執行環境 → a 函式的執行環境 → 全域執行環境」，因為這邊是先呼叫 a 函式，接著在 a 函式裡面才執行 b 函式。
+
+再來看一個稍微複雜的例子，這次我們來看每一行程式碼的執行順序為何。
+
+```javascript
+// STEP 1
+
+function a() {
+  b(); // STEP 3
+  var c; // STEP 5
+}
+
+function b() {
+  var d; // STEP 4
+}
+
+a(); // STEP 2
+var d; // STEP 6
+```
+
+STEP 1：一開始經過創造階段後，已經創造出全域執行環境。
+
+STEP 2：執行 a 函式，放入執行堆。接著我們不是執行下方的 `var d`，而是執行 a 函式裡面的內容，因為當下最新的執行環境已經變成 `a()` 的執行環境了。
+
+STEP 3：逐行執行 a 函式的程式碼，首先第一行是執行 b 函式，因此執行堆最上方的執行環境會變成 `b()`。
+
+STEP 4：開始執行 b 函式的程式碼，這邊只有一行 `var d`，執行完這行之後這個函式就已經執行完畢了。當函式已經執行完成，執行堆會將這個函式的執行環境 Pop 掉，也就是從最上方拿掉一個，所以最新的執行環境又會再回到 `a()`。
+
+STEP 5：執行環境回到 `a()` 之後，繼續逐行執行 a 函式的程式碼，也就是 `var c` 這個動作。
+
+STEP 6：當 a 函式完成後，同樣也會 Pop off，所以現在執行環境會回到全域執行環境，最後就接著執行 `var d`。
+
+## 函式、環境與變數環境 (Variable Environment)
+
+變數環境指的就是你創造變數的位置，以及它在記憶體中和其他變數的關係。
+簡單來說，就是你的變數在哪裡？
+
+以下是一個簡單的例子，每個 `myVar` 其實各自定義在不同的執行環境中，雖然 `myVar` 被宣告了三次，但它們三個都是不一樣的，彼此之間沒有關聯。
+
+```javascript
+function b() {
+  var myVar; // b() 執行環境
+}
+
+function a() {
+  var myVar = 2; // a() 執行環境
+  b();
+}
+
+var myVar = 1; // 全域執行環境
+a();
+```
+
+我們可以加上 `console.log(myVar)` 來驗證我們的理解，預期會看到 1, 2, undefined, 1 的結果。
+
+```javascript
+function b() {
+  var myVar;
+  console.log(myVar); // undefined
+}
+
+function a() {
+  var myVar = 2;
+  console.log(myVar); // 2
+  b();
+}
+
+var myVar = 1;
+console.log(myVar); // 1
+a();
+console.log(myVar); // 1
+```
+
+這裡的重點在於理解進入與離開執行環境的流程。
+
+一開始我們是在全域執行環境，因此會 Log 出全域執行環境下的 `myVar`。接著則是進入 `a()` 而後是 `b()` 執行環境，當執行完成後會 Pop Off 出來，此時會先離開 `b()` 而後離開 `a()`。最後就會回到全域，並執行最後一行的 Log。
+
+## 範圍鏈 (Scope Chain)
+
+執行函式時，如果在當前的執行環境下找不到需要的變數，就會到「外部環境」尋找變數，而外部環境會依照函式的實際位置而有所不同。
+
+### 外部環境
+
+每個執行環境，都會有一個外部環境。
+
+JavaScript 會透過 Parser 得知這段程式碼物理上的實際位置，並為執行環境創造一個「外部環境的參照」，這個參照相當於前面提到的「詞彙環境」。
+
+前面提到過「詞彙環境 = 程式碼被寫出來的實際位置」，所以詞彙上 `b()` 函式的詞彙環境會是全域執行環境。
+
+這個向外找的動作是可以一直延續的，也就是說當我們在外部環境找不到變數時，可以再往外繼續尋找，直到全域等級為止（因為全域執行環境沒有外部環境了）。
+
+### 概念整理
+
+可以得到一個小結論：
+
+- 執行環境 → 與「函式調用、執行順序、執行緒」有關。
+- 詞彙環境 → 與「外部環境、尋找變數」有關。
+
+最後，以上所敘述的「向外尋找變數，直到有找到或沒找到為止」的這段過程，看起來就像一條鏈子，這一整條鏈子我們稱作「範圍鏈」。
+**範圍**代表我可以存取到這個變數的地方，而**鏈**就是所有外部環境參照的連結。
+
+到這邊我們就可以理解「當 JavaScript 找不到 b 變數，會一路往範圍鏈下去找」這句話的意思哩。
+
+## 範圍、ES6 與 let
+
+### 範圍 (Scope)
+
+範圍就是變數可以被取用的區域。
+
+若呼叫相同的函式兩次，各自會有自己的一個執行環境，因此函式中的變數雖然相同，但是在記憶體中其實是兩個不同的變數。
+
+### ES6 let 的區塊範圍 (Block Scoping)
+
+ES6 引入新的宣告變數方式 let。
+let 讓 JavaScript 使用一種叫做區塊範圍 (Block Scoping) 的東西，而這個「區塊」的定義其實就是指在「大括號」中的意思，像是 if 敘述裡面或是 for 迴圈裡面。
+
+當變數被使用 let 宣告在區塊裡面時，它就只能在那一個區塊中被取用。
+所以如果是執行 for 迴圈裡面的 let 宣告，則每一次執行時宣告的變數，在記憶體中的位置都是不同的，而這就是區塊範圍的概念。
+
+變數宣告的方式與 var 相同，宣告後變數會放到記憶體中，並且有預設值 undefined。
+但是 let 宣告的變數必須等到那一行程式碼被執行時，才是真正宣告變數，此時變數才可以被使用。
+
+### 暫時性死區 (Temporal Dead Zone)
+
+其實 let 與 const 也有 Hoisting，但是沒有初始化為 undefined，而是形成 TDZ。
+在「提升之後」以及「賦值之前」這段期間，如果在賦值之前試圖取值，就會拋出錯誤，如下方範例所示。
+
+```javascript
+console.log(c); // Uncaught ReferenceError: c is not defined
+let c = true;
+```
+
+這邊只要調整一下順序，讓變數**先被賦值之後再取值**就可以了。
+不過這邊也要注意，並不是撰寫順序上把取值的動作寫在後面就可以，而是在「執行順序」上取值的動作要在賦值後面。
+
+```javascript
+let c = true;
+console.log(c); // true
+```
+
+> 關於 let 與 const Hoisting 更詳細的介紹，可以參考 Huli 寫的[我知道你懂 hoisting，可是你了解到多深？](https://blog.techbridge.cc/2018/11/10/javascript-hoisting/)這篇文章。
+
+## 非同步回呼 (Asynchronous Callbacks)
+
+![瀏覽器](https://i.imgur.com/YGE52Jd.png)
+
+關於 JavaScript 的非同步事件，有以下幾個重點：
+
+- 直到執行堆是空的（即 JavaScript 已經逐行執行完程式）才會處理**事件佇列**。
+- 並不是真正的非同步，而是瀏覽器非同步地把東西放到事件佇列，但原本的程式仍繼續一行行執行。
+- 非同步的部分是發生在 JavaScript 引擎外。
+- 持續檢查 (Continuous check)：JavaScript 會用同步的方式處理非同步事件，根據這些非同步事件的順序一一完成。
+
+## 回顧
+
+看完這篇文章，我們到底有什麼收穫呢？藉由本文可以理解到…
+
+- JavaScript 的小觀念與名詞解釋，包含語法解析器、直譯器與編譯器的差異、詞彙環境、執行環境、名稱/值配對、物件、全域執行環境與全域物件、單執行緒、同步執行。
+- 執行環境：創造與提升階段、程式執行階段。
+- 知道在呼叫函式後，執行堆的順序該怎麼跑，以及變數環境在哪裡。
+- 範圍鏈就是可以存取到這個變數的外部環境參照的範圍。
+- ES6 let 的區塊範圍、提升、暫時性死區。
+- JavaScript 的非同步事件。
+
+## References
+
+- [JavaScript: Understanding the Weird Parts](https://www.udemy.com/course/understand-javascript/)

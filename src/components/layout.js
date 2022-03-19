@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'gatsby';
 import styled, { createGlobalStyle } from 'styled-components';
 import { StaticImage } from 'gatsby-plugin-image';
+
 import footerImage from '../images/footer-ground.png';
 
 // Global Style
@@ -24,11 +25,14 @@ const GlobalStyle = createGlobalStyle`
     a {
       text-decoration: none;
       color: #c1170c;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     code.language-text {
       background-color: rgba(27,31,35,.06);
-      color: #304d92;
+      color: #274878;
       font-size: 0.875rem;
       padding: 0.1875rem 0.5rem;
     }
@@ -48,8 +52,13 @@ const GlobalStyle = createGlobalStyle`
         text-transform: uppercase;
         font-weight: bold;
       }
-      &.language-javascript::before, &.language-js::before, &.language-jsx::before {
+      &.language-javascript::before, &.language-js::before {
         content: "js";
+        background: #f7df1e;
+        color: #000;
+      }
+      &.language-jsx::before {
+        content: "jsx";
         background: #f7df1e;
         color: #000;
       }
@@ -63,19 +72,38 @@ const GlobalStyle = createGlobalStyle`
         background: #ff9800;
         color: #fff;
       }
+      &.language-scss::before {
+        content: "scss";
+        background: #ff9800;
+        color: #fff;
+      }
+      &.language-shell::before {
+        content: "shell";
+        background: #fff;
+        color: #000;
+      }
+      &.language-bash::before {
+        content: "bash";
+        background: #fff;
+        color: #000;
+      }
     }
 
     blockquote {
-      border-left: 4px solid #fe5c71;
+      border-left: 4px solid #c1170c;
       line-height: 1.8;
       padding-left: 1rem;
+    }
+
+    img {
+      max-width: 100%;
     }
   }
 `;
 
 // Header
 const Header = styled.header`
-  background-image: linear-gradient(to bottom right, #395877, #c5e2f7);
+  background: #333;
 `;
 const HeaderWrapper = styled.div`
   padding: 1rem;
@@ -100,6 +128,7 @@ const SiteAvatar = styled.div`
   display: inline-block;
   width: 100px;
   height: 100px;
+  border: 0.25rem solid #fff;
   border-radius: 50%;
   overflow: hidden;
 `;
@@ -107,10 +136,6 @@ const SiteDescription = styled.p`
   color: #efefef;
   text-align: center;
   font-style: italic;
-  a {
-    color: #efefef;
-    text-decoration: none;
-  }
 `;
 const SiteLinks = styled.div`
   display: flex;
@@ -146,6 +171,7 @@ const NavLinkItem = styled.li`
     display: inline-block;
     padding: 0.625rem 0.9375rem;
     color: #efefef;
+    border-radius: 0.25rem 0.25rem 0 0;
     &.active {
       background-color: #c1170c;
     }
@@ -157,7 +183,7 @@ const Container = styled.div`
   max-width: 792px;
   margin: 0 auto;
   padding: 1rem;
-  min-height: calc(100vh - 548px);
+  min-height: calc(100vh - 475px);
   height: 100%;
 `;
 
@@ -217,47 +243,27 @@ const Layout = ({ children }) => {
             前端工程師，喜歡 San-X
             的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記。
           </SiteDescription>
-          <SiteDescription>
-            本部落格使用 <a href="https://github.com/gatsbyjs/gatsby">Gatsby</a>{' '}
-            製作
-          </SiteDescription>
-          <SiteDescription>本部落格有使用 Google Analytics</SiteDescription>
           <SiteLinks>
             <a
               href="https://www.linkedin.com/in/sealman"
               target="_blank"
               rel="noreferrer noopener"
             >
-              <StaticImage
-                src="../images/icon-linkedin.svg"
-                alt="LinkedIn"
-                width={30}
-                height={30}
-              />
+              <StaticImage src="../images/icon-linkedin.svg" alt="LinkedIn" />
             </a>
             <a
               href="https://github.com/Sealman234"
               target="_blank"
               rel="noreferrer noopener"
             >
-              <StaticImage
-                src="../images/icon-github.svg"
-                alt="GitHub"
-                width={30}
-                height={30}
-              />
+              <StaticImage src="../images/icon-github.svg" alt="GitHub" />
             </a>
             <a
               href="https://twitter.com/castle2668"
               target="_blank"
               rel="noreferrer noopener"
             >
-              <StaticImage
-                src="../images/icon-twitter.svg"
-                alt="Twitter"
-                width={30}
-                height={30}
-              />
+              <StaticImage src="../images/icon-twitter.svg" alt="Twitter" />
             </a>
           </SiteLinks>
         </HeaderWrapper>

@@ -1,0 +1,266 @@
+---
+title: 'Vue 初心者筆記 #6 表單資料雙向綁定 & v-model 修飾符'
+excerpt: '本文介紹以 Vue 製作表單元件的技巧，包括 Input、Textarea、Checkbox、Radio、Select 等表單元素的使用。'
+tags: ['Vue']
+date: '2019-10-15'
+---
+
+## v-model 綁定 Input
+
+當使用者輸入內容的同時，text 的值會跟著改變並呈現於畫面上。
+
+```html
+<input type="text" class="form-control" v-model="text" /> {{ text }}
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    text: '',
+  },
+});
+```
+
+### 搭配 Input 使用的 v-model 修飾符
+
+#### .lazy
+
+加入 lazy 修飾符後，要按下 Enter 或是在旁邊點擊一下，資料才會繪製出來，不會在輸入時就馬上更新畫面。
+
+```html
+<input type="text" v-model.lazy="lazyMsg" /> {{ lazyMsg }}
+```
+
+#### .number
+
+藉由 number 修飾符將連接的字串資料轉為純數值的格式。
+
+使用 `typeof()` 可以發現 `<input type="number">` 輸出並儲存的資料是「字串」格式。
+
+```html
+<input type="number" v-model.number="age" />
+<pre>{{ typeof(age) }} {{ age }}</pre>
+```
+
+#### .trim
+
+加入 trim 修飾符，可以把字串「前後」多餘的空白去除。
+
+```html
+<input type="text" v-model.trim="trimMsg" /> {{ trimMsg }}緊黏的文字
+```
+
+## v-model 綁定 Textarea
+
+新增 v-model 綁定 data 裡的 textarea，當使用者輸入內容的同時，textarea 的值跟著改變並呈現於畫面上。
+
+```html
+<pre>{{ textarea }}</pre>
+<textarea cols="30" rows="3" class="form-control" v-model="textarea"></textarea>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    textarea: '',
+  },
+});
+```
+
+## v-model 綁定 Checkbox
+
+Checkbox 依據**數量**分為單選與多選，只有一個的話就是單選 (true or false)，多個就是多選 (Array)。
+
+### 單選 Checkbox
+
+```html
+<input type="checkbox" id="check1" v-model="checkbox1" />
+<label for="check1"> 你要不要看電影 </label>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    checkbox1: false,
+  },
+});
+```
+
+上面的單選 Checkbox 預設的 `value` 值為 `true` 與 `false`，如果我們要用別的值當作 `value`，可以設定 `true-value` 與 `false-value` 屬性。
+
+例如：
+
+```html
+<input
+  type="checkbox"
+  id="sex"
+  v-model="sex"
+  true-value="男生"
+  false-value="女生"
+/>
+<label for="sex">{{ sex }}</label>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    sex: '男生',
+  },
+});
+```
+
+這裡因為資料 `data: { sex: '男生', }` 預設的值就是 `true-value`，所以 Checkbox 預設為已勾選的狀態。
+
+### 多選 Checkbox
+
+新增 v-model 綁定 `data` 裡的 `checkboxArray`。
+依據 Checkbox 的數量，可以知道這邊的 Checkbox 是 Array 的格式。
+
+```html
+<input type="checkbox" id="check2" value="雞" v-model="checkboxArray" />
+<label for="check2">雞</label>
+
+<input type="checkbox" id="check3" value="豬" v-model="checkboxArray" />
+<label for="check3">豬</label>
+
+<input type="checkbox" id="check4" value="牛" v-model="checkboxArray" />
+<label for="check4">牛</label>
+
+<p>晚餐火鍋裡有 <span v-for="item in checkboxArray">{{ item }} </span>。</p>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    checkboxArray: [],
+  },
+});
+```
+
+勾選之後，`option` 的 `value`（雞 / 豬 / 羊）會儲存到 `checkboxArray` 陣列裡，而勾選的順序就等於 `index`。
+
+![Checkbox](https://i.imgur.com/DqyUdY2.png)
+
+如果要把陣列資料呈現到畫面上，我們可以使用 v-for 把陣列的值一一抓出來。
+
+```html
+<span v-for="item in checkboxArray">{{ item }} </span>
+```
+
+最後畫面呈現的順序，就會跟加入陣列的順序 (index) 一樣。
+
+![畫面呈現](https://i.imgur.com/yEz7uWk.png)
+
+## v-model 綁定 Radio
+
+Radio 就沒有多選了，只有單選！
+
+新增 v-model 綁定 `data` 裡的 `singleRadio`，`singleRadio` 預設是一個空的字串。
+選取任一個 `radio` 後，它的 `value` 會賦予到 `singleRadio` 上，然後花括號吃到 `singleRadio` 的值就會把資料呈現至畫面。
+
+```html
+<input type="radio" id="radio2" value="雞" v-model="singleRadio" />
+<label for="radio2">雞</label>
+
+<input type="radio" id="radio3" value="豬" v-model="singleRadio" />
+<label for="radio3">豬</label>
+
+<input type="radio" id="radio4" value="牛" v-model="singleRadio" />
+<label for="radio4">牛</label>
+
+<p>晚餐火鍋裡有 {{ singleRadio }}。</p>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    singleRadio: '',
+  },
+});
+```
+
+## v-model 綁定 Select
+
+Select 標籤可以透過它的 v-model 與 `option` 裡的 `value` 將值帶進來。
+
+新增 v-model 綁定 `data` 裡的 `selected`，`selected` 預設為一個空字串。
+因為 `selected` 預設是空值，所以這邊第一個 `option` 的 `value` 留空的話，就會是預設值。
+
+※ 做表單時常用的小技巧：可以在 `option` 上加入 `disabled` 讓使用者選到其他的選項之後，沒辦法再選回「請選擇」的選項。
+
+```html
+<select v-model="selected">
+  <option disabled value="">請選擇</option>
+  <option value="小美">小美</option>
+  <option value="可愛小妞">可愛小妞</option>
+  <option value="漂亮阿姨">漂亮阿姨</option>
+</select>
+<p>小明喜歡的女生是 {{ selected }}。</p>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    selected: '',
+  },
+});
+```
+
+※ `option` 標籤裡面的文字內容跟 `value` 的值可以不一樣，例如：`<option value="阿姨">漂亮阿姨</option>`。
+
+### 透過 v-for 產生選項
+
+在 `option` 裡面使用 v-for：
+
+```html
+<select v-model="selected2">
+  <option value="" disabled>請選擇</option>
+  <option :value="item" v-for="item in selectData">{{ item }}</option>
+</select>
+<p>小明喜歡的女生是 {{ selected2 }}。</p>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    selectData: ['小美', '可愛小妞', '漂亮阿姨'],
+    selected2: '',
+  },
+});
+```
+
+### 加上 multiple 製作出多選的 Select
+
+利用 HTML 的特性，加上 `multiple` 屬性，就可以變成多選。
+
+```html
+<select multiple v-model="multiSelected">
+  <option value="小美">小美</option>
+  <option value="可愛小妞">可愛小妞</option>
+  <option value="漂亮阿姨">漂亮阿姨</option>
+</select>
+<p>小明喜歡的女生是 <span v-for="item in multiSelected">{{ item }} </span>。</p>
+```
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: {
+    multiSelected: [],
+  },
+});
+```
+
+> 可以透過 shift 或 ctrl 來操作多選
+
+![多選呈現結果](https://i.imgur.com/uJDKhiP.png)
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

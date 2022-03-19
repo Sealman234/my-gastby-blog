@@ -1,0 +1,89 @@
+---
+title: 'Vue 初心者筆記 #31 透過 Event Bus 組件溝通處理錯誤回饋訊息'
+excerpt: '這篇筆記會介紹如何透過 Event Bus 組件溝通的概念，製作出上傳失敗時的訊息回饋功能。'
+tags: ['Vue']
+date: '2020-01-20'
+---
+
+## 製作"上傳檔案之格式錯誤"的回饋訊息
+
+整體步驟：
+
+1. 製作 Alert 元件
+2. 將 Alert 元件匯出至 Navbar，並在 Dashboard.vue 中 `import` 使用
+3. 如果用戶上傳檔案失敗，可透過 Event Bus 使用 Alert 元件，提醒用戶錯誤在哪裡
+
+### Part 1：Event Bus 組件溝通
+
+使用 Event Bus 時，我們可以新增一個 bus.js 檔案來呼叫 Event Bus，再將它 `import` 到 main.js 中。
+
+#### main.js
+
+```javascript
+import './bus';
+```
+
+#### bus.js
+
+我們將 Event Bus 掛載在 Vue 的原型下，所以可以直接對 Event Bus 做呼叫。
+例如：`Vue.prototype.$bus`。
+
+```javascript
+import Vue from 'vue';
+Vue.prototype.$bus = new Vue();
+```
+
+> 由於 Event Bus 可以做到跨元件溝通，所以建議將 Event Bus 可以使用的方法（包含使用的方法、傳遞的參數等等），都寫個註解在這個 bus.js 檔案內。
+> 如果沒有標示，可能會忘記或不清楚有哪些方法可以使用喔。
+
+### Part 2：事件觸發流程
+
+將 Event Bus 掛載好之後，就可以開始使用 `$bus` 囉！
+
+1. 在 Products.vue 中，如果上傳失敗就用 `$emit` 觸發 `messsage:push` 事件，並帶入參數 `response.data.message`（Alert 的顯示訊息）以及 `danger`（Alert 的 Bootstrap 樣式）這兩個參數。
+
+   ```javascript
+   this.$bus.$emit('message:push', response.data.message, 'danger');
+   ```
+
+2. 當我們觸發 Alert 元件 (AlertMessage.vue) 裡的 `messsage:push` 事件後，就會接續地觸發該事件內的 `updateMessage(message, status)` 事件，來跳出錯誤回饋的 Alert 訊息。
+
+   ```javascript
+   vm.$bus.$on('message:push', (message, status = 'warning') => {
+     vm.updateMessage(message, status);
+   });
+   ```
+
+回饋訊息的整體運作流程如下圖所示：
+
+![回饋訊息運作流程](https://i.imgur.com/9lq6Ado.png)
+
+#### 補充說明：參數
+
+- `messages`：一個陣列裡面包著物件格式資料，有 `message`、`status`、`timestamp` 等屬性與值
+- `messsage:push`：是自定義事件，可自行命名
+- `message`：傳入的參數（文字內容）
+- `status`：傳入的參數（樣式，預設值為 `warning`）
+
+#### 補充說明：\$on
+
+在元件中，我們直接呼叫了 Vue 實體下的 `$bus`，並用 `$on` 的方式註冊 `message:push` 方法。
+後面則帶有這個方法的兩個參數，分別是參數 `message` 與表示狀態的值 `status` （`status` 可以給一個預設樣式值為 `warning`）。
+
+```javascript
+vm.$bus.$on('message:push', (message, status = 'warning') => {
+  vm.updateMessage(message, status);
+});
+```
+
+其實 `$on` 就類似原生 JavaScript 的監聽事件 `addEventListener`。
+`vm.$on` 是用來監聽當前實例上的自定義事件，而且事件可由 `vm.$emit` 觸發。
+外層是用 `$on` 去註冊，內層則是用 `$emit` 去觸發它。
+
+> 有 `$` 符號的屬性為「實例屬性」，這是官方為了區別與使用者定義的屬性所以用 `$` 區分開來
+
+## 參考資料
+
+1. [API — Vue.js | vm.\$on( event, callback )](https://cn.vuejs.org/v2/api/#vm-on)
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

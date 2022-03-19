@@ -1,0 +1,137 @@
+---
+title: 'Vue 初心者筆記 #3 事件綁定 (v-on)'
+excerpt: '本篇介紹如何使用 v-on 做出頁面上的互動行為。'
+tags: ['Vue']
+date: '2019-10-12'
+---
+
+## 如何使用 v-on
+
+v-on 在 jQuery 中寫成 `$('xxx').on('click', function(){...})`，當被綁定的 DOM 元素被點擊時，就會觸發後方 function 裡頭的事件行為。
+
+jQuery 與 Vue 的概念不同，Vue 會把觸發事件寫在**元件**上，而非直接寫在 Vue 的原始碼裡面。
+在 Vue 中，我們會在 HTML 元素上綁定要觸發的事件，再到 Vue app 裡面新增一個物件叫做 methods。
+
+我們透過以下兩個範例，說明 v-on 的使用方法與觀念。
+
+### 範例一：反轉字串
+
+首先我們新增一個 `reverseText` 的方法到 methods 物件，接著將事件透過 `v-on` 綁定上去。
+
+```html
+<div id="app">
+  <input type="text" v-model="text" />
+  <button v-on:click="reverseText">反轉字串</button>
+  {{ newText }}
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      text: '',
+      newText: '',
+    },
+    // 新增 methods 物件
+    methods: {
+      reverseText: function () {
+        console.log('點我');
+      },
+    },
+  });
+</script>
+```
+
+設定好 v-on 與觸發事件後，我們要讓 methods 能夠讀取 data 的資料，這時候會使用 `this` 來取得這個資料的屬性。
+完成後這個 `newText` 就會是 `text` 字串反轉後的結果哩。
+
+```javascript
+methods: {
+  reverseText: function(){
+    console.log('點我', this.text);
+    this.newText = this.text.split('').reverse().join(''); // 字串反轉
+  }
+}
+```
+
+### 反轉字串的步驟拆解
+
+剛才的 `.split('').reverse().join('')` 是字串反轉的一種方法，我們可以把這段程式碼拆解成以下三個步驟。
+
+1. `.split('')`：將字串以某個字或符號分割，並回傳一個陣列 (Array)
+   例如：`'Hello'.split("e")` → ['H', 'llo']
+   若以空白分隔，會變成 ['H', 'e', 'l', 'l', 'o']
+2. `.reverse()`：把陣列裡元素的順序做顛倒
+   例如：`'Hello'.split("e").reverse` → ['llo', 'H']
+   若以空白分隔，會變成 ['o', 'l', 'l', 'e', 'H']
+3. `.join()`：把陣列拼接成字串 (String)
+   例如：`'Hello'.split("e").reverse.join("-")` → "llo-H"
+   `["a", "b", "c"].join(",")` → "a,b,c"
+
+### 範例二：切換 ClassName
+
+目標：透過切換 ClassName 來旋轉 box。
+實作方法：
+
+1. 在 data 裡預定義 `isRotate` 資料，並使用 v-bind 將 `isRotate` 與 div 元素做綁定
+2. 綁定 v-on 與 `changeRotate` 事件到 button 上
+
+如此一來當使用者點擊按鈕時，就會觸發事件並執行 `this.isRotate = !this.isRotate` 這段程式碼，達到動態切換 `isRotate` 值的效果。
+
+```html
+<div id="app">
+  <div :class="{'rotate': isRotate }"></div>
+  <button v-on:click="changeRotate">切換 box 樣式</button>
+</div>
+
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    isRotate: false,
+  },
+  // 新增 methods 物件
+  methods: {
+    changeRotate: function () {
+      this.isRotate = !this.isRotate;
+    },
+  },
+});
+</scipt>
+```
+
+## v-on 事件帶參數
+
+v-on:click 所觸發的事件也可以是帶有參數的函式。
+例如：每次點擊儲值按鈕都會加 500 元，且該物件按下儲值時不會影響到其他兩個物件。
+
+```html
+<div id="app">
+  <ul>
+    <li v-for="item in arrayData">
+      {{ item.name }} 有 {{ item.cash }} 元
+      <button @click="storeMoney(item)">儲值</button>
+    </li>
+  </ul>
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      arrayData: [
+        { name: '阿翔', age: 21, cash: 500 },
+        { name: '小萱', age: 23, cash: 1000 },
+        { name: '漂亮阿姨', age: 30, cash: 5000 }
+      ],
+    },
+    methods: {
+      storeMoney: function(item) {
+        item.cash = item.cash + 500;
+      },
+    }
+  })
+</scipt>
+```
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

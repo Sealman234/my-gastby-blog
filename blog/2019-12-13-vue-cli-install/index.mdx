@@ -1,0 +1,52 @@
+---
+title: 'Vue 初心者筆記 #20 Vue CLI 安裝與建置'
+excerpt: '終於要進入 Vue CLI 的章節了，關於 Vue CLI 的第一篇筆記將會介紹如何安裝 Vue Cli，並說明建置完成後的資料夾架構。'
+tags: ['Vue']
+date: '2019-12-13'
+---
+
+## 安裝步驟
+
+1. 安裝 Vue CLI 2.x 版本：`npm install -g vue-cli`
+2. 安裝 Webpack 模板：`vue init webpack 資料夾名稱`
+3. 安裝所需套件：`npm install`
+4. 運行 Vue + Webpack：`npm run dev`
+
+成功運行後，在網址欄輸入 `http://localhost:8080/` 應該會出現以下畫面：
+
+![Vue + Webpack](https://i.imgur.com/uWuT8Ka.png)
+
+## 資料夾結構說明
+
+成功建置環境後，我們先來查看一下 README 文件裡的說明吧。
+我們可以看到裡面有個 `npm run build` 指令，這是用來執行正式版 Vue CLI 的，而我們剛才執行的 `dev` 則是測試版的意思。
+
+在我們執行 `npm run build` 之後，會生成 `dist` 資料夾，終端機也會跑出說明訊息，表示 `dist` 的檔案必須用 HTTP Server 才能運作，沒辦法直接打開。
+
+在開始使用前，我們這裡要先介紹每個資料夾與檔案的作用，這也是本篇筆記的重點，就是整理這些檔案的結構。
+
+### 根目錄下的資料夾與檔案
+
+- index.html：所有的檔案都會從 src 打包後注入到此檔案第十行 `<!-- built files will be auto injected -->` 的地方，而此檔案本身則不太會更動到。
+- .postcssrc.js：替 CSS 編譯加入前綴詞的設定檔。
+- .babelrc：所謂的 Babel 就是 ES6 的編譯器，這個檔案就是替 ES6 編譯的設定檔。
+- dist：透過 `npm run bulid` 生成的檔案，這個資料夾下的檔案要使用 Server 才能正常運作。
+  另外，dist 會自動重新生成，每次輸入 `npm run bulid` 的時候就會加上不同的 hash 在資源上，避免有暫存而沒有取到新資源。
+- static：放入 "不會" 被編譯的檔案。
+- src：放入 "會" 被編譯的檔案，是 Vue CLI 最重要的資料夾，所有開發內容都在這邊。
+
+  - src 裡面的 main.js：Webpack 設定以 main.js 作為所有 Vue.js 的進入點。
+    例如：設定 `el` 的 id 為 `#app`，並 import 元件 App.vue 檔案進來。
+
+    > 【關於 .vue 檔案的補充】
+    > .vue 檔案包含 X-Template (`<template>`)、JavaScript (`<script>`)，與 CSS 樣式 (`<style>`)。
+    > 其中 `<script>` 裡面也可以再 import 元件。
+    > 例如：我們可以再 import HelloWorld.vue 這個元件，這個元件預設是放在 src/components 裡面。
+
+    這邊的 Vue 元件是可以一層一層地包進去的，在 Vue CLI 中都是使用元件來載入與製作。
+
+- assets：會針對特定尺寸的圖片來做編譯，做成 Base64 的格式。
+- config：寫 Vue 應用程式時會使用到的設定檔。
+- build：Webpack 的原始碼。
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

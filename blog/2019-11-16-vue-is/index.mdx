@@ -1,0 +1,103 @@
+---
+title: 'Vue 初心者筆記 #14 使用 is 動態切換元件'
+excerpt: '本篇文章會介紹使用 is 顯示元件與動態切換元件的方式。'
+tags: ['Vue']
+date: '2019-11-16'
+---
+
+## 使用 is 顯示元件
+
+顯示元件有兩種方式：
+
+1. 第一種是將元件的 `template` 名稱直接寫成標籤
+   例如 `<primary-component>`
+2. 另一種則是透過 `is` 把資料內容帶入
+   例如：帶入 `<div>` 的標籤內
+
+基本上，這兩種方式呈現於畫面上的結果是一樣的。
+
+<iframe
+  height="265"
+  style="width: 100%;"
+  scrolling="no"
+  title="6-17 使用 is 顯示元件"
+  src="https://codepen.io/Sealman/embed/LYYXggx?height=265&theme-id=default&default-tab=html,result"
+  frameborder="no"
+  allowtransparency="true"
+  allowfullscreen="true"
+>
+  See the Pen{' '}
+  <a href="https://codepen.io/Sealman/pen/LYYXggx">6-17 使用 is 顯示元件</a> by
+  Sean Huang (<a href="https://codepen.io/Sealman">@Sealman</a>) on{' '}
+  <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+## 使用 is 動態切換元件
+
+### v-if 寫法
+
+過去要達到 "切換" 的效果，我們會使用點擊事件 `v-on:click`，搭配 `v-if` 條件判斷式來完成。
+
+範例：
+
+<iframe
+  height="265"
+  style="width: 100%;"
+  scrolling="no"
+  title="6-17 使用 is 切換顯示元件 (v-if)"
+  src="https://codepen.io/Sealman/embed/OJJaBYo?height=265&theme-id=default&default-tab=html,result"
+  frameborder="no"
+  allowtransparency="true"
+  allowfullscreen="true"
+>
+  See the Pen{' '}
+  <a href="https://codepen.io/Sealman/pen/OJJaBYo">
+    6-17 使用 is 切換顯示元件 (v-if)
+  </a>{' '}
+  by Sean Huang (<a href="https://codepen.io/Sealman">@Sealman</a>) on{' '}
+  <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+但是這個 `v-if` 的方法只適合用在切換的元件數量比較少的時候。
+
+如果要切換的元件很多，像是製作頁籤的時候，
+我們不就需要寫好幾行類似的程式碼了嗎？
+這樣子效果就不是很好了。
+
+### is 寫法
+
+所以我們要改良一下，像是改成使用 `is` 來做切換元件的動作。
+
+<iframe
+  height="265"
+  style="width: 100%;"
+  scrolling="no"
+  title="6-17 使用 is 切換顯示元件 (is)"
+  src="https://codepen.io/Sealman/embed/eYYQQNJ?height=265&theme-id=default&default-tab=html,result"
+  frameborder="no"
+  allowtransparency="true"
+  allowfullscreen="true"
+>
+  See the Pen{' '}
+  <a href="https://codepen.io/Sealman/pen/eYYQQNJ">
+    6-17 使用 is 切換顯示元件 (is)
+  </a>{' '}
+  by Sean Huang (<a href="https://codepen.io/Sealman">@Sealman</a>) on{' '}
+  <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+> 要特別注意，因為這裡是做「動態」切換，所以要在 `is` 前面加上 `v-bind`，寫成 `:is`。
+
+這邊我們使用 `v-bind` 分別綁定 `data` 內的變數資料 `current` 與 `item`。
+
+之所以會使用 `v-bind` 綁定 `current`，是因為要讓 `is` 指向「元件名稱」，使得 Vue 在初始化時，就替換成該元件。
+因此，`v-bind:is` 是將元件名稱指向 `current` 這個變數，也代表動態切換的控制權是交由 `current` 來決定。
+
+那麼，`current` 又是由誰控制呢？
+
+我們的 `a` 按鈕上都有綁定 `v-on:click` 事件，當使用者點擊按鈕時，`current` 的值就會做出切換。
+例如：點擊「紅色元件」按鈕時，`current` 變數的值會從 `primary-component` 改為 `danger-component`。
+
+所以我們才能只綁定 `current` 變數，就達到切換按鈕的效果！
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

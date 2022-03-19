@@ -1,0 +1,99 @@
+---
+title: 'Vue 初心者筆記 #25 Vue Router 的配置與參數設定'
+excerpt: '前面我們使用 Vue CLI 與 Vue Router 做了基礎的實作練習，現在要回頭看 Vue Router 配置文件裡的構造與參數。'
+tags: ['Vue']
+date: '2019-12-27'
+---
+
+## Vue Router 構造配置與參數
+
+所謂的構造配置文件，就是指 index.js 這個路由配置檔案。
+之前我們使用過一些參數，其他還有一些參數是我們沒使用過的，這些在官方文件中都有做詳細介紹。
+
+### routes
+
+我們之前已經使用過 `routes` 裡面的 `path`、`component`、`name`、`components` 等參數。
+而其他參數在實作中也很常使用，詳細介紹可參考 [Vue 官方文件](https://tinyurl.com/rzmtn2t)。
+
+```javascript
+export default new VueRouter({
+  routes: [
+    {
+      name: '首頁',
+      path: '/index',
+      component: Home,
+    },
+  ],
+});
+```
+
+### mode
+
+`mode` 是路徑的配置方法，總共有三種 `mode`，分別是 `hash`、`history`、`abstract`。
+
+#### hash
+
+`hash` 是使用 URL hash 值來做路由，就是網址裡的 `#`。在使用 `hash` 模式切換頁面時，這個 `#` 字號會一直保留著。
+例如：`http://localhost:8080/#/page`
+
+#### history
+
+`history` 則是以 HTML 的方式來切換頁面，不需要加上 `#` 也能正確切換路徑。
+例如：`http://localhost:8080/page/child3`
+
+```javascript
+export default new VueRouter({
+  mode: 'history', // mode 改為 history 模式
+  routes: [
+    {
+      name: '首頁',
+      path: '/index',
+      component: Home,
+    },
+  ],
+});
+```
+
+看到這邊是不是覺得 `history` 模式的 URL 比較好看呢？畢竟看起來比較像是一個正常的網址嘛！
+
+不過 `history` 模式使用的是後端伺服器的路由，與預設的 `hash` 模式不同，`hash` 模式只使用前端路由。
+因此，如果我們要使用 `history` 模式，並非只加上這行 `mode: 'history'` 就能完成，還需要後端正確地配置才能使用。
+
+在 [Vue 官方文件](https://tinyurl.com/yx6etmsz)裡，針對 `history` 模式也有著這麼一段話：
+「不過這種模式要玩好，還需要後台配置支持。因為我們的應用是個單頁客戶端應用，如果後台沒有正確的配置，當用戶在瀏覽器直接訪問 `http://oursite.com/user/id` 就會返回 404，這就不好看了。」
+
+意思是如果後端沒有配置 `domain/articlelist` 路徑，用 `history` 模式也是找不到頁面，所以還是建議使用預設模式 `hash`。
+
+### base
+
+如果整個應用程式的路徑不是在預設的根目錄下，可以加入 `base` 的設定。
+
+### linkActiveClass 與 linkExactActiveClass
+
+- `linkActiveClass`：模糊比對
+- `linkExactActiveClass`：絕對比對
+
+當觸發路徑時，Vue 會在觸發的那個標籤上加入一個 Class 名稱。
+
+而這個觸發路徑後，動態加入的 Class 是可以改變名稱的，例如：
+
+```javascript
+export default new VueRouter({
+  linkActiveClass: 'active',
+  routes: [
+    {
+      name: '首頁',
+      path: '/index',
+      component: Home,
+    },
+  ],
+});
+```
+
+這樣就能針對標籤的 ClassName 做替換了。
+
+> 其實就有點類似 ToggleMenu 在目前選項上，加上 `.active` 的感覺。
+
+以上這些就是我們在配置文件 (index.js) 中，比較常會使用到的設定。
+
+> 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

@@ -19,6 +19,9 @@ const Heading = styled.h2`
 const PostLink = styled(Link)`
   text-decoration: none;
   color: #c1170c;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Archives = ({ data }) => {
@@ -57,7 +60,7 @@ export const query = graphql`
         slug
         frontmatter {
           title
-          month: date(formatString: "MMMM")
+          month: date(formatString: "MMM")
           year: date(formatString: "YYYY")
         }
       }
