@@ -27,6 +27,7 @@
     "gatsby-plugin-mdx": "^3.9.1",
     "gatsby-plugin-react-helmet": "^5.10.0",
     "gatsby-plugin-sharp": "^4.9.1",
+    "gatsby-plugin-sitemap": "^5.10.1",
     "gatsby-plugin-styled-components": "^5.9.0",
     "gatsby-remark-autolink-headers": "^5.10.0",
     "gatsby-remark-images": "^6.9.1",
