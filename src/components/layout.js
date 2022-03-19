@@ -232,7 +232,7 @@ const Layout = ({ children }) => {
           <SiteAvatarWrapper>
             <SiteAvatar>
               <StaticImage
-                src="../images/avatar.jpeg"
+                src="../images/avatar.png"
                 alt="Sealman"
                 width={100}
                 height={100}
