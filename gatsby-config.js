@@ -54,20 +54,13 @@ module.exports = {
         icon: `src/images/icon.png`,
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-google-gtag`,
-    //   options: {
-    //     trackingIds: ['UA-153300681-1'],
-    //     pluginConfig: {
-    //       head: true,
-    //     },
-    //   },
-    // },
     {
-      resolve: 'gatsby-plugin-google-tagmanager',
+      resolve: 'gatsby-plugin-google-gtag',
       options: {
-        id: 'GTM-KQSR42J',
-        includeInDevelopment: false,
+        trackingIds: ['G-8LNYZZ5RLH'],
+        pluginConfig: {
+          head: true,
+        },
       },
     },
   ],
