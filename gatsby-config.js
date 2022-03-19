@@ -55,9 +55,15 @@ module.exports = {
       },
     },
     {
+      resolve: 'gatsby-plugin-google-tagmanager',
+      options: {
+        id: 'GTM-W7JN28H',
+      },
+    },
+    {
       resolve: 'gatsby-plugin-google-gtag',
       options: {
-        trackingIds: ['UA-153300681-1', 'G-8LNYZZ5RLH'],
+        trackingIds: ['UA-153300681-1'],
         pluginConfig: {
           head: true,
         },
