@@ -26,10 +26,7 @@ const About = () => {
     <Layout>
       <Seo title="關於我" pathname="about" />
       <Heading>🍔 About Me | 關於我</Heading>
-      <p>
-        前端工程師，喜歡 San-X
-        的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記。
-      </p>
+      <p>前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食。</p>
       <ul>
         <li>暱稱：海豹人</li>
         <li>描述：你不需要很厲害才能開始，但你需要開始才會很厲害</li>

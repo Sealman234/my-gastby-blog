@@ -171,7 +171,8 @@ const NavLinkItem = styled.li`
     display: inline-block;
     padding: 0.625rem 0.9375rem;
     color: #efefef;
-    border-radius: 0.25rem 0.25rem 0 0;
+    transition: background-color 0.3s ease;
+    &:hover,
     &.active {
       background-color: #c1170c;
     }
@@ -240,8 +241,7 @@ const Layout = ({ children }) => {
             </SiteAvatar>
           </SiteAvatarWrapper>
           <SiteDescription>
-            前端工程師，喜歡 San-X
-            的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記。
+            Frontend Engineer / Taiwanese / Passion Comes From Mastery
           </SiteDescription>
           <SiteLinks>
             <a

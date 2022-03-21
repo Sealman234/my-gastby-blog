@@ -1,10 +1,18 @@
 module.exports = {
   siteMetadata: {
     title: "Sealman's Blog",
-    description:
-      '前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記',
+    description: 'Frontend Engineer / Taiwanese / Passion Comes From Mastery',
     author: 'Sealman',
-    keywords: ['Sealman', 'blog', 'gatsby'],
+    keywords: [
+      'JavaScript',
+      'Vue',
+      'Quasar',
+      'React',
+      'Sealman',
+      '海豹人',
+      '海豹人的第一個家',
+      'Sealman Blog',
+    ],
     siteUrl: 'https://blog.sealman.tw',
   },
   plugins: [

@@ -27,7 +27,7 @@ const PostLink = styled(Link)`
 const Archives = ({ data }) => {
   return (
     <Layout>
-      <Seo title="歸檔" pathname="archives" />
+      <Seo title="文章歸檔" pathname="archives" />
       <Heading>Archives</Heading>
       <p>目前總共有 {data.allMdx.totalCount} 篇文章 d(`･∀･)b</p>
       {yearList.map((year) => (

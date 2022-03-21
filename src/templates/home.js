@@ -99,7 +99,7 @@ const Home = ({ data, pageContext }) => {
 
   return (
     <Layout>
-      <Seo title="首頁" />
+      <Seo title="海豹人的第一個家" />
       {data.allMdx.nodes.map((node) => (
         <Post key={node.id}>
           <PostTitle>
