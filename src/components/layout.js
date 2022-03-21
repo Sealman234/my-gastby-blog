@@ -285,6 +285,15 @@ const Layout = ({ children }) => {
               </Link>
             </NavLinkItem>
             <NavLinkItem>
+              <a
+                href="https://docs.sealman.tw/"
+                target={'_blank'}
+                rel="noreferrer noopener"
+              >
+                克服 JS 的奇怪部分
+              </a>
+            </NavLinkItem>
+            <NavLinkItem>
               <Link activeClassName="active" to="/about">
                 關於我
               </Link>
