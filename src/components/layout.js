@@ -286,7 +286,7 @@ const Layout = ({ children }) => {
             </NavLinkItem>
             <NavLinkItem>
               <a
-                href="https://docs.sealman.tw/"
+                href="https://javascript.sealman.tw/"
                 target={'_blank'}
                 rel="noreferrer noopener"
               >
