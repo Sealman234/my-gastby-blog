@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
 
 import Layout from '../components/layout';
@@ -21,16 +20,6 @@ const ProjectTitle = styled.h3`
 `;
 
 const Projects = () => {
-  const data = useStaticQuery(graphql`
-    query {
-      site {
-        siteMetadata {
-          description
-        }
-      }
-    }
-  `);
-
   return (
     <Layout>
       <Seo title="Projects" pathname="projects" />
