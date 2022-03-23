@@ -169,9 +169,13 @@ const NavLinkItem = styled.li`
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    padding: 0.625rem 0.9375rem;
+    padding: 0.625rem 0.625rem;
     color: #efefef;
     transition: background-color 0.3s ease;
+    @media (min-width: 375px) {
+      padding: 0.625rem 0.9375rem;
+    }
+
     &:hover,
     &.active {
       background-color: #c1170c;
@@ -285,13 +289,9 @@ const Layout = ({ children }) => {
               </Link>
             </NavLinkItem>
             <NavLinkItem>
-              <a
-                href="https://javascript.sealman.tw/"
-                target={'_blank'}
-                rel="noreferrer noopener"
-              >
-                克服 JS 的奇怪部分
-              </a>
+              <Link activeClassName="active" to="/projects">
+                專案
+              </Link>
             </NavLinkItem>
             <NavLinkItem>
               <Link activeClassName="active" to="/about">
