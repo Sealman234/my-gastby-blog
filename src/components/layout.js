@@ -237,7 +237,7 @@ const Layout = ({ children }) => {
           <SiteAvatarWrapper>
             <SiteAvatar>
               <StaticImage
-                src="../images/avatar.png"
+                src="../images/avatar.jpeg"
                 alt="Sealman"
                 width={100}
                 height={100}
@@ -263,7 +263,7 @@ const Layout = ({ children }) => {
               <StaticImage src="../images/icon-github.svg" alt="GitHub" />
             </a>
             <a
-              href="https://twitter.com/castle2668"
+              href="https://twitter.com/Sealman234"
               target="_blank"
               rel="noreferrer noopener"
             >
