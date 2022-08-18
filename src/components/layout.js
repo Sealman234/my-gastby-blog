@@ -131,6 +131,9 @@ const SiteAvatar = styled.div`
   border: 0.25rem solid #fff;
   border-radius: 50%;
   overflow: hidden;
+  img {
+    border-radius: 50%;
+  }
 `;
 const SiteDescription = styled.p`
   color: #efefef;

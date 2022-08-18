@@ -26,31 +26,40 @@ const Projects = () => {
       <Heading>Projects</Heading>
       <ProjectTitle>
         <a
-          href="https://javascript.sealman.tw"
+          href="https://github.com/Sealman234/MapleStoryShopV4"
           target="_blank"
           rel="noreferrer noopener"
         >
-          克服 JavaScript 的奇怪部分
+          MapleStory Shop
         </a>
       </ProjectTitle>
       <p>
-        這個系列文章是 JavaScript: Understanding the Weird Parts
-        課程的學習筆記。
+        🍁 Show my LOVE for MapleStory over the years by building this website
+        featuring iconic items!
       </p>
       <ProjectTitle>
         <a
-          href="https://react.sealman.tw/"
+          href="https://github.com/Sealman234/MaskMapV4"
           target="_blank"
           rel="noreferrer noopener"
         >
-          React Complete Note
+          Mask Map
+        </a>
+      </ProjectTitle>
+      <p>A website that show us where can we buy face masks in Taiwan.</p>
+      <ProjectTitle>
+        <a
+          href="https://github.com/Sealman234/github-org-repos-app"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          GitHub Organization Repositories App
         </a>
       </ProjectTitle>
       <p>
-        這個系列文章是 React - The Complete Guide (incl Hooks, React Router,
-        Redux) 課程的學習筆記。
+        透過串接 GitHub REST API，讓我們可以直接快速地搜尋並瀏覽某一個
+        Organization 的所有 Repository。
       </p>
-      <p>此筆記內容目前尚未整理完成。</p>
     </Layout>
   );
 };

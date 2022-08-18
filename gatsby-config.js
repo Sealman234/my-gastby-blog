@@ -4,6 +4,8 @@ module.exports = {
     description: 'Frontend Engineer / Taiwanese / Passion Comes From Mastery',
     author: 'Sealman',
     keywords: [
+      'HTML',
+      'CSS',
       'JavaScript',
       'Vue',
       'Quasar',
