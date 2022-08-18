@@ -1,8 +1,8 @@
 {
-  "name": "my-gatsby-blog",
+  "name": "sealman-blog",
   "version": "1.0.0",
   "private": true,
-  "description": "my-gatsby-blog",
+  "description": "sealman-blog",
   "author": "Sealman",
   "keywords": [
     "gatsby"
