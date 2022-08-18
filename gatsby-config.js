@@ -15,8 +15,9 @@ module.exports = {
       '海豹人的第一個家',
       'Sealman Blog',
     ],
-    siteUrl: 'https://blog.sealman.tw',
+    siteUrl: 'https://Sealman234.github.io',
   },
+  pathPrefix: '/Sealman234.github.io',
   plugins: [
     'gatsby-plugin-styled-components',
     'gatsby-plugin-image',
