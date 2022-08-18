@@ -17,6 +17,7 @@ module.exports = {
     ],
     siteUrl: 'https://www.sealman.tw',
   },
+  trailingSlash: 'never',
   plugins: [
     'gatsby-plugin-styled-components',
     'gatsby-plugin-image',

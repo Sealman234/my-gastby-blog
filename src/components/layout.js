@@ -287,7 +287,7 @@ const Layout = ({ children }) => {
               </Link>
             </NavLinkItem>
             <NavLinkItem>
-              <Link activeClassName="active" to="/tags">
+              <Link activeClassName="active" to="/tags" partiallyActive={true}>
                 標籤列表
               </Link>
             </NavLinkItem>

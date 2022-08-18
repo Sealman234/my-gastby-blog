@@ -26,9 +26,12 @@ const About = () => {
     <Layout>
       <Seo title="關於我" pathname="about" />
       <Heading>🍔 About Me | 關於我</Heading>
-      <p>前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食。</p>
+      <p>
+        I'm a Front End Developer who shares programming goodness with the
+        community 🍁
+      </p>
       <ul>
-        <li>暱稱：海豹人</li>
+        <li>暱稱：Sean Huang aka Sealman</li>
         <li>描述：你不需要很厲害才能開始，但你需要開始才會很厲害</li>
         <li>狀態：前端菜鳥一枚</li>
         <li>專業：前端開發與資訊管理</li>
@@ -36,10 +39,10 @@ const About = () => {
       </ul>
       <h2>🏡 About Blog | 關於部落格</h2>
       <p>
-        本部落格名稱改編自史萊姆的第一個家，是海豹人的童年回憶，從創立至今都有持續更新，希望我也能一直更新，持續地精進自己。
+        本部落格名稱改編自史萊姆的第一個家，是海豹人的童年回憶，而且從創立至今都有持續更新，希望我也能不斷更新，持續地精進自己。
       </p>
       <p>
-        這個部落格主要用來紀錄我學習和開發的筆記，同時也能檢視自己對技能的理解。
+        這個部落格主要是用來紀錄我學習與開發的筆記，同時檢視自己對技能的理解。
         <br />
         歡迎大家交流 (\*´∀`)~♥
       </p>
