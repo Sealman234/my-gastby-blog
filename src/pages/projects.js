@@ -26,6 +26,26 @@ const Projects = () => {
       <Heading>Projects</Heading>
       <ProjectTitle>
         <a
+          href="https://react.sealman.tw"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          React Book
+        </a>
+      </ProjectTitle>
+      <p>📘 My React Book</p>
+      <ProjectTitle>
+        <a
+          href="https://javascript.sealman.tw"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          JavaScript Book
+        </a>
+      </ProjectTitle>
+      <p>📙 My JavaScript Book</p>
+      <ProjectTitle>
+        <a
           href="https://github.com/Sealman234/MapleStoryShopV4"
           target="_blank"
           rel="noreferrer noopener"
