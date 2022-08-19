@@ -58,7 +58,7 @@ module.exports = {
         name: "Sealman's Blog",
         short_name: 'Sealman Blog',
         description: `前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記`,
-        lang: `zh-Hant`,
+        lang: `zh-Hant-TW`,
         start_url: `/`,
         background_color: `#fff`,
         theme_color: `#333`,

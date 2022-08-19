@@ -309,7 +309,7 @@ const Layout = ({ children }) => {
       </Container>
       <Footer>
         <Copyright>
-          Copyright © by <a href="https://sealman234.github.io/">Sealman</a>.
+          Copyright © by <a href="https://github.com/Sealman234">Sealman</a>.
           <br />
           All images and other content related to MapleStory are owned by Nexon
           Corporation.
