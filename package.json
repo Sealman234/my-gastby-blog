@@ -19,7 +19,6 @@
     "@mdx-js/react": "^1.6.22",
     "babel-plugin-styled-components": "^2.0.6",
     "gatsby": "^4.9.3",
-    "gatsby-plugin-google-analytics": "^4.10.0",
     "gatsby-plugin-google-gtag": "^4.10.0",
     "gatsby-plugin-google-tagmanager": "^4.10.1",
     "gatsby-plugin-image": "^2.9.1",

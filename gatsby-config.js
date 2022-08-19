@@ -73,6 +73,14 @@ module.exports = {
         includeInDevelopment: false,
       },
     },
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {
+        trackingIds: [
+          'UA-153300681-1', // Google Analytics / GA
+        ],
+      },
+    },
     'gatsby-plugin-sitemap',
   ],
 };
