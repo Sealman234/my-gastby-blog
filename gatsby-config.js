@@ -67,18 +67,15 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-plugin-google-tagmanager',
-      options: {
-        id: 'GTM-W7JN28H',
-        includeInDevelopment: false,
-      },
-    },
-    {
       resolve: `gatsby-plugin-google-gtag`,
       options: {
         trackingIds: [
-          'UA-153300681-1', // Google Analytics / GA
+          'G-WTGMEP37YK', // Google Analytics
         ],
+        pluginConfig: {
+          head: false,
+          respectDNT: true,
+        },
       },
     },
     'gatsby-plugin-sitemap',
