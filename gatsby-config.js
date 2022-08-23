@@ -1,7 +1,3 @@
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
-});
-
 module.exports = {
   siteMetadata: {
     title: "Sealman's Blog",
@@ -71,15 +67,10 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-google-gtag`,
+      resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingIds: [
-          process.env.GA_ID, // Google Analytics
-        ],
-        pluginConfig: {
-          head: true,
-          respectDNT: true,
-        },
+        trackingId: 'UA-153300681-1',
+        head: false,
       },
     },
     'gatsby-plugin-sitemap',
