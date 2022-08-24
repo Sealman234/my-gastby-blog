@@ -1,4 +1,12 @@
+# Logs
+logs
+*.log
+
+# Build Path of Test Fixtures
+.gatsby-context.js
+.DS_Store
+public/
 node_modules/
 .cache/
-public
-.env*
+.netlify
+.eslintcache
