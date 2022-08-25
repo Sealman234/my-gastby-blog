@@ -44,7 +44,7 @@ const BlogPost = ({ data }) => {
   const image = getImage(post.frontmatter.hero_image);
   const metaImage = image
     ? {
-        src: image.images.sources[0].srcSet,
+        src: image.images.fallback.src,
         width: image.width,
         height: image.height,
       }
@@ -109,7 +109,7 @@ export const query = graphql`
           hero_image_credit_text
           hero_image {
             childImageSharp {
-              gatsbyImageData
+              gatsbyImageData(formats: [PNG, AUTO])
             }
           }
         }
