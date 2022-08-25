@@ -259,18 +259,11 @@ const Layout = ({ children }) => {
               <StaticImage src="../images/icon-linkedin.svg" alt="LinkedIn" />
             </a>
             <a
-              href="https://github.com/Sealman234"
+              href="https://github.com/sealman234"
               target="_blank"
               rel="noreferrer noopener"
             >
               <StaticImage src="../images/icon-github.svg" alt="GitHub" />
-            </a>
-            <a
-              href="https://twitter.com/Sealman234"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <StaticImage src="../images/icon-twitter.svg" alt="Twitter" />
             </a>
           </SiteLinks>
         </HeaderWrapper>
@@ -310,7 +303,7 @@ const Layout = ({ children }) => {
       <Footer>
         <Copyright>
           Copyright © 2019-2022{' '}
-          <a href="https://github.com/Sealman234">Sealman</a>. All rights
+          <a href="https://github.com/sealman234">Sealman</a>. All rights
           reserved.
           <br />
           All images and other content related to MapleStory are owned by Nexon
