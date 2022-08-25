@@ -1,7 +1,6 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import styled from 'styled-components';
-
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
@@ -14,7 +13,6 @@ const Post = styled.article`
   margin-top: 1rem;
   padding-bottom: 1rem;
 `;
-
 const PostTitle = styled.h2`
   margin: 0;
   a {
@@ -25,13 +23,11 @@ const PostTitle = styled.h2`
     }
   }
 `;
-
 const PostDate = styled.p`
   color: #666;
   font-size: 0.875rem;
   margin: 0;
 `;
-
 const PostExcerpt = styled.p`
   a {
     text-decoration: none;
@@ -41,7 +37,6 @@ const PostExcerpt = styled.p`
     }
   }
 `;
-
 const PostTags = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -59,7 +54,6 @@ const PostTags = styled.div`
     }
   }
 `;
-
 const Pagination = styled.div`
   border: 1px solid #eee;
   margin-top: 1rem;
@@ -107,7 +101,7 @@ const Home = ({ data, pageContext }) => {
           </PostTitle>
           <PostDate>{node.frontmatter.date}</PostDate>
           <PostExcerpt>
-            <Link to={`/${node.slug}`}>{node.excerpt}</Link>
+            <Link to={`/${node.slug}`}>{node.frontmatter.excerpt}</Link>
           </PostExcerpt>
           <PostTags>
             {node.frontmatter.tags.length > 0 &&
@@ -147,14 +141,14 @@ export const query = graphql`
       skip: $skip
     ) {
       nodes {
+        id
+        slug
         frontmatter {
           title
           date(formatString: "YYYY-MM-DD")
+          excerpt
           tags
         }
-        id
-        excerpt
-        slug
       }
     }
   }

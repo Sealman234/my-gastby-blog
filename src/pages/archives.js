@@ -1,7 +1,6 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import styled from 'styled-components';
-
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
@@ -15,7 +14,6 @@ const Heading = styled.h2`
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
 `;
-
 const PostLink = styled(Link)`
   text-decoration: none;
   color: #c1170c;

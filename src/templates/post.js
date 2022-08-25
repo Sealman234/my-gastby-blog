@@ -14,13 +14,11 @@ const slugify = (str) => {
 const PostTitle = styled.h1`
   margin-bottom: 0;
 `;
-
 const PostDate = styled.p`
   color: #666;
   font-size: 0.875rem;
   margin: 0;
 `;
-
 const PostTags = styled.div`
   display: flex;
   flex-wrap: wrap;

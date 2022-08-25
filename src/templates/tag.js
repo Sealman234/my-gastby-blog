@@ -1,7 +1,6 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
 import styled from 'styled-components';
-
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
@@ -13,7 +12,6 @@ const Heading = styled.h2`
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
 `;
-
 const Post = styled.article`
   border-bottom: 1px solid #eee;
   margin-top: 1rem;
@@ -25,7 +23,6 @@ const Post = styled.article`
     margin-bottom: 1rem;
   }
 `;
-
 const PostTitle = styled.h2`
   margin: 0;
   a {
@@ -36,13 +33,11 @@ const PostTitle = styled.h2`
     }
   }
 `;
-
 const PostDate = styled.p`
   color: #666;
   font-size: 0.875rem;
   margin: 0;
 `;
-
 const PostExcerpt = styled.p`
   a {
     text-decoration: none;
@@ -52,7 +47,6 @@ const PostExcerpt = styled.p`
     }
   }
 `;
-
 const PostTags = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -86,7 +80,7 @@ const tag = ({ data, pageContext }) => {
           </PostTitle>
           <PostDate>{post.frontmatter.date}</PostDate>
           <PostExcerpt>
-            <Link to={`/${post.slug}`}>{post.excerpt}</Link>
+            <Link to={`/${post.slug}`}>{post.frontmatter.excerpt}</Link>
           </PostExcerpt>
           <PostTags>
             {post.frontmatter.tags.length > 0 &&
