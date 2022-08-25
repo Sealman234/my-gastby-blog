@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
+import StaticAvatar from '../../static/avatar.jpeg';
 
-function SEO({ description, lang, meta, image: metaImage, title, pathname }) {
+function SEO({ description, lang, image: metaImage, title, pathname }) {
+  console.log({ description, lang, metaImage, title, pathname });
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -24,7 +26,7 @@ function SEO({ description, lang, meta, image: metaImage, title, pathname }) {
   const image =
     metaImage && metaImage.src
       ? `${site.siteMetadata.siteUrl}${metaImage.src}`
-      : null;
+      : `${site.siteMetadata.siteUrl}${StaticAvatar}`;
   const canonical = pathname
     ? `${site.siteMetadata.siteUrl}/${pathname}`
     : null;
@@ -68,6 +70,10 @@ function SEO({ description, lang, meta, image: metaImage, title, pathname }) {
           content: `website`,
         },
         {
+          property: `og:url`,
+          content: canonical,
+        },
+        {
           name: `twitter:creator`,
           content: site.siteMetadata.author,
         },
@@ -79,49 +85,49 @@ function SEO({ description, lang, meta, image: metaImage, title, pathname }) {
           name: `twitter:description`,
           content: metaDescription,
         },
-      ]
-        .concat(
-          metaImage
-            ? [
-                {
-                  property: 'og:image',
-                  content: image,
-                },
-                {
-                  property: 'og:image:width',
-                  content: metaImage.width,
-                },
-                {
-                  property: 'og:image:height',
-                  content: metaImage.height,
-                },
-                {
-                  name: 'twitter:card',
-                  content: 'summary_large_image',
-                },
-              ]
-            : [
-                {
-                  name: 'twitter:card',
-                  content: 'summary',
-                },
-              ]
-        )
-        .concat(meta)}
+        {
+          name: `twitter:site`,
+          content: `@sealman234`,
+        },
+        {
+          property: 'og:image',
+          content: image,
+        },
+      ].concat(
+        metaImage
+          ? [
+              {
+                property: 'og:image:width',
+                content: metaImage.width,
+              },
+              {
+                property: 'og:image:height',
+                content: metaImage.height,
+              },
+              {
+                name: 'twitter:card',
+                content: 'summary_large_image',
+              },
+            ]
+          : [
+              {
+                name: 'twitter:card',
+                content: 'summary',
+              },
+            ]
+      )}
     />
   );
 }
 
 SEO.defaultProps = {
-  lang: `zh-Hant`,
-  meta: [],
+  lang: `zh-Hant-TW`,
   description: ``,
 };
 
 SEO.propTypes = {
   description: PropTypes.string,
   lang: PropTypes.string,
-  meta: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string.isRequired,
   image: PropTypes.shape({
     src: PropTypes.string.isRequired,

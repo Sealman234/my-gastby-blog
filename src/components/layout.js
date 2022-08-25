@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Link } from 'gatsby';
 import styled, { createGlobalStyle } from 'styled-components';
 import { StaticImage } from 'gatsby-plugin-image';
-
 import footerImage from '../images/footer-ground.png';
 
 // Global Style
