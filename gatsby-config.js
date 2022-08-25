@@ -55,9 +55,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "Sealman's Blog",
+        name: '海豹人的第一個家',
         short_name: 'Sealman Blog',
-        description: `前端工程師，喜歡 San-X 的まめゴマ、旅遊和吃美食，這裡紀錄了我的學習和開發筆記`,
+        description: `Frontend Engineer / Taiwanese / Passion Comes From Mastery`,
         lang: `zh-Hant-TW`,
         start_url: `/`,
         background_color: `#fff`,
@@ -66,6 +66,7 @@ module.exports = {
         icon: `src/images/icon.png`,
       },
     },
+    'gatsby-plugin-offline',
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
