@@ -5,7 +5,6 @@ import { useStaticQuery, graphql } from 'gatsby';
 import StaticAvatar from '../../static/avatar.jpeg';
 
 function SEO({ description, lang, image: metaImage, title, pathname }) {
-  console.log({ description, lang, metaImage, title, pathname });
   const { site } = useStaticQuery(
     graphql`
       query {
