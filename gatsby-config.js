@@ -66,7 +66,12 @@ module.exports = {
         icon: `src/images/icon.png`,
       },
     },
-    'gatsby-plugin-offline',
+    {
+      resolve: `gatsby-plugin-offline`,
+      options: {
+        precachePages: [`/*`],
+      },
+    },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
