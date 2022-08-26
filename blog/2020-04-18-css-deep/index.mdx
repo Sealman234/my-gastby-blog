@@ -1,6 +1,6 @@
 ---
 title: '客製化修改 Quasar Framework 組件樣式'
-excerpt: '最近使用 Quasar CLI 開發專案，裡面有許多組件可以使用，但是多數的 UI Framework 提供的組件都是層層包裝好的，有些組件的 CSS 樣式甚至會使用 important 來製作，導致我們難以覆寫或修改。這邊要介紹在 Quasar Framework 之中該如何強硬地修改 CSS 樣式，來客製化 Quasar 提供的組件。'
+excerpt: '最近在使用 Quasar CLI 開發專案，裡面有許多已經做好的元件可以使用，但是它所提供的元件是層層包裝好的，有些元件的 CSS 樣式甚至使用 important 還是難以覆寫或修改。這邊要介紹在 Quasar Framework 之中該如何強硬地修改 CSS 樣式，來客製化 Quasar 提供的組件。'
 tags: ['CSS', 'Quasar Framework']
 date: '2020-04-18'
 ---
@@ -45,15 +45,8 @@ Quasar Framework 提供許多組件、Plugin，以及完善的樣式表，讓我
 </style>
 ```
 
-不過 `/deep/` 這種覆寫 CSS 的方式，或許在效能上會有所影響也說不定。
-此外，Google Chrome 2017 年的更新日誌中，有出現過 [Chrome 63 將刪除::shadow 和 /deep/](https://developers.google.com/web/updates/2017/10/remove-shadow-piercing?hl=zh-tw) 的消息，但是這是 `shadow-dom` 的 `/deep/`，與 vue-loader 的 `/deep/` 是不同的東西。
-
 ## 結論
 
 其實使用 UI 框架前就應該與公司的 UI 討論過，如果 UI 喜歡客製化自己的風格，那麼打從一開始就不要使用 UI 框架會比較好。
-
-## 參考資料
-
-1. [如何在 Vue 裡面使用 Element-ui 並修改 CSS 樣式呢？ - I am Mike - Medium](https://medium.com/i-am-mike/%E5%A6%82%E4%BD%95%E5%9C%A8vue%E8%A3%A1%E9%9D%A2%E4%BD%BF%E7%94%A8element-ui%E4%B8%A6%E4%BF%AE%E6%94%B9css%E6%A8%A3%E5%BC%8F%E5%91%A2-f11c1e05787f)
 
 > 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫

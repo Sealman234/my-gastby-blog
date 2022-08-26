@@ -16,7 +16,7 @@ date: '2020-03-13'
 3. 在元件中使用 `dispatch` 取用方法
 4. 在元件中透過 `computed` 將資料呈現到畫面上
 
-另外，雖然 Vue 元件能直接用 `this` 呼叫 Axios 使用 `$http` 的行為，但是 index.js 並非 Vue 元件，所以會出現錯誤。
+另外，雖然 Vue 元件能直接用 `this` 呼叫 Axios 使用 `$http` 的行為，但是 index.js 並非 Vue 元件，所以會出現錯誤。  
 因此，這裡要再導入 Axios 並把 `this.$http.get(url)` 改成 `axios.get(url)`。
 
 如果想在 Actions 中使用同樣在 Vuex 裡的方法，可透過 `context.dispatch('事件名稱')` 取用。
@@ -47,7 +47,7 @@ actions: {
 
 ## Part 2：Vuex 的 mapGetters 與 mapActions
 
-官方稱 mapGetters 與 mapActions 為**輔助函數**，其實它們就只是把 Store 裡的東西直接拿（映射）到元件上用，可以讓程式碼乾淨一些。
+官方稱 mapGetters 與 mapActions 為**輔助函數**，其實它們就只是把 Store 裡的東西直接拿（映射）到元件上用，可以讓程式碼乾淨一些。  
 如果要使用的話，必須先在 Vue 元件中以**解構**的方式將套件引入：
 
 ```javascript
@@ -76,7 +76,7 @@ getters: {
 }
 ```
 
-把資料移到 Getters 之後，我們如果想要在元件中使用這個資料，可利用**展開** (`...mapGetters`) 的方式，透過 `mapGetters` 把所有的 `getters` 都取出來。
+把資料移到 Getters 之後，我們如果想要在元件中使用這個資料，可利用**展開** (`...mapGetters`) 的方式，透過 `mapGetters` 把所有的 `getters` 都取出來。  
 又因為是透過陣列的方式取出，所以我們也可以一次取多個 `getters`，例如：
 
 ```javascript
@@ -95,18 +95,18 @@ methods: {
 },
 ```
 
-然而，如果該事件帶有參數的話，其實是無法使用 `mapActions` 來取用 `actions` 的。
+然而，如果該事件帶有參數的話，其實是無法使用 `mapActions` 來取用 `actions` 的。  
 這種時候就只能乖乖透過 `dispatch` 去呼叫 Vuex 裡面的 `actions` 並加上後方要傳入的參數哩。
 
 ## Part 3：模組化資料
 
-如果執行的是大型專案，Store 的程式碼可能會很雜亂！可能會有一部分的 Code 是與商品有關的，而另一部分則與購物車有關，其他可能還有訂單、優惠券等等。
-在這種情況下，我們其實可以透過**模組化**的方式，將這些程式碼分門別類，各自再區分到不同的檔案之中。
+如果執行的是大型專案，Store 的程式碼可能會很雜亂！可能會有一部分的 Code 是與商品有關的，而另一部分則與購物車有關，其他可能還有訂單、優惠券等等。  
+在這種情況下，我們其實可以透過**模組化**的方式，將這些程式碼分門別類，各自再區分到不同的檔案之中。  
 例如：從 index.js 中，把與產品有關的程式碼拆分到 products.js。
 
 ### 如何拆分
 
-拆分的程式碼結構其實就與原本的檔案相同，把要拆的部分剪下來貼過去就可以了。
+拆分的程式碼結構其實就與原本的檔案相同，把要拆的部分剪下來貼過去就可以了。  
 在拆好 Modules 之後，還要記得把 products.js 載進 index.js 之中，並新增 `modules` 物件。
 
 #### index.js
@@ -123,7 +123,7 @@ export default new Vuex.Store({
 
 ### 如何共用資料
 
-在拆分出去的模組中，`state` 是屬於模組的區域變數，而 `actions`、`mutations`、`getters` 都是屬於全域變數。
+在拆分出去的模組中，`state` 是屬於模組的區域變數，而 `actions`、`mutations`、`getters` 都是屬於全域變數。  
 這裡會建議再加上 `namespaced: true` 這個屬性，把它們都改為區域變數，避免重複使用到相同名稱。
 
 以下是幾個「在元件中使用模組」的範例：

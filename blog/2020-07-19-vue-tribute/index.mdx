@@ -7,7 +7,7 @@ date: '2020-07-19'
 
 ## 開始使用 vue-tribute
 
-[vue-tribute](https://github.com/syropian/vue-tribute) @ GitHub
+> [vue-tribute](https://github.com/syropian/vue-tribute) @ GitHub
 
 vue-tribute 是將 ES6 Native 的 [tribute](https://github.com/zurb/tribute) 經過 Vue.js 的寫法包裝後的套件，方便支援 Vue.js 框架的寫法。
 
@@ -77,7 +77,7 @@ tributeOptions: {
 
 ## 處理標記結果
 
-接著，我們要來處理 @mention 得到的結果。
+接著，我們要來處理 @mention 得到的結果。  
 由於 vue-tribute 沒有提供方法來綁定與監聽選取到的項目，所以我們只好從選取後的文字框當中，將標記到的對象給篩選出來。
 
 ### 篩選出所有的標記對象
@@ -116,6 +116,7 @@ const replaceContent = content.replace(
 ### Contenteditable 滑鼠游標自動 Focus 至最後方
 
 使用 `contenteditable` 時，如果有 Focus 游標的需求，無法直接透過一般的 `focus()` 完成，需要使用到 `Selection` 與 `Range` 屬性。
+
 在 Stack Overflow 上 [Nico Burns](https://stackoverflow.com/users/140293/nico-burns) 在 [javascript - How to move cursor to end of contenteditable entity - Stack Overflow](https://stackoverflow.com/a/3866442/13594832) 這篇問題裡提到的解法，應該是目前可行的解法。
 
 > 不過若 `contenteditable` 裡面有放其他元素，在 Node 節點上可能要再做判斷
@@ -149,6 +150,7 @@ this.setEndOfContenteditable(elem); // 游標移到最後面
 ### Contenteditable 複製貼上時限制為純文字
 
 若要防止使用者貼上文字以外的內容，可以加上以下程式碼，防止使用者貼上任何內容。
+
 在 [Javascript trick for \'paste as plain text\` in execCommand - Stack Overflow](https://stackoverflow.com/a/12028136/13594832) 這個問題串的最佳解答，算是比起另一個網路上的熱門答案更簡單、更好理解，且不容易出現 Bug 的寫法。
 
 ```javascript

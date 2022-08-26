@@ -5,9 +5,9 @@ tags: ['JavaScript']
 date: '2019-10-28'
 ---
 
-## 過去常用的 var、window
+## 過去常用的 var 與 window
 
-之前寫 JS 總是用 var 宣告變數，但使用 var 宣告的變數，會汙染全域變數，例如：
+以前寫 JavaScript 總是用 var 來宣告變數，但是使用 var 宣告的變數，會汙染全域環境，例如：
 
 ```javascript
 var a = 1;
@@ -17,19 +17,19 @@ for (var i = 0; i < 3; i++) {
 }
 ```
 
-如果用「開發人員工具」輸入 window 去搜尋，會發現最上方出現 a 這個全域變數。
+如果用「開發人員工具」輸入 window 去搜尋，會發現最上方出現 `a` 這個全域變數。
 
 而在 ES6 推出後，有了「區塊域」的概念與 let 的寫法，就能避免掉使用 var 會汙染全域變數的副作用了！
 
 ## ES6 優缺點概述
 
 - 優點
-  - 解決 ES5 的 BUG 與不便之處
-  - 盡量避免汙染全域變數 → 維護性較高、不會污染其他開發者
+  - 解決 ES5 的 BUG 與不方便
+  - 盡量避免汙染全域環境 → 維護性較高，不會污染到其他開發者使用的變數
 - 缺點
-  - 舊版瀏覽器的小問題 → 使用 Babel + Gulp 可解決
+  - 舊版瀏覽器的小問題 → 使用 Babel + Gulp 等方式即可解決
 
-## ES6 let 的特性
+## ES6 let 的特性：區塊作用域
 
 let 與 const 用來宣告「區塊」裡的變數，即「區域變數」，所謂的區塊就是指這個 { 大括號 } 裡面的東西。
 
@@ -52,13 +52,13 @@ console.log(a); // 結果為 0
 
 ※ 註：ES6 建議 JS 都寫成**函數式**，盡量以函式呼叫的方式去做設計，不要使用到 var。
 
-## 在 for 迴圈中使用 let
+## 範例：在 For Loop 中使用 let 與 var 的差異
 
-我們透過 var 使用於 for 迴圈的時候常見的問題，來進一步解釋 let 的特性。
+我們透過 var 使用於 for 迴圈時常見的問題，來進一步解釋 let 的特性。
 
 ### 使用 var 的問題
 
-下方程式碼當中，我們希望上方的列表被點擊時，會跳出 alert 來通知我們是點到哪一個列表。
+下方程式碼當中，我們希望上方的列表被點擊時，會跳出 alert 來通知我們是點到哪一個列表。  
 因此，我們先監聽 `li` 並加上 JavaScript 的 `click` 事件：
 
 ```html
@@ -82,15 +82,13 @@ for (var i = 0; i < listLength; i++) {
 }
 ```
 
-完成之後，雖然點擊 li 確實會彈出 alert，但是我們卻發現不管點擊的是哪一個 li，彈跳出來的 alert 的內容都是 4。
+完成之後，雖然點擊 `li` 確實會彈出 alert，但是我們卻發現不管點擊的是哪一個 `li`，彈跳出來的 alert 的內容都是 `4`。
 
-這是因為它的值被「全域變數」所影響。當 for 迴圈跑完之後，i 的值已經等於 i++ 完的結果，汙染了全域變數。
+這是因為 `i` 的值已經被「全域變數」所影響。當 For 迴圈跑完之後，`i` 的值已經等於 `i++` 四次之後的結果，且汙染了全域變數。
 
 ### 使用 let 改善
 
-注意 for 迴圈右邊的大括號。
-
-let 的功能是 for 執行每一次，裡面的 i 都可以存活在個別的**大括號作用域**裡面，彼此執行的內容不像全域變數一樣會被干擾。
+let 的功能是 For 迴圈執行每一次，裡面的 `i` 都可以存活在個別的「大括號作用域」裡面，所以彼此執行的內容不像 var 一樣會被干擾。
 
 ```javascript
 const listLength = document.querySelectorAll('.list li').length;
@@ -103,20 +101,20 @@ for (let i = 0; i < listLength; i++) {
 }
 ```
 
-感覺就像是：
+背後運行的方式就像：
 
-1. 執行 let i = 0，i 存活在 i 為 0 的 { } 作用域裡面，執行 function (){ alert(i+1)}，變成 alert(1)
-2. 執行 let i = 1，i 存活在 i 為 1 的 { } 作用域裡面，執行 function (){ alert(i+1)}，變成 alert(2)
+1. 執行 `let i = 0`，此時的 i 存活在等於 0 的 { } 作用域裡面，執行 `function (){ alert(i+1)}`，變成 `alert(1)`
+2. 執行 `let i = 1`，此時的 i 存活在等於 1 的 { } 作用域裡面，執行 `function (){ alert(i+1)}`，變成 `alert(2)`
 
-## ES6 const 的特性
+## ES6 const 的特性：唯獨
 
-const 是**唯讀變數**（即不能去做修改），常用在一些不能被變更的變數，例如：網址、圓周率。
+const 是唯讀變數（即不能修改），常用在一些不能被變更的變數，例如：網址、圓周率。
 
 不過有個例外，就是 { 物件 } 跟 [ 陣列 ] 還是會被變更，這方面可以用 `freeze()` 方法解決。
 
 ### Object.freeze()
 
-`freeze()` 的功能顧名思義，就是「凍結」一個物件，用於防止物件新增屬性，或是防止原有的屬性被刪除。
+`freeze()` 的功能顧名思義就是「凍結」一個物件，用於防止物件新增屬性，或是防止原有的屬性被刪除。
 
 ```javascript
 const obj = {
@@ -133,8 +131,8 @@ console.log(obj.url); // 30 -> https://sealman.com
 
 ### 1. 其實大家都有 Hoisting
 
-Q：為什麼第一次 console.log(a) 是顯示 undefined，而不是顯示找不到 a 呢？
-A：因為 JavaScript 編譯時，會預設 var 向上提升，只要是建立變數或 Function 都會自動提升到最上面去。
+Q：為什麼第一次 `console.log(a)` 是顯示 undefined，而不是顯示找不到 a 呢？  
+A：因為 JavaScript 編譯時，會預設讓用 var 宣告的變數向上提升，只要是建立變數或 Function 都會自動提升到最上面去。
 
 ```javascript
 // var a; // 就相當於有這一行存在
@@ -152,21 +150,23 @@ let a = 3;
 console.log(a); // 3
 ```
 
-很多人會誤解為 var 有向上提升的特性，而 let / const 沒有，這是錯誤的唷。
-let 與 const 也有 Hoisting，但是它們不會先初始化為 undefined，而是會形成 TDZ。在「提升之後」以及「賦值之前」這段期間，如果在賦值之前試圖取值，就會拋出錯誤。
+此時，很多人會認為 var 有向上提升的特性，而 let 與 const 沒有，但這是錯誤的喔。
+
+其實 let 與 const 也有 Hoisting，但是它們不會先初始化為 undefined，而是會形成 TDZ，也就是「暫時性死區」。  
+在「提升之後」至「賦值之前」這段期間，如果在賦值前試圖取值，就會拋出錯誤。
 
 > 關於 let 與 const Hoisting 更詳細的介紹，可以參考 Huli 寫的[我知道你懂 hoisting，可是你了解到多深？](https://blog.techbridge.cc/2018/11/10/javascript-hoisting/)這篇文章
 
-### 2. 可不可以重新賦值
+### 2. 可不可以重新宣告賦值
 
-var 可以重新賦予其值：
+var 可以重新宣告並賦予其值：
 
 ```javascript
 var a = 1;
 var a = 2; // var 可以重新賦予
 ```
 
-let 跟 const 不能重新賦予：
+let 跟 const 則不能重新宣告賦予：
 
 ```javascript
 let a = 1;
@@ -185,7 +185,7 @@ var c = 1;
 
 a 跟 b 不會出現在 window 裡，c 則會出現在 window 裡，因為 c 是全域變數。
 
-這邊就能回到我們一開始所說的，使用 let 與 const 能避免掉使用 var 會汙染全域變數的副作用。
+這邊就回到我們一開始所說的，使用 let 與 const 能避免掉使用 var 會汙染全域變數的副作用。
 
 ## 總結
 

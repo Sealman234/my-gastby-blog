@@ -29,8 +29,7 @@ HTML 的部分很簡單，只需要一行即可：
 
 `@keyframes` 是在制定動畫的內容，透過關鍵影格選擇器 `from` 與 `to`（或者 `0%` 與 `100%`）去製作想要完成的效果。
 
-打字效果其實就是以改變外層容器的寬度來實現的，因此這裡的設定就是針對 `width` 的調整。
-在範例中我把寬度設定為 `10em`，因為這剛好是 10 個中文字的寬度。
+打字效果其實就是以改變外層容器的寬度來實現的，因此這裡的設定就是針對 `width` 的調整。在範例中我把寬度設定為 `10em`，因為這剛好是 10 個中文字的寬度。
 
 ```css
 @keyframes typing {
@@ -52,23 +51,21 @@ HTML 的部分很簡單，只需要一行即可：
 }
 ```
 
-基本上就是填入剛才的 `@keyframes` 名稱，還有動畫作用時間 (`animation-duration`) 與作用次數 (`iteration-count`) 等等。
+基本上就是填入剛才的 `@keyframes` 名稱，還有動畫作用時間 (`animation-duration`) 與作用次數 (`iteration-count`) 等等。  
 像這邊我想要讓動畫執行無限次，因此 `iteration-count` 的值用了 `infinite`。
 
-補間動畫 (`timing-function`) 我是使用 CSS3 animation 的 `step()` 功能，這算是比較少用到的功能。
-它主要是可以讓動畫變得斷斷續續的，而非順暢地連續執行，不過在這邊使用其實還滿適合的，因為打字時本來就是一個字一個字斷斷續續地出現嘛！
+補間動畫 (`timing-function`) 我是使用 CSS3 animation 的 `step()` 功能，這算是比較少用到的功能。它可以刻意讓動畫變得斷斷續續的，而非順暢地連續執行，因此很適合在這裡，因為打字時本來就是一個字一個字斷斷續續地出現嘛！
 
 > 關於 steps 的介紹可參考這篇文章：[CSS3 animation 屬性中的 steps 功能符深入介紹](https://www.zhangxinxu.com/wordpress/2018/06/css3-animation-steps-step-start-end/)
 
 ### 閃爍游標效果
 
-游標的部分，原先我是使用 `border` 製作，並且用 `padding` 來推開一些空間，這樣邊框才不會貼著文字。
+游標的部分，原先我是使用 `border` 製作，並且用 `padding` 來推開一些空間，這樣邊框才不會貼著文字。  
 然而，這麼做也導致了 `overflow: hidden` 在幫我卡掉溢出時，會剪裁得不太乾淨，會出現下一個字提前出現一點點的狀況，影響了動畫整體的呈現。
 
-因此我們可以改成使用 `box-shadow` 來模擬游標。
-動畫內容一樣是使用 `@keyframes` 與 `animation` 來製作。
+因此我們可以改成使用 `box-shadow` 來模擬游標，而動畫內容一樣是使用 `@keyframes` 與 `animation` 來製作。
 
-最後附上完整的 CSS 程式碼：
+最後就附上完整的 CSS 程式碼給大家吧 😇
 
 ```css
 .typing {
