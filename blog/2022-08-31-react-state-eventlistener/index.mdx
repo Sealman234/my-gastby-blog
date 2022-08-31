@@ -8,11 +8,11 @@ keywords: ['React', 'Ant Design', 'state', 'DOM', 'Event Listener', 'useEffect']
 
 ## 應該盡量使用 JSX 處理事件
 
-其實這個不是 Ant Design 的問題，雖然它的 Table 在綁定 `dataSource` 屬性上確實會有點問題，這跟它背後的機制有關，不過在 `columns` 屬性的使用上是沒問題的，所以這裡先不把問題歸咎於套件。
+其實這個不是 Ant Design 的問題，雖然它的 Table 在綁定 `dataSource` 屬性上確實比較特殊，這跟它背後的運作機制有關，不過在 `columns` 屬性的使用上是沒問題的，所以這裡先不把問題歸咎於套件。
 
 真正問題在於，使用 React State 時，應該盡量不要使用原生的 DOM 方法，像是本文要講的 `addEventListener` 這種。
 
-我們應該使用與 React 相關的綁定方式，像是在 JSX 中使用 `onClick` 來監聽事件，這種方式會更符合意義、更簡潔，同時也會避免一些奇怪問題。
+我們應該使用與 React 相關的綁定方式，像是在 JSX 中使用 `onClick` 來監聽事件，這種方式會更符合意義、更簡潔，同時也能避免一些問題。
 
 ```jsx
 <Button onClick={() => console.log(seamValue)}>Click me!</Button>
@@ -20,9 +20,9 @@ keywords: ['React', 'Ant Design', 'state', 'DOM', 'Event Listener', 'useEffect']
 
 ## 原生 DOM 事件需配合 Dependency 監聽
 
-如果你真的無法把你想監聽的 Element 掛上 JSX 的事件處理，那就只能硬著頭皮加原生 DOM 事件了。這種情況其實也很常見，例如使用 UI 套件像是 Ant Design 的時候。
+如果你真的無法把你想監聽的 Element 掛上 JSX 的事件處理，那就只能硬著頭皮使用原生的 DOM 事件了。
 
-如果想監聽 Ant Design Table 的滾動，會發現 Table Body 的位置包裝在元件渲染後的內層，我們沒辦法直接透過 JSX 掛上 `onScroll` 事件，此時只能透過 `addEventListener` 去做監聽。
+這種情況其實也很常見，例如使用 UI 套件像是 Ant Design 的時候，如果想監聽 Ant Design Table 的滾動，會發現 Table Body 的位置被包裝在元件渲染後的內層，我們沒辦法直接透過 JSX 掛上 `onScroll` 事件，此時只能透過 `addEventListener` 去做監聽。
 
 ```jsx
 import React, { useEffect, useState } from 'react';
@@ -49,15 +49,15 @@ const App = () => {
 export default App;
 ```
 
-這麼做之後，你會發現 Scroll 觸發時，設定的 State 沒有被正確更新成 `newColumns`，然而你在 React DevTools 裡面卻可以發現 State 已經更新了，是畫面上 Table 所使用的 State 沒有更新。
+這麼做之後，你會發現 Scroll 觸發時，設定的 State 沒有被正確更新成 `newColumns`，然而你在 React DevTools 裡面卻可以發現 State 已經更新了，只是畫面上 Table 所使用的 State 沒有更新。
 
 會出現這個問題，主要是因為原生的 DOM 事件並不會知道 React State 的更新，原生 EventListener 綁定到的值，其實一直都是最初的 Initial State。
 
 ## 解決方法
 
-因此如果想要更新綁定的值，我們必須重新綁定一個新的 EventListener 上去。
+因此，如果想要更新綁定的值，我們必須重新綁定一個新的 Event Listener 上去。
 
-我們把會更新的 State 放入 useEffect 的 Dependency 陣列中，這樣當 State 改變時，就會重新綁定 Listener。
+我們把會更新的 State 放到 useEffect 的 Dependency 陣列中，這樣當 State 改變時，就會重新為 DOM 元素綁定事件，此時的 Listener 所使用的值就會是更新後的 State 了。
 
 ```jsx
 const [col, setCols] = useState(columns);
@@ -82,6 +82,6 @@ useEffect(() => {
 }, [dataColumn]);
 ```
 
-對了，記得在 Cleanup Function 中執行 `removeEventListener` 清除之前綁定的監聽，這樣可以盡量避免 Memory Leaks 發生喔。
+對了，記得在 Cleanup Function 中執行 `removeEventListener` 清除之前綁定的監聽，這樣可以盡量避免 Memory Leaks 的發生喔。
 
 > 以上資源是我自己整理過後的筆記，若有錯誤歡迎隨時和我聯繫
