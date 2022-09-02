@@ -92,6 +92,7 @@ const GlobalStyle = createGlobalStyle`
       border-left: 4px solid #c1170c;
       line-height: 1.8;
       padding-left: 1rem;
+      margin: 0 0 1.25rem 1.25rem;
     }
 
     img {
