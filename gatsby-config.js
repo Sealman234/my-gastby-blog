@@ -63,7 +63,13 @@ module.exports = {
         background_color: `#fff`,
         theme_color: `#333`,
         display: `standalone`,
+        // Automatic mode configuration
         icon: `src/images/icon.png`,
+        icon_options: {
+          // For all the options available,
+          // please see the section "Additional Resources" below.
+          purpose: `any maskable`,
+        },
       },
     },
     {
