@@ -31,7 +31,7 @@ const About = () => {
       </p>
       <ul>
         <li>暱稱：Sean Huang aka Sealman</li>
-        <li>描述：你不需要很厲害才能開始，但你需要開始才會很厲害</li>
+        <li>描述：烏龜慢慢爬也是爬，學得下去比較重要！</li>
         <li>狀態：前端菜鳥一枚</li>
         <li>專業：前端開發與資訊管理</li>
         <li>信箱：castle2668@gmail.com</li>
