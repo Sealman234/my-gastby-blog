@@ -1,20 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: "Sealman's Blog",
+    title: '海豹人的第一個家',
     description: 'Frontend Engineer / Taiwanese / Passion Comes From Mastery',
     author: 'Sealman',
-    keywords: [
-      'HTML',
-      'CSS',
-      'JavaScript',
-      'Vue',
-      'Quasar',
-      'React',
-      'Sealman',
-      '海豹人',
-      '海豹人的第一個家',
-      'Sealman Blog',
-    ],
     siteUrl: 'https://www.sealman.tw',
   },
   trailingSlash: 'never',
@@ -56,7 +44,7 @@ module.exports = {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: '海豹人的第一個家',
-        short_name: 'Sealman Blog',
+        short_name: "Sealman's first homepage",
         description: `Frontend Engineer / Taiwanese / Passion Comes From Mastery`,
         lang: `zh-Hant-TW`,
         start_url: `/`,

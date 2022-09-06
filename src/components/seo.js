@@ -4,14 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 import StaticAvatar from '../../static/avatar.jpeg';
 
-function SEO({
-  description,
-  lang,
-  image: metaImage,
-  title,
-  pathname,
-  keywords,
-}) {
+function SEO({ description, lang, image: metaImage, title, pathname }) {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -20,7 +13,6 @@ function SEO({
             title
             description
             author
-            keywords
             siteUrl
           }
         }
@@ -29,22 +21,21 @@ function SEO({
   );
 
   const metaDescription = description || site.siteMetadata.description;
-  const metaKeywords = keywords || site.siteMetadata.keywords;
   const image =
     metaImage && metaImage.src
       ? `${site.siteMetadata.siteUrl}${metaImage.src}`
       : `${site.siteMetadata.siteUrl}${StaticAvatar}`;
   const canonical = pathname
     ? `${site.siteMetadata.siteUrl}/${pathname}`
-    : null;
+    : site.siteMetadata.siteUrl;
+  const defaultTitle = site.siteMetadata.title;
 
   return (
     <Helmet
       htmlAttributes={{
         lang,
       }}
-      title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      title={defaultTitle && pathname ? `${title} | ${defaultTitle}` : title}
       link={
         canonical
           ? [
@@ -57,44 +48,44 @@ function SEO({
       }
       meta={[
         {
-          name: `description`,
+          name: 'description',
           content: metaDescription,
         },
         {
-          name: 'keywords',
-          content: metaKeywords.join(','),
-        },
-        {
-          property: `og:title`,
+          property: 'og:title',
           content: title,
         },
         {
-          property: `og:description`,
+          property: 'og:description',
           content: metaDescription,
         },
         {
-          property: `og:type`,
-          content: `website`,
+          property: 'og:type',
+          content: 'article',
         },
         {
-          property: `og:url`,
+          property: 'og:url',
           content: canonical,
         },
         {
-          name: `twitter:creator`,
-          content: site.siteMetadata.author,
+          property: 'og:site_name',
+          content: defaultTitle,
         },
         {
-          name: `twitter:title`,
+          name: 'twitter:title',
           content: title,
         },
         {
-          name: `twitter:description`,
+          name: 'twitter:description',
           content: metaDescription,
         },
         {
-          name: `twitter:site`,
-          content: `@sealman234`,
+          name: 'twitter:site',
+          content: '@sealman234',
+        },
+        {
+          name: 'twitter:creator',
+          content: '@sealman234',
         },
         {
           property: 'og:image',
@@ -128,8 +119,8 @@ function SEO({
 }
 
 SEO.defaultProps = {
-  lang: `zh-Hant-TW`,
-  description: ``,
+  lang: 'zh-Hant-TW',
+  description: '',
 };
 
 SEO.propTypes = {

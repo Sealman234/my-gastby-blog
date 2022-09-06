@@ -57,7 +57,6 @@ const BlogPost = ({ data }) => {
         description={post.frontmatter.excerpt}
         image={metaImage}
         pathname={post.slug}
-        keywords={post.frontmatter.keywords}
       />
       <article className="blog-post">
         <PostTitle>{post.frontmatter.title}</PostTitle>
@@ -105,7 +104,6 @@ export const query = graphql`
           date(formatString: "YYYY-MM-DD")
           excerpt
           tags
-          keywords
           hero_image_alt
           hero_image_credit_link
           hero_image_credit_text
