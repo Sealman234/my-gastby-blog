@@ -38,20 +38,6 @@ const Projects = () => {
       </p>
       <ProjectTitle>
         <a
-          href="https://javascript.sealman.tw"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          📙 JavaScript Book
-        </a>
-      </ProjectTitle>
-      <p>
-        這是我的 JavaScript 學習筆記，主要包含我修習 JavaScript: Understanding
-        the Weird Part 這門課程的筆記內容，說明 JavaScript
-        背後的運作原理與邏輯，同時也會持續整理 ECMAScript 的更新內容進來。
-      </p>
-      <ProjectTitle>
-        <a
           href="https://sealman234.github.io/MapleStoryShopV4"
           target="_blank"
           rel="noreferrer noopener"

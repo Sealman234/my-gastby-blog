@@ -1,4 +1,10 @@
 {
-  "editor.formatOnSave": true,
-  "cSpell.words": ["frontmatter", "noopener", "noreferrer", "nowrap", "Sealman"]
+  "cSpell.words": [
+    "frontmatter",
+    "noopener",
+    "noreferrer",
+    "nowrap",
+    "Sealman"
+  ],
+  "editor.formatOnSave": true
 }
