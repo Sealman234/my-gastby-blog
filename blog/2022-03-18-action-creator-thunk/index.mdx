@@ -1,0 +1,101 @@
+---
+title: 'Redux Toolkit with Action Creator Thunk'
+excerpt: '本文繼續介紹 Redux Toolkit 的使用方式，因為有 Action Creator Thunk 讓我真的特別愛用 Redux Toolkit ❤️'
+tags: ['React', 'Redux', 'Redux Toolkit']
+date: '2022-03-18'
+---
+
+## Problems with Asynchronous code in Redux
+
+在元件中可處理非同步行為，而在 Reducer 中我們只處理同步行為。因為在 Reducer 執行 Call API 這種非同步的動作會造成 Side Effect，另外也不要在 Reducer 以外的地方 mutate 任何的 state。
+
+那麼究竟該怎麼做呢？
+
+我們可以在**元件**中的 `useEffect` 執行非同步行為，或是透過 Redux 的 **Action creator** 來執行。
+
+## Where should our logic (code) go
+
+- Synchronous, side-effect free code (i.e. data transformations)
+  - **Prefer** Reducers
+  - **Avoid** Action Creators or Components
+- Async code or code with side-effects
+  - **Prefer** Action Creators or Components
+  - **Never use** Reducers
+
+For example: First, we update our Redux store. Then, we select the updated store to send the HTTP request.
+
+## Action Creator Thunk
+
+> IMO this is similar to `actions` in Vuex
+
+非同步的 Code 可以放在 Component 或是 Redux Thunks
+
+- Thunk: 只是一個函式，為了將某一個動作，延後到其他事情完成後
+
+  如果一個 Action Creator 是 Thunk，那麼這個 Action Creator 不會回傳 Action 物件，而是會回傳一個函式（這個函式才會返回 Action 物件）。
+
+例如：想要在 Dispatch 之前，先完成一些事情。
+
+```jsx
+// Thunk
+export const sendCartData = (cart) => {
+  // Redux Toolkit give us "dispatch" automatically
+  // and Redux Toolkit will execute this function automatically
+  return async (dispatch) => {
+    // We wanna do something before dispatching...
+    dispatch(
+      uiActions.showNotification({
+        status: 'pending',
+        title: 'Sending...',
+        message: 'Sending cart data!',
+      })
+    );
+
+    const sendRequest = async () => {
+      const response = await fetch(
+        'https://react-http-14f5a-default-rtdb.firebaseio.com/cart.json',
+        {
+          method: 'PUT',
+          body: JSON.stringify(cart),
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Sending cart data failed.');
+      }
+    };
+
+    try {
+      await sendRequest();
+      dispatch(
+        uiActions.showNotification({
+          status: 'success',
+          title: 'Success!',
+          message: 'Sent cart data successfully!',
+        })
+      );
+    } catch (error) {
+      dispatch(
+        uiActions.showNotification({
+          status: 'error',
+          title: 'Error!',
+          message: 'Sending cart data failed!',
+        })
+      );
+    }
+  };
+};
+```
+
+所以這個自定義的 Action Creator Function (Thunk) 可以幫助我們把組件裡的 Logic 抽離，改為放在 Redux 裡面，讓組件更精簡。
+
+Both two approaches are great, but I prefer this way more!
+
+## 回顧
+
+看完這篇文章，我們到底有什麼收穫呢？藉由本文可以理解到…
+
+- Action Creator Thunk
+
+## References
+
+- [React - The Complete Guide (incl Hooks, React Router, Redux)](https://www.udemy.com/course/react-the-complete-guide-incl-redux/)

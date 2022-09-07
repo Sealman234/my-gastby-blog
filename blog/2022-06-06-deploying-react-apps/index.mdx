@@ -1,0 +1,28 @@
+---
+title: 'Deploying React Apps'
+excerpt: '本文為 React Router 升級第 6 版的筆記。'
+tags: ['React']
+date: '2022-06-06'
+---
+
+## Upload Production Code to Server
+
+任何 SPA 框架 Build 出來的都是一個 Static Website，意思就是網站是由 HTML、CSS，與 Client Side 的 JavaScript React Code 所組成，並沒有需要在 Server 執行的 JavaScript Code。
+
+因此，我們需要的是「Static Site Host」像是 Google Cloud、AWS，或是使用我們用來開 API 用的 Firebase（沒錯它也有提供這項服務）。
+
+使用 Firebase 的話，在輸入 `firebase init` 進入專案設定時，會有一個問題是「Configure as a single-page app (rewrite all urls to /index.html)?」這裡要選擇「Yes」。問題的意思是，要不要讓所有頁面都使用 index.html，而這個就是 SPA 在做的事情。
+
+我們透過 React Router 去定義路由，因此所有的頁面都是同一個 HTML，只是透過 Router 的切換，讓頁面呈現的內容改變而已。
+
+> 下架已部署的專案：`firebase hosting:disable`
+
+## 回顧
+
+看完這篇文章，我們到底有什麼收穫呢？藉由本文可以理解到…
+
+- Upload Production Code to Firebase Hosting Service
+
+## References
+
+- [React - The Complete Guide (incl Hooks, React Router, Redux)](https://www.udemy.com/course/react-the-complete-guide-incl-redux/)

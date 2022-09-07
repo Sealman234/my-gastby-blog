@@ -24,20 +24,6 @@ const Projects = () => {
       <Heading>Projects</Heading>
       <ProjectTitle>
         <a
-          href="https://react.sealman.tw"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          📘 React Book
-        </a>
-      </ProjectTitle>
-      <p>
-        我的 React 學習筆記，是以我修習 React - The Complete Guide (incl Hooks,
-        React Router, Redux) 這門課程的筆記為基礎結構，持續補充與整理 React
-        的相關觀念。
-      </p>
-      <ProjectTitle>
-        <a
           href="https://sealman234.github.io/MapleStoryShopV4"
           target="_blank"
           rel="noreferrer noopener"

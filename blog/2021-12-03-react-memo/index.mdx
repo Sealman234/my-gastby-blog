@@ -1,0 +1,40 @@
+---
+title: 'Introducing React.memo'
+excerpt: '本文介紹 React.memo 的使用方式，以此減少元件不必要的渲染。'
+tags: ['React']
+date: '2021-12-03'
+---
+
+## React.memo
+
+> 偵測 Props 有沒有修改，減少元件不必要的渲染。
+
+只要在輸出 Component 時套上 `React.memo()` 即可。（限 Functional Component 使用，Class Component 不能用）
+
+`React.memo` 會去看這個 Component 所傳入使用的 **Props** 是否改變 (New props value vs. Previous props value)。如果父元件給的 Props 有改變，才會重新執行與評估這個子元件，而不是每次都重新執行。
+
+```jsx
+export default React.memo(DemoOutput);
+```
+
+但是，如果 Props 的類別是 Object (or Array or Function)，即使傳的是一樣的值，但兩者在比較時仍然會判斷為不同，因為這是 JavaScript 的特性。
+
+例如：傳給 `Button` 的 Props `onClick` 是一個 `setState` (`toggleParagraphHandler`) 函式，所以即使包上 `React.memo()` 也還是會一直重新執行。
+
+```jsx
+<Button onClick={toggleParagraphHandler}>Toggle Paragraph!</Button>
+// props.onClick === props.previous.onClick // false
+// {} === {} // false
+```
+
+這代表只要 Props 是物件 React.memo 就沒用了嗎？此時我們需要搭配下一篇介紹的 useCallback 來解決這個問題！
+
+## 回顧
+
+看完這篇文章，我們到底有什麼收穫呢？藉由本文可以理解到…
+
+- React.memo
+
+## References
+
+- [React - The Complete Guide (incl Hooks, React Router, Redux)](https://www.udemy.com/course/react-the-complete-guide-incl-redux/)

@@ -1,0 +1,57 @@
+---
+title: 'Introducing useCallback'
+excerpt: '本文介紹 useCallback 的使用方式。'
+tags: ['React']
+date: '2021-12-12'
+---
+
+> [useCallback - React 官方文件](https://zh-hant.reactjs.org/docs/hooks-reference.html#usecallback)
+
+## ⚓ useCallback Hook
+
+> Avoid unnecessary re-rendering "when Props is Object type"
+
+```jsx
+// 回傳一個 memoized 的 callback
+
+const memoizedCallback = useCallback(() => {
+  doSomething(a, b);
+}, [a, b]);
+```
+
+`useCallback` 允許我們儲存跨組件執行的「函式」，它會把函式儲存在 React 內存記憶體，讓使用時的物件位址都是指向同一個地方。
+
+這時候使用像是 `React.memo` 時，就能夠知道傳入的函式是相同的物件。儘管 Props 的是 Object，仍可以在父元件重新渲染時，不會重新分配記憶體位址，減少不必要的重新渲染。
+
+### Dependencies
+
+useCallback 與 useEffect 都一樣要傳入 dependency array，要放入我們在函式中使用到的（相關於組件的）任何東西。
+
+```jsx
+// 這裡用到 setState 但是不用放入 dependency，因為 React 保證 setState 不會變化
+const toggleParagraphHandler = useCallback(() => {
+  setShowParagraph((prevShowParagraph) => !prevShowParagraph);
+}, []);
+```
+
+如果函式有使用到一些變數，因為有 Closure 關住原本的狀態，所以就算外部更改了變數，此時 useCallback 包住的函式的變數的值，依然還是傳入時的值。
+
+這時就得把那個變數加到 dependency，讓 `allowToggle` 如果一更改，就重新生成 `toggleParagraphHandler` Function。
+
+```jsx
+const toggleParagraphHandler = useCallback(() => {
+  if (allowToggle) {
+    setShowParagraph((prevShowParagraph) => !prevShowParagraph);
+  }
+}, [allowToggle]);
+```
+
+## 回顧
+
+看完這篇文章，我們到底有什麼收穫呢？藉由本文可以理解到…
+
+- useCallback Hook
+
+## References
+
+- [React - The Complete Guide (incl Hooks, React Router, Redux)](https://www.udemy.com/course/react-the-complete-guide-incl-redux/)
