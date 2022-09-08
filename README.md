@@ -13,3 +13,6 @@ npm run develop
 ## Todo List
 
 待寫清單...
+
+- [ ] Why does useEffect run two times?
+- [ ] Gatsby Blog PWA
