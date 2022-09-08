@@ -98,7 +98,19 @@ module.exports = {
         head: false,
       },
     },
-    'gatsby-plugin-sitemap',
-    'gatsby-plugin-robots-txt',
+    {
+      resolve: 'gatsby-plugin-sitemap',
+      options: {
+        output: '/',
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-robots-txt',
+      options: {
+        host: 'https://www.sealman.tw',
+        sitemap: 'https://www.sealman.tw/sitemap-index.xml',
+        policy: [{ userAgent: '*', allow: '/' }],
+      },
+    },
   ],
 };
