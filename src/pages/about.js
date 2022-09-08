@@ -25,10 +25,7 @@ const About = () => {
     <Layout>
       <Seo title="關於我" pathname="about" />
       <Heading>🍔 About Me | 關於我</Heading>
-      <p>
-        I'm a Front End Developer who shares programming goodness with the
-        community 🍁
-      </p>
+      <p>Frontend Engineer / Taiwanese / Passion Comes From Mastery</p>
       <ul>
         <li>暱稱：Sean Huang aka Sealman</li>
         <li>描述：烏龜慢慢爬也是爬，學得下去比較重要！</li>

@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: '海豹人的第一個家',
-    description: 'Frontend Engineer / Taiwanese / Passion Comes From Mastery',
+    description: "Sealman's first homepage",
     author: 'Sealman',
     siteUrl: 'https://www.sealman.tw',
   },
@@ -41,31 +41,33 @@ module.exports = {
     },
     'gatsby-plugin-react-helmet',
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: 'gatsby-plugin-manifest',
       options: {
         name: '海豹人的第一個家',
-        short_name: "Sealman's first homepage",
-        description: `Frontend Engineer / Taiwanese / Passion Comes From Mastery`,
-        lang: `zh-Hant-TW`,
-        start_url: `/`,
-        background_color: `#fff`,
-        theme_color: `#333`,
-        display: `standalone`,
+        short_name: 'SealmanTW',
+        description: "Sealman's first homepage",
+        lang: 'zh-Hant-TW',
+        id: '/',
+        start_url: '/',
+        background_color: '#fff',
+        theme_color: '#333',
+        display: 'standalone',
         // Automatic mode configuration
-        icon: `src/images/icon.png`,
+        icon: 'src/images/icon.png',
         icon_options: {
           // For all the options available,
           // please see the section "Additional Resources" below.
-          purpose: `any maskable`,
+          purpose: 'maskable',
         },
       },
     },
-    {
-      resolve: `gatsby-plugin-offline`,
-      options: {
-        precachePages: [`/*`],
-      },
-    },
+    'gatsby-plugin-offline',
+    // {
+    //   resolve: `gatsby-plugin-offline`,
+    //   options: {
+    //     precachePages: [`/*`],
+    //   },
+    // },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
