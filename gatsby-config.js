@@ -54,11 +54,6 @@ module.exports = {
         display: 'standalone',
         // Automatic mode configuration
         icon: 'src/images/icon.png',
-        icon_options: {
-          // For all the options available,
-          // please see the section "Additional Resources" below.
-          purpose: 'maskable',
-        },
       },
     },
     'gatsby-plugin-offline',
