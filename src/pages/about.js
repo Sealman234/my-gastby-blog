@@ -27,8 +27,11 @@ const About = () => {
       <Heading>🍔 About Me | 關於我</Heading>
       <p>Frontend Engineer / Taiwanese / Passion Comes From Mastery</p>
       <ul>
-        <li>暱稱：Sean Huang aka Sealman</li>
-        <li>描述：烏龜慢慢爬也是爬，學得下去比較重要！</li>
+        <li>暱稱：海豹人 Sealman</li>
+        <li>
+          描述：每天都進步 1%，一年後你會進步 37 倍；每天都退步
+          1%，一年後你會弱化到趨近於 0！
+        </li>
         <li>狀態：前端菜鳥一枚</li>
         <li>專業：前端開發與資訊管理</li>
         <li>信箱：castle2668@gmail.com</li>
