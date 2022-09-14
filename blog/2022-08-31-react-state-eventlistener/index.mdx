@@ -21,7 +21,9 @@ date: '2022-08-31'
 
 如果你真的無法把你想監聽的 Element 掛上 JSX 的事件處理，那就只能硬著頭皮使用原生的 DOM 事件了。
 
-這種情況其實也很常見，例如使用 UI 套件像是 Ant Design 的時候，如果想監聽 Ant Design Table 的滾動，會發現 Table Body 的位置被包裝在元件渲染後的內層，我們沒辦法直接透過 JSX 掛上 `onScroll` 事件，此時只能透過 `addEventListener` 去做監聽。
+這種情況其實也很常見，例如使用 UI 套件像是 Ant Design 的時候，如果想監聽 Ant Design Table 的滾動，會發現 Table Body 的位置被包裝在元件渲染後的內層，我們沒辦法直接透過 JSX 掛上 `onScroll` 事件。
+
+這時候就只能透過 `addEventListener` 去做監聽了。
 
 ```jsx
 import React, { useEffect, useState } from 'react';
@@ -48,15 +50,15 @@ const App = () => {
 export default App;
 ```
 
-這麼做之後，你會發現 Scroll 觸發時，設定的 State 沒有被正確更新成 `newColumns`，然而你在 React DevTools 裡面卻可以發現 State 已經更新了，只是畫面上 Table 所使用的 State 沒有更新。
+這麼做之後，你會發現 Scroll 觸發時，所設定的 State 沒有被正確更新成 `newColumns`，然而你在 React DevTools 裡面卻可以看到 State 已經更新，只是畫面上 Table 所使用的 State 沒有更新。
 
 會出現這個問題，主要是因為原生的 DOM 事件並不會知道 React State 的更新，原生 EventListener 綁定到的值，其實一直都是最初的 Initial State。
 
 ## 解決方法
 
-因此，如果想要更新綁定的值，我們必須重新綁定一個新的 Event Listener 上去。
+如果想要更新綁定的值，我們必須重新綁定一個新的 Event Listener 上去。
 
-我們把會更新的 State 放到 useEffect 的 Dependency 陣列中，這樣當 State 改變時，就會重新為 DOM 元素綁定事件，此時的 Listener 所使用的值就會是更新後的 State 了。
+我們把更新的 State 放到 useEffect 的 Dependency 陣列中，這樣當 State 改變時，就會重新為 DOM 元素綁定事件，此時的 Listener 所使用的值就會是更新後的 State 囉！
 
 ```jsx
 const [col, setCols] = useState(columns);
