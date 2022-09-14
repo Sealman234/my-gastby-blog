@@ -7,9 +7,9 @@ date: '2022-03-03'
 
 ## ⚓ useSelector hook
 
-> 有點類似 Vue.js 的 `computed` 計算屬性，會監控 Redux 特定狀態的更動
+> A hook to access the redux store's state, and manage the subscription behind the scenes.
 
-A hook to access the redux store's state, and manage the subscription behind the scenes.
+useSelector 會監控 Redux 特定狀態的更動，有點類似 Vuex 中 `computed` 計算屬性的感覺。
 
 ```jsx
 import { useSelector } from 'react-redux';
@@ -28,13 +28,13 @@ const Counter = () => {
 export default Counter;
 ```
 
-此外，當 Redux store 更新時，使用 `counter` 的 Component 也會一起被更新（重新評估、執行），因為這樣才能確保接收 Redux 最新的 `state`。
+當 Redux store 更新時，使用 `counter` 的 Component 也會一起被更新（重新評估、執行），因為這樣才能確保接收 Redux 最新的 `state` 喔。
 
 ## ⚓ useDispatch hook
 
-A hook to access the redux `dispatch` function.
+> A hook to access the redux `dispatch` function.
 
-提供 dispatch 函式：`const dispatch = useDispatch()`
+useDispatch 提供 dispatch 函式：`const dispatch = useDispatch()`。
 
 ```jsx
 import { useDispatch } from 'react-redux';
@@ -63,7 +63,7 @@ export default Counter;
 
 ## Attach Payloads to Actions Object
 
-瞭解 Redux 基本的使用後，我們繼續往下看一些比較深入而且實用的功能！
+> 瞭解 Redux 基本的使用後，我們繼續往下看一些比較深入而且實用的功能吧！
 
 當我們 dispatch 一個 action 時，Payload 裡面除了 `type` 我們還可以放更多內容，像是定義 `amount`，讓按鈕可以一次加上指定的數量。
 

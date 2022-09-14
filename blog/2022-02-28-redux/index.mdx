@@ -12,6 +12,8 @@ React Context 適合用於規模較小、邏輯簡單的 App。
 如果開發的 App 比較龐大時，Context 可能會變得很複雜，一個 Provider 所管理的 State 非常多，不同的業務邏輯通通寫在一起很容易搞混。
 但如果把不同邏輯各自拆開，卻又會出現以下情況，變成這樣一個巢狀的結構。
 
+除此之外，React Team 成員在 2018 年的 GitHub Comment 中說到 React Context 不適合用在頻繁更換狀態的情境下，比較適合應用在像是 Authentication 等狀態變更頻率較低的地方。
+
 ```jsx
 return (
   <AuthContextProvider>
@@ -23,8 +25,6 @@ return (
   </AuthContextProvider>
 );
 ```
-
-除此之外，React Team 成員在 2018 年的 GitHub Comment 中說到 React Context 不適合用在頻繁更換狀態的情境下，比較適合應用在像是 Authentication 等狀態變更頻率較低的地方。
 
 ## How Redux works
 
