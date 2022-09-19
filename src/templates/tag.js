@@ -1,11 +1,11 @@
-import React from 'react';
-import { graphql, Link } from 'gatsby';
-import styled from 'styled-components';
-import Layout from '../components/layout';
-import Seo from '../components/seo';
+import React from "react";
+import { graphql, Link } from "gatsby";
+import styled from "styled-components";
+import Layout from "../components/Layout";
+import Seo from "../components/seo";
 
 const slugify = (str) => {
-  return str.replace(/\s+/g, '-').toLowerCase();
+  return str.replace(/\s+/g, "-").toLowerCase();
 };
 
 const Heading = styled.h2`

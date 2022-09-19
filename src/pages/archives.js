@@ -1,8 +1,8 @@
-import React from 'react';
-import { graphql, Link } from 'gatsby';
-import styled from 'styled-components';
-import Layout from '../components/layout';
-import Seo from '../components/seo';
+import React from "react";
+import { graphql, Link } from "gatsby";
+import styled from "styled-components";
+import Layout from "../components/Layout";
+import Seo from "../components/seo";
 
 const currentYear = new Date().getFullYear();
 const yearList = [];
@@ -35,8 +35,8 @@ const Archives = ({ data }) => {
             {data.allMdx.nodes.map(
               (node) =>
                 node.frontmatter.year === year && (
-                  <li key={node.id} style={{ paddingBottom: '0.25rem' }}>
-                    <span>{node.frontmatter.month}</span>{' '}
+                  <li key={node.id} style={{ paddingBottom: "0.25rem" }}>
+                    <span>{node.frontmatter.month}</span>{" "}
                     <PostLink to={`/${node.slug}`}>
                       {node.frontmatter.title}
                     </PostLink>

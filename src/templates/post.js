@@ -1,14 +1,15 @@
-import React, { Fragment } from 'react';
-import { graphql, Link } from 'gatsby';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
-import styled from 'styled-components';
+import React, { Fragment } from "react";
+import { graphql, Link } from "gatsby";
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import styled from "styled-components";
 
-import Layout from '../components/layout';
-import Seo from '../components/seo';
+import Layout from "../components/Layout";
+import Seo from "../components/seo";
+import ToC from "../components/ToC";
 
 const slugify = (str) => {
-  return str.replace(/\s+/g, '-').toLowerCase();
+  return str.replace(/\s+/g, "-").toLowerCase();
 };
 
 const PostTitle = styled.h1`
@@ -49,6 +50,7 @@ const BlogPost = ({ data }) => {
         height: image.height,
       }
     : null;
+  const { tableOfContents } = post;
 
   return (
     <Layout>
@@ -76,7 +78,7 @@ const BlogPost = ({ data }) => {
             {post.frontmatter.hero_image_credit_link &&
               post.frontmatter.hero_image_credit_text && (
                 <p>
-                  Photo Credit:{' '}
+                  Photo Credit:{" "}
                   <a href={post.frontmatter.hero_image_credit_link}>
                     {post.frontmatter.hero_image_credit_text}
                   </a>
@@ -84,6 +86,7 @@ const BlogPost = ({ data }) => {
               )}
           </Fragment>
         )}
+        <ToC toc={tableOfContents} />
         <MDXRenderer>{post.body}</MDXRenderer>
       </article>
     </Layout>
@@ -113,6 +116,7 @@ export const query = graphql`
             }
           }
         }
+        tableOfContents(maxDepth: 3)
       }
     }
   }

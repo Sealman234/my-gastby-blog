@@ -1,8 +1,8 @@
-import React from 'react';
-import { graphql, Link } from 'gatsby';
-import styled from 'styled-components';
-import Layout from '../components/layout';
-import Seo from '../components/seo';
+import React from "react";
+import { graphql, Link } from "gatsby";
+import styled from "styled-components";
+import Layout from "../components/Layout";
+import Seo from "../components/seo";
 
 const Heading = styled.h2`
   margin-top: 0.5rem;
@@ -17,7 +17,7 @@ const TagLink = styled(Link)`
 `;
 
 const slugify = (str) => {
-  return str.replace(/\s+/g, '-').toLowerCase();
+  return str.replace(/\s+/g, "-").toLowerCase();
 };
 
 const Tags = ({ data }) => {
@@ -36,7 +36,7 @@ const Tags = ({ data }) => {
       <p>目前總共有 {tags.length} 個標籤 (`・ω・´)</p>
       <ul>
         {tags.map(({ tag, kebab, totalCount }) => (
-          <li key={tag} style={{ paddingBottom: '0.25rem' }}>
+          <li key={tag} style={{ paddingBottom: "0.25rem" }}>
             <TagLink to={`/tags/${kebab}`}>
               {tag} ({totalCount})
             </TagLink>

@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;
@@ -57,7 +57,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Make tag pages
   const TagTemplate = path.resolve(`src/templates/tag.js`);
   resultTags.data.allMdx.group.forEach(async ({ tag, totalCount }) => {
-    const kebab = tag.replace(/\s+/g, '-').toLowerCase();
+    const kebab = tag.replace(/\s+/g, "-").toLowerCase();
     const path = `/tags/${kebab}`;
     createPage({
       path,
@@ -76,7 +76,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   Array.from({ length: numPages }).forEach((_, i) => {
     createPage({
       path: i === 0 ? `/` : `/page${i + 1}`,
-      component: path.resolve('./src/templates/home.js'),
+      component: path.resolve("./src/templates/home.js"),
       context: {
         limit: postsPerPage,
         skip: i * postsPerPage,

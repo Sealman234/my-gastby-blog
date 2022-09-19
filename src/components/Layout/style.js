@@ -1,11 +1,8 @@
-import React, { Fragment } from 'react';
-import { Link } from 'gatsby';
-import styled, { createGlobalStyle } from 'styled-components';
-import { StaticImage } from 'gatsby-plugin-image';
-import footerImage from '../images/footer-ground.png';
+import styled, { createGlobalStyle } from "styled-components";
+import footerImage from "../../images/footer-ground.png";
 
 // Global Style
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
@@ -102,13 +99,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 // Header
-const Header = styled.header`
+export const Header = styled.header`
   background: #333;
 `;
-const HeaderWrapper = styled.div`
+export const HeaderWrapper = styled.div`
   padding: 1rem;
 `;
-const SiteTitle = styled.h1`
+export const SiteTitle = styled.h1`
   font-size: 2rem;
   font-weight: bold;
   margin: 0 0 1rem 0;
@@ -121,10 +118,10 @@ const SiteTitle = styled.h1`
     }
   }
 `;
-const SiteAvatarWrapper = styled.div`
+export const SiteAvatarWrapper = styled.div`
   text-align: center;
 `;
-const SiteAvatar = styled.div`
+export const SiteAvatar = styled.div`
   display: inline-block;
   width: 100px;
   height: 100px;
@@ -135,12 +132,12 @@ const SiteAvatar = styled.div`
     border-radius: 50%;
   }
 `;
-const SiteDescription = styled.p`
+export const SiteDescription = styled.p`
   color: #efefef;
   text-align: center;
   font-style: italic;
 `;
-const SiteLinks = styled.div`
+export const SiteLinks = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,18 +150,18 @@ const SiteLinks = styled.div`
     overflow: hidden;
   }
 `;
-const HeaderBanner = styled.nav`
+export const HeaderBanner = styled.nav`
   background-color: #333;
   max-width: 760px;
   margin: 0 auto;
 `;
-const NavLinks = styled.ul`
+export const NavLinks = styled.ul`
   margin: 0;
   padding: 0;
   display: flex;
   list-style: none;
 `;
-const NavLinkItem = styled.li`
+export const NavLinkItem = styled.li`
   padding: 0;
   > a {
     width: 100%;
@@ -187,7 +184,11 @@ const NavLinkItem = styled.li`
 `;
 
 // Main Container
-const Container = styled.div`
+export const TocWrap = styled.div`
+  position: relative;
+`;
+
+export const Container = styled.div`
   max-width: 792px;
   margin: 0 auto;
   padding: 1rem;
@@ -196,7 +197,7 @@ const Container = styled.div`
 `;
 
 // Footer
-const Footer = styled.footer`
+export const Footer = styled.footer`
   height: 148px;
   background-image: url(${footerImage});
   background-repeat: repeat-x;
@@ -204,7 +205,7 @@ const Footer = styled.footer`
   justify-content: center;
   align-items: center;
 `;
-const Copyright = styled.div`
+export const Copyright = styled.div`
   font-size: 0.875rem;
   font-weight: bold;
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
@@ -227,91 +228,3 @@ const Copyright = styled.div`
     color: #fff;
   }
 `;
-
-const Layout = ({ children }) => {
-  return (
-    <Fragment>
-      <GlobalStyle />
-      <Header>
-        <HeaderWrapper>
-          <SiteTitle>
-            <Link to="/">海豹人的第一個家</Link>
-          </SiteTitle>
-          <SiteAvatarWrapper>
-            <SiteAvatar>
-              <StaticImage
-                src="../images/avatar.jpeg"
-                alt="Sealman"
-                width={100}
-                height={100}
-              />
-            </SiteAvatar>
-          </SiteAvatarWrapper>
-          <SiteDescription>
-            Frontend Engineer / Taiwanese / Passion Comes From Mastery
-          </SiteDescription>
-          <SiteLinks>
-            <a
-              href="https://www.linkedin.com/in/sealman"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <StaticImage src="../images/icon-linkedin.svg" alt="LinkedIn" />
-            </a>
-            <a
-              href="https://github.com/sealman234"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <StaticImage src="../images/icon-github.svg" alt="GitHub" />
-            </a>
-          </SiteLinks>
-        </HeaderWrapper>
-        <HeaderBanner>
-          <NavLinks>
-            <NavLinkItem>
-              <Link activeClassName="active" to="/">
-                首頁
-              </Link>
-            </NavLinkItem>
-            <NavLinkItem>
-              <Link activeClassName="active" to="/archives">
-                歸檔
-              </Link>
-            </NavLinkItem>
-            <NavLinkItem>
-              <Link activeClassName="active" to="/tags" partiallyActive={true}>
-                標籤列表
-              </Link>
-            </NavLinkItem>
-            <NavLinkItem>
-              <Link activeClassName="active" to="/projects">
-                專案
-              </Link>
-            </NavLinkItem>
-            <NavLinkItem>
-              <Link activeClassName="active" to="/about">
-                關於我
-              </Link>
-            </NavLinkItem>
-          </NavLinks>
-        </HeaderBanner>
-      </Header>
-      <Container>
-        <main>{children}</main>
-      </Container>
-      <Footer>
-        <Copyright>
-          Copyright © 2019-2022{' '}
-          <a href="https://github.com/sealman234">Sealman</a>. All rights
-          reserved.
-          <br />
-          All images and other content related to MapleStory are owned by Nexon
-          Corporation.
-        </Copyright>
-      </Footer>
-    </Fragment>
-  );
-};
-
-export default Layout;

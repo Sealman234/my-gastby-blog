@@ -1,11 +1,11 @@
-import React from 'react';
-import { graphql, Link } from 'gatsby';
-import styled from 'styled-components';
-import Layout from '../components/layout';
-import Seo from '../components/seo';
+import React from "react";
+import { graphql, Link } from "gatsby";
+import styled from "styled-components";
+import Layout from "../components/Layout";
+import Seo from "../components/seo";
 
 const slugify = (str) => {
-  return str.replace(/\s+/g, '-').toLowerCase();
+  return str.replace(/\s+/g, "-").toLowerCase();
 };
 
 const Post = styled.article`
@@ -88,7 +88,7 @@ const Home = ({ data, pageContext }) => {
   const { currentPage, numPages } = pageContext;
   const isFirst = currentPage === 1;
   const isLast = currentPage === numPages;
-  const prevPage = currentPage - 1 === 1 ? '/' : `/page${currentPage - 1}`;
+  const prevPage = currentPage - 1 === 1 ? "/" : `/page${currentPage - 1}`;
   const nextPage = `/page${currentPage + 1}`;
 
   return (
