@@ -18,6 +18,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .blog-post {
+    h2 {
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid #eee;
+    }
+
     a {
       text-decoration: none;
       color: #c1170c;
@@ -94,6 +99,11 @@ export const GlobalStyle = createGlobalStyle`
 
     img {
       max-width: 100%;
+    }
+
+    ul li {
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
     }
   }
 `;

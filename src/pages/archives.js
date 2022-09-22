@@ -35,7 +35,7 @@ const Archives = ({ data }) => {
             {data.allMdx.nodes.map(
               (node) =>
                 node.frontmatter.year === year && (
-                  <li key={node.id} style={{ paddingBottom: "0.25rem" }}>
+                  <li key={node.id} style={{ marginBottom: "0.25rem" }}>
                     <span>{node.frontmatter.month}</span>{" "}
                     <PostLink to={`/${node.slug}`}>
                       {node.frontmatter.title}

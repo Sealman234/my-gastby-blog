@@ -36,7 +36,7 @@ const Tags = ({ data }) => {
       <p>目前總共有 {tags.length} 個標籤 (`・ω・´)</p>
       <ul>
         {tags.map(({ tag, kebab, totalCount }) => (
-          <li key={tag} style={{ paddingBottom: "0.25rem" }}>
+          <li key={tag} style={{ marginBottom: "0.25rem" }}>
             <TagLink to={`/tags/${kebab}`}>
               {tag} ({totalCount})
             </TagLink>
