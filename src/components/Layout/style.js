@@ -24,6 +24,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     a {
+      word-break: break-all;
       text-decoration: none;
       color: #c1170c;
       &:hover {
