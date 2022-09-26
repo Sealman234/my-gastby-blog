@@ -1,11 +1,11 @@
 ---
-title: '升級 React Router v6 筆記'
-excerpt: '本文為 React Router 升級第 6 版的筆記。'
-tags: ['React', 'React Router']
-date: '2022-04-08'
+title: "升級 React Router v6 筆記"
+excerpt: "本文為 React Router 升級第 6 版的筆記。"
+tags: ["React", "React Router"]
+date: "2022-04-08"
 ---
 
-## React Router v6 Changes
+## React Router v6 Changelog
 
 - 將 Switch 替換成 Routes
   - 把 Route 用 Routes 包起來
@@ -19,32 +19,35 @@ date: '2022-04-08'
 - 移除 useHistory 改用 useNavigate 執行程式化導航
 - Prompt 直接移除，沒有替代方案
 
-## 將 Switch 替換成 Routes，改用 element 屬性指定渲染元件
+## Switch 改名為 Routes 並改用 element 屬性指定渲染元件
 
-第一個變化，就是 React Router 版本 6 將原本的 `<Switch>` 更改為 `<Routes>`，這只是單純地更改名字，用法沒有改變。  
-使用上，一樣是要用 `<BrowserRouter>` 包住 `<App>` 來指定要在 `<App>` 底下規劃路由。
+第一個變化，就是 React Router 版本 6 將原本的 `<Switch>` 更改為 `<Routes>`，這只是單純地更改名字，用法沒有改變。
 
-但是註冊路由元件的方式就不一樣了，原先 V5 我們是在 `<Route>` 的子層放入 Page Component。  
-但到了 V6，則改用 `<Route>` 元件的 `element` 屬性來指定要渲染的頁面元件等 JSX 程式碼。
+使用上，一樣是要用 `<BrowserRouter>` 包住 `<App>`，以指定是要在 `<App>` 底下規劃路由。
+
+然而，註冊路由元件的方式就不一樣了，原先 V5 我們是在 `<Route>` 的子層放入 Page Component，更新到 V6 後則是改用 `<Route>` 元件的 `element` 屬性來指定要渲染的頁面元件等 JSX 程式碼。
 
 ### 把 Route 用 Routes 包起來
 
 > 錯誤訊息：A `<Route>` is only ever to be used as the child of `<Routes>` element, never rendered directly. Please wrap your `<Route>` in a `<Routes>`.
 
-在第 5 版，我們不一定要使用 `<Switch>` 來包住 `<Route>`，但是到了第 6 版，React Router 就強制大家都要在 `<Route>` 外面包一層 `<Routes>`。
+在第 5 版，我們不一定要使用 `<Switch>` 來包住 `<Route>`。
+
+但是到了第 6 版，React Router 就強制大家都要在 `<Route>` 外面包一層 `<Routes>`，否則就會出現以上的錯誤訊息。
 
 ### 不再需要 exact 屬性
 
-在 V5 我們需要使用 `exact` 確保配對完全符合的路徑，才不會說只要前半段符合就通通出現。  
-但是到了 V6，我們不需要再加 `exact`，因為已經預設所有的 `<Route>` 都會套用 `exact` 的效果。
+在 V5 我們需要使用 `exact` 確保配對完全符合的路徑，才不會說只要前半段符合就通通出現。
 
-這麼做的好處是，我們不用那麼在意註冊路由時的「順序」。
+到了 V6 我們不再需要加上 `exact`，因為 React Router V6 已經預設讓所有的 `<Route>` 都套用 `exact` 的效果了。
+
+這麼做的好處是，我們不用再去注意註冊路由時的「順序」。
 
 之前在 V5，如果有使用到動態路由，我們需要記得把動態路由放到較後面的順序註冊，因為如果底下還有其他路徑（像是 `/products/edit`），Router 會永遠無法進入那一頁，因為它會被上面的動態路徑 `/products/:productId` 攔截。
 
-升級到 V6 後，React Router 會幫我們自動匹配最佳的路由。
+而升級到 V6 後，React Router 會幫我們自動匹配最佳的路由。
 
-結合以上所述，我們現在可以透過以下寫法來定義路由：
+綜合以上所述，我們現在可以透過以下寫法來定義路由：
 
 ```jsx
 <Routes>
@@ -56,11 +59,11 @@ date: '2022-04-08'
 
 ## 調整 Nested Routes 定義方式
 
-### 加上米字號來配對子元件中的 Routes
+### 使用米字號配對子元件中的 Routes
 
-如果你有巢狀路由，例如 `/welcome` 與 `/welcome/new-user`，他們都會顯示 `<Welcome>` 這個 Page Component，因為是巢狀的關係。
+如果你有巢狀路由，例如 `/welcome` 與 `/welcome/new-user`，那麼它們都會顯示 `<Welcome>` 這個 Page Component，因為是巢狀的關係。
 
-在 React Router V6，如果子元件裡面有 `<Routes><Route /></Routes>`，我們就必須使用 `/welcome/*` 讓 Router 可以訪問到子路由，而不是只能與 `/welcome` 這一個路由配對。
+在 React Router V6，如果子元件裡面有配置路由（`<Routes><Route /></Routes>`），我們就必須使用米字號（`/welcome/*`）讓 Router 可以訪問到子路由，而不是只能與 `/welcome` 這一個路由配對。
 
 > [v6 docs](https://reactrouter.com/docs/en/v6/upgrading/v5#relative-routes-and-links): Routes with descendant routes (defined in other components) use a trailing `*` in their path to indicate they match deeply.
 
@@ -68,15 +71,15 @@ date: '2022-04-08'
 <Route path="/welcome/*" element={<Welcome />} />
 ```
 
-> 底下提到的集中管理的方式則不需要加上米字號。
+> 下面會介紹另一個「集中管理」的方式是不需要加上米字號的。
 
 ### 子組件的路徑寫法
 
-V6 巢狀路由不用再撰寫上層的路徑，因為 V6 會幫我們自動判斷加入，所以 `/welcome/*` 底下的巢狀子路由，就可以將 `/welcome/new-user` 替換成 `new-user` 囉！
+V6 巢狀路由不用再撰寫上層的路徑，因為 V6 會幫我們自動判斷並加入，所以 `/welcome/*` 底下的巢狀子路由，就可以將 `/welcome/new-user` 直接寫成 `new-user`。
 
 如果使用 `<Link>` 也是一樣，可以省略前面的路由。
 
-然後特別注意，如果要這樣寫，最前方「不能加上斜線」，否則會直接成為第一層路由。
+> 特別注意，如果要這樣寫，最前方「不能加上斜線」，否則會直接成為第一層路由。
 
 ```jsx
 const Welcome = () => {
@@ -92,9 +95,9 @@ const Welcome = () => {
 };
 ```
 
-### V6 集中定義 Routes，搭配 Outlet 元件，不再需要米字號
+### V6 集中定義：Routes 與 Outlet 元件
 
-React Router V6 全新支援將 Nested Routes 集中於 App.js 中定義，更方便我們管理巢狀路由，而非分散在各個組件當中。
+React Router V6 全新支援將 Nested Routes 集中於 App.js 中定義，讓我們更方便地管理巢狀路由，而非分散在各個組件當中。
 
 另外，使用這個定義方式的話，父層的 Route 可以不用加上米字號！
 
@@ -111,8 +114,9 @@ React Router V6 全新支援將 Nested Routes 集中於 App.js 中定義，更�
 
 > 這個做法並不是強制的，只是更推薦這樣處理囉 👍
 
-定義完成後，事情還沒結束，我們還需要指定子路由要渲染的 JSX 要放在哪裡。  
-這邊會使用到 V6 新增的 `<Outlet>` 元件，它只是一個 Placeholder，用來表示要在哪裡插入 JSX 內容。
+路由定義完成後，我們需要去指定子路由要渲染的 JSX 要放在哪邊。
+
+我們使用 V6 新增的 `<Outlet>` 元件，它的作用是一個 Placeholder，用來表示要在哪裡插入 JSX 內容。
 
 ```jsx
 const Welcome = () => {
@@ -126,9 +130,9 @@ const Welcome = () => {
 };
 ```
 
-## NavLink 的 activeClassName 已移除，請改用 ClassName
+## 移除 NavLink 的 activeClassName 屬性，請改用 className 實作
 
-在 V5 時，我們想要加個 `active` 的 Class 都這樣加，但現在這個屬性直接掰了。
+在 V5 時，我們想要加上 `active` 的 Class 可能會這樣添加，但是現在這個屬性直接被移除了。
 
 ```jsx
 <NavLink activeClassName={classes.active} to="/welcome">
@@ -136,23 +140,24 @@ const Welcome = () => {
 </NavLink>
 ```
 
-取而代之的是，在 `ClassName` 用一個特殊的方式來實作：
+取而代之的是在 `className` 用一個特殊的方式來實作：V6 的 `className` 現在可以放一個函式！
 
-V6 的 `ClassName` 現在可以放一個函式！  
-這個函式有一個參數 `navData`，它是一個物件，裡面有一個名為 `isActive` 的屬性，這個屬性在該 NavLink 正被造訪，處於活動狀態 (Active) 時，其值就會是 true。
+這個函式有一個參數 `navData`，它是一個物件，裡面有一個名為 `isActive` 的屬性，這個屬性在該 NavLink 正被造訪、處於活動狀態 (Active) 時，其值就會是 true。
 
-如何使用它呢？我們透過箭頭函式會 Return Value 這一點，通過動態地判斷 `navData.isActive` 的值，若為 true 即回傳 `classes.active`，否則回傳空字串。
+那麼該如何使用它呢？
+
+我們透過箭頭函式 Return Value 的特性，動態判斷 `navData.isActive` 的值，若為 true 就回傳 `classes.active`，若為 false 則回傳空字串。
 
 ```jsx
 <NavLink
-  className={(navData) => (navData.isActive ? classes.active : '')}
+  className={(navData) => (navData.isActive ? classes.active : "")}
   to="/welcome"
 >
   Welcome
 </NavLink>
 ```
 
-## Redirect 改名叫 Navigate，而且能用 replace
+## Redirect 改名為 Navigate 且新增 replace 方法
 
 V5 使用 `<Redirect>` 進行重新導向。
 
@@ -166,7 +171,7 @@ V5 使用 `<Redirect>` 進行重新導向。
 
 V6 則更換成 `<Navigate>` 元件。
 
-若加上 `replace` 屬性，則重新導向時會使用「取代」的方式，如果拿掉就會是預設的「Push」的導向方式。
+還可以加上 `replace` 屬性，讓重新導向時使用「取代」的方式，如果拿掉沒寫就會是預設「Push」的導向方式。
 
 ```jsx
 <Routes>
@@ -179,14 +184,14 @@ V6 則更換成 `<Navigate>` 元件。
 
 ## 移除 useHistory 改用 useNavigate 執行程式化導航
 
-第 6 版把 useHistory 移除了，取而代之的是 useNavigate，它一樣擁有 Push、Replace、前後導向等功能，但是在寫法上看起來更簡單囉。
+第 6 版把 useHistory 移除了，取而代之的是 useNavigate，它一樣擁有 Push、Replace、前後導向等功能，但是在寫法上看起來更簡單。
 
 ```javascript
 const navigate = useNavigate();
-navigate('/welcome');
+navigate("/welcome");
 
 // 如果要用 Redirect 也就是 Replace 的話，可以加上第二個參數
-navigate('/welcome', { replace: true });
+navigate("/welcome", { replace: true });
 
 // 單純加上 -1，表示回到上一頁
 navigate(-1);
@@ -200,32 +205,33 @@ navigate(1);
 
 除此之外，useNavigate 同樣也能支援物件形式，可以處理比較複雜的路徑。
 
-甚至更進一步，我們可以使用 `createSearchParams` 幫我們自動將 Params 物件轉為 URL 字串！  
-喔對了，search 要記得在最前面加上一個 `?` 喔
+甚至可以使用 `createSearchParams` 幫我們自動將 Params 物件轉為 URL 字串！
 
 ```javascript
 // 支援物件形式
 navigate({
   pathname: `${location.pathname}`,
-  search: `?sort=${isSortingAscending ? 'desc' : 'asc'}`,
+  search: `?sort=${isSortingAscending ? "desc" : "asc"}`,
 });
 
 // createSearchParams
-const params = { sort: isSortingAscending ? 'desc' : 'asc' };
+const params = { sort: isSortingAscending ? "desc" : "asc" };
 navigate({
   pathname: location.pathname,
   search: `?${createSearchParams(params)}`,
 });
 ```
 
+> 注意，`search` 的 value 要記得在前面加上一個 `?` 作為 Query String 的開頭喔。
+
 ## Prompt 直接移除，沒有替代方案
 
-這個是缺點，目前還沒有替代方案，只能自己搞定 ⋯⋯React Router 團隊給點方法吧，真的是哭啊！
+這個是缺點，目前還沒有替代方案，你各位只能自己想辦法啊 🥲
 
-## Optimize code with Lazy Loading and Suspense fallback
+## 補充：Optimize code with Lazy Loading and Suspense fallback
 
 - React.memo
-- Lazy Loading - Load code only when it's needed.
+- Lazy Loading - Load code only when it's needed
 
 進入頁面前，Browser 會載入我們打包的整個 Bundle，涵蓋所有的 React Code，讓我們進入後可以看到渲染的頁面，以及 Reactive 的各種狀態。
 
@@ -237,21 +243,20 @@ navigate({
 
 ```jsx
 // import NewQuote from './pages/NewQuote';
-const NewQuote = React.lazy(() => import('./pages/NewQuote'));
+const NewQuote = React.lazy(() => import("./pages/NewQuote"));
 ```
 
-此時回到頁面，會發現頁面顯示有錯誤。這是因為我們把檔案拆分成 chunks 之後，如我們所願，React Router 進行了延遲加載，但是 React 卻也因此無法順利進行渲染的工作，因此而導致 React 報錯。
+完成後回到頁面，會發現頁面顯示有錯誤。這是因為我們把檔案拆分成 chunks 之後，如我們所願 React Router 進行了延遲加載，但是 React 卻也因此無法順利進行渲染的工作而導致 React 報錯。
 
-為了讓 React 繼續進行渲染而非報錯，我們可以準備一個替代的元件 `<Suspense>` 給它，讓 React 在載入完成前先渲染這個替代內容。
-其中的替代內容我們就寫在 `fallback` 這個屬性裡面，利用箭頭函式回傳 JSX 內容。
+為了讓 React 繼續進行渲染而非報錯，我們可以準備一個替代的元件 `<Suspense>` 給它，讓 React 在載入完成前先渲染這個替代內容。其中的替代內容我們就寫在 `fallback` 這個屬性裡面，透過箭頭函式回傳 JSX 內容。
 
 範例：將 Lazy Loading 應用在各個需要的頁面上
 
 ```jsx
-const AllQuotes = React.lazy(() => import('./pages/AllQuotes'));
-const NewQuote = React.lazy(() => import('./pages/NewQuote'));
-const QuoteDetail = React.lazy(() => import('./pages/QuoteDetail'));
-const NotFound = React.lazy(() => import('./pages/NotFound'));
+const AllQuotes = React.lazy(() => import("./pages/AllQuotes"));
+const NewQuote = React.lazy(() => import("./pages/NewQuote"));
+const QuoteDetail = React.lazy(() => import("./pages/QuoteDetail"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
@@ -282,6 +287,7 @@ function App() {
 看完這篇文章，我們到底有什麼收穫呢？藉由本文可以理解到…
 
 - Upgrading To React Router v6
+- Optimize code with Lazy Loading and Suspense fallback
 
 ## References
 
