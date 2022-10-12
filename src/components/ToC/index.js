@@ -2,8 +2,6 @@ import React from "react";
 import * as Style from "./style";
 
 const ToC = ({ toc = {} }) => {
-  console.log(toc);
-
   return (
     <Style.FullHeightWrap>
       <Style.StickyToC>
