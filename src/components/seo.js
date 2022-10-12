@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
-import { useStaticQuery, graphql } from 'gatsby';
-import StaticAvatar from '../../static/avatar.jpeg';
+import React from "react";
+import PropTypes from "prop-types";
+import { Helmet } from "react-helmet";
+import { useStaticQuery, graphql } from "gatsby";
+import StaticAvatar from "../../static/avatar.jpeg";
 
 function SEO({ description, lang, image: metaImage, title, pathname }) {
   const { site } = useStaticQuery(
@@ -25,9 +25,12 @@ function SEO({ description, lang, image: metaImage, title, pathname }) {
     metaImage && metaImage.src
       ? `${site.siteMetadata.siteUrl}${metaImage.src}`
       : `${site.siteMetadata.siteUrl}${StaticAvatar}`;
-  const canonical = pathname
+  const rawCanonical = pathname
     ? `${site.siteMetadata.siteUrl}/${pathname}`
     : site.siteMetadata.siteUrl;
+  const canonical = rawCanonical.endsWith("/")
+    ? rawCanonical.slice(0, -1)
+    : rawCanonical;
   const defaultTitle = site.siteMetadata.title;
 
   return (
@@ -40,7 +43,7 @@ function SEO({ description, lang, image: metaImage, title, pathname }) {
         canonical
           ? [
               {
-                rel: 'canonical',
+                rel: "canonical",
                 href: canonical,
               },
             ]
@@ -48,69 +51,69 @@ function SEO({ description, lang, image: metaImage, title, pathname }) {
       }
       meta={[
         {
-          name: 'description',
+          name: "description",
           content: metaDescription,
         },
         {
-          property: 'og:title',
+          property: "og:title",
           content: title,
         },
         {
-          property: 'og:description',
+          property: "og:description",
           content: metaDescription,
         },
         {
-          property: 'og:type',
-          content: 'article',
+          property: "og:type",
+          content: "article",
         },
         {
-          property: 'og:url',
+          property: "og:url",
           content: canonical,
         },
         {
-          property: 'og:site_name',
+          property: "og:site_name",
           content: defaultTitle,
         },
         {
-          name: 'twitter:title',
+          name: "twitter:title",
           content: title,
         },
         {
-          name: 'twitter:description',
+          name: "twitter:description",
           content: metaDescription,
         },
         {
-          name: 'twitter:site',
-          content: '@sealman234',
+          name: "twitter:site",
+          content: "@sealman234",
         },
         {
-          name: 'twitter:creator',
-          content: '@sealman234',
+          name: "twitter:creator",
+          content: "@sealman234",
         },
         {
-          property: 'og:image',
+          property: "og:image",
           content: image,
         },
       ].concat(
         metaImage
           ? [
               {
-                property: 'og:image:width',
+                property: "og:image:width",
                 content: metaImage.width,
               },
               {
-                property: 'og:image:height',
+                property: "og:image:height",
                 content: metaImage.height,
               },
               {
-                name: 'twitter:card',
-                content: 'summary_large_image',
+                name: "twitter:card",
+                content: "summary_large_image",
               },
             ]
           : [
               {
-                name: 'twitter:card',
-                content: 'summary',
+                name: "twitter:card",
+                content: "summary",
               },
             ]
       )}
@@ -119,8 +122,8 @@ function SEO({ description, lang, image: metaImage, title, pathname }) {
 }
 
 SEO.defaultProps = {
-  lang: 'zh-Hant-TW',
-  description: '',
+  lang: "zh-Hant-TW",
+  description: "",
 };
 
 SEO.propTypes = {
