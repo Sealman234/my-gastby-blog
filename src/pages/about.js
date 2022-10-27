@@ -34,7 +34,7 @@ const About = () => {
         </li>
         <li>狀態：前端菜鳥一枚</li>
         <li>專業：前端開發與資訊管理</li>
-        <li>信箱：castle2668@gmail.com</li>
+        <li>信箱：sealman.dev@gmail.com</li>
       </ul>
       <h2>🏡 About Blog | 關於部落格</h2>
       <p>
