@@ -9,14 +9,14 @@ date: "2022-10-11"
 
 > Avoid unnecessary re-rendering "when Props is Object type"
 
+useCallback 允許我們儲存跨組件執行的「函式」，它會把函式儲存在 React 內存記憶體，讓使用時的物件位址都是指向同一個地方。
+
 ```jsx
 // 回傳一個 memoized 的 callback
 const memoizedCallback = useCallback(() => {
   doSomething(a, b);
 }, [a, b]);
 ```
-
-useCallback 允許我們儲存跨組件執行的「函式」，它會把函式儲存在 React 內存記憶體，讓使用時的物件位址都是指向同一個地方。
 
 這時候使用像是 React.memo 時，就能夠知道傳入的函式是相同的物件。儘管 Props 的是 Object，仍可以在父元件重新渲染時，不會重新分配記憶體位址，減少不必要的重新渲染。
 
@@ -53,7 +53,7 @@ useCallback 常見的其中一個使用情境，就是在實作 Throttle 或 Deb
 
 換句話說，每一次回傳的 Debounced 函式也會是全新的，因此我們必須想辦法記憶這個函式，避免 React 元件重新渲染。
 
-### useRef 前來報到
+### 透過 useRef 避免重新渲染
 
 我們可以透過 useRef 來記錄資料，因為透過 useRef 記錄的資料即使改變也不會造成重新渲染，反之 useState 則會造成 Re-render。
 
