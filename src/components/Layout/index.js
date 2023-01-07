@@ -82,7 +82,7 @@ const Layout = ({ children }) => {
       </Style.TocWrap>
       <Style.Footer>
         <Style.Copyright>
-          Copyright © 2019-2022{" "}
+          Copyright © 2019-2023{" "}
           <a href="https://github.com/sealman234">Sealman</a>. All rights
           reserved.
           <br />
