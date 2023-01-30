@@ -1,0 +1,41 @@
+---
+title: "JavaScript Array Methods Docs"
+excerpt: "陣列處理方法大全，是健忘的海豹人常常需要回頭查看的網頁技術文件。"
+tags: ["JavaScript"]
+date: "2023-01-30"
+---
+
+## forEach
+
+> [Array.prototype.forEach() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
+
+將陣列裡的每個元素傳入，並執行給定的函式一次。
+
+```javascript
+const array1 = ["a", "b", "c"];
+
+array1.forEach((element) => console.log(element));
+
+// Expected output: "a"
+// Expected output: "b"
+// Expected output: "c"
+```
+
+## filter
+
+> [Array.prototype.filter() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+
+經過指定的函式過濾後，回傳一個新的結果陣列。
+
+```javascript
+const words = ["Sean", "Sunny", "Paul", "Iris", "Julia"];
+
+const result = words.filter((word) => word.length > 4);
+
+console.log(result);
+// Expected output: Array ["Sunny", "Julia"]
+```
+
+## References
+
+- [MDN Web Docs](https://developer.mozilla.org/zh-TW/)
