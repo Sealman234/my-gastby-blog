@@ -1,18 +1,18 @@
 module.exports = {
   siteMetadata: {
-    title: '海豹人的第一個家',
+    title: "海豹人的第一個家",
     description: "Sealman's first homepage",
-    author: 'Sealman',
-    siteUrl: 'https://www.sealman.tw',
+    author: "Sealman",
+    siteUrl: "https://www.sealman.dev",
   },
-  trailingSlash: 'never',
+  trailingSlash: "never",
   plugins: [
-    'gatsby-plugin-styled-components',
-    'gatsby-plugin-image',
-    'gatsby-plugin-sharp',
-    'gatsby-transformer-sharp',
+    "gatsby-plugin-styled-components",
+    "gatsby-plugin-image",
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
         name: `blog`,
         path: `${__dirname}/blog`,
@@ -22,7 +22,7 @@ module.exports = {
       resolve: `gatsby-plugin-mdx`,
       options: {
         gatsbyRemarkPlugins: [
-          'gatsby-remark-prismjs',
+          "gatsby-remark-prismjs",
           {
             resolve: `gatsby-remark-images`,
             options: {
@@ -39,20 +39,20 @@ module.exports = {
         ],
       },
     },
-    'gatsby-plugin-react-helmet',
+    "gatsby-plugin-react-helmet",
     {
-      resolve: 'gatsby-plugin-manifest',
+      resolve: "gatsby-plugin-manifest",
       options: {
-        name: '海豹人的第一個家',
-        short_name: 'SealmanTW',
+        name: "海豹人的第一個家",
+        short_name: "SealmanTW",
         description: "Sealman's first homepage",
-        lang: 'zh-Hant-TW',
-        id: '/',
-        start_url: '/',
-        background_color: '#fff',
-        theme_color: '#333',
-        display: 'standalone',
-        icon: 'src/images/favicon.png', // This path is relative to the root of the pre-rendered site
+        lang: "zh-Hant-TW",
+        id: "/",
+        start_url: "/",
+        background_color: "#fff",
+        theme_color: "#333",
+        display: "standalone",
+        icon: "src/images/favicon.png", // This path is relative to the root of the pre-rendered site
         icons: [
           // Paths relative to the static folder
           {
@@ -82,7 +82,7 @@ module.exports = {
             purpose: `maskable`,
           },
         ],
-        cache_busting_mode: 'none',
+        cache_busting_mode: "none",
       },
     },
     {
@@ -94,22 +94,22 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: 'UA-153300681-1',
+        trackingId: "UA-153300681-1",
         head: false,
       },
     },
     {
-      resolve: 'gatsby-plugin-sitemap',
+      resolve: "gatsby-plugin-sitemap",
       options: {
-        output: '/',
+        output: "/",
       },
     },
     {
-      resolve: 'gatsby-plugin-robots-txt',
+      resolve: "gatsby-plugin-robots-txt",
       options: {
-        host: 'https://www.sealman.tw',
-        sitemap: 'https://www.sealman.tw/sitemap-index.xml',
-        policy: [{ userAgent: '*', allow: '/' }],
+        host: "https://www.sealman.dev",
+        sitemap: "https://www.sealman.dev/sitemap-index.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
       },
     },
   ],

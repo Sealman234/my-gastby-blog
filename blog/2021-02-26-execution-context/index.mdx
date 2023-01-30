@@ -1,8 +1,8 @@
 ---
-title: 'Understand JavaScript #4 Execution Context - How JS Works Behind The Scenes'
-excerpt: '本篇主要介紹 JavaScript 的運作過程，可以瞭解到 JavaScript 底層在做的事情，以及程式碼處理與執行的過程，還有一些我們必須理解的專有名詞。以下一一仔細跟大家說明 (๑•̀ㅂ•́)و✧'
-tags: ['JavaScript']
-date: '2021-02-26'
+title: "Understand JavaScript #4 Execution Context - How JS Works Behind The Scenes"
+excerpt: "本篇主要介紹 JavaScript 的運作過程，可以瞭解到 JavaScript 底層在做的事情，以及程式碼處理與執行的過程，還有一些我們必須理解的專有名詞。以下一一仔細跟大家說明 (๑•̀ㅂ•́)و✧"
+tags: ["JavaScript"]
+date: "2021-02-26"
 ---
 
 ![讓我們一起看下去](https://i.imgur.com/WybJvLc.png)
@@ -110,7 +110,7 @@ STEP 6：當 a 函式完成後，同樣也會 Pop off，所以現在執行環境
 
 常見的 Hoisting 會用在變數與函式，而變數與函式的 Hoisting 有點不同，因為變數有等號這種設值符號。通常在一開始，變數 (`var`) 會被設定為 `undefined`，函式則會完全被設定好並放進記憶體中。
 
-我們可以先把 `undefined` 理解為尚未設定 (not set) 的感覺，關於它的詳細介紹我們會在後續的筆記[型別 (Types)](https://docs.sealman.tw/types-and-operators/types/#undefined)中提到。
+我們可以先把 `undefined` 理解為尚未設定 (not set) 的感覺，關於它的詳細介紹我們會在後續的筆記中提到。
 
 ### 執行階段 (Execution Phase)
 
@@ -119,9 +119,9 @@ STEP 6：當 a 函式完成後，同樣也會 Pop off，所以現在執行環境
 ```javascript
 b();
 console.log(a);
-var a = 'Hello World!';
+var a = "Hello World!";
 function b() {
-  console.log('Called b');
+  console.log("Called b");
 }
 console.log(a);
 ```
@@ -130,7 +130,7 @@ console.log(a);
 
 ```javascript
 function b() {
-  console.log('Called b');
+  console.log("Called b");
 }
 var a;
 
@@ -138,7 +138,7 @@ b(); // Called b
 
 console.log(a); // undefined
 
-a = 'Hello World!';
+a = "Hello World!";
 console.log(a); // Hello World!
 ```
 
