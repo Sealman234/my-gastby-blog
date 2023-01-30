@@ -49,7 +49,7 @@ const About = () => {
         <li>網站名稱：海豹人的第一個家</li>
         <li>網站類型：部落格</li>
         <li>網站描述：{data.site.siteMetadata.description}</li>
-        <li>網站網址：https://www.sealman.tw</li>
+        <li>網站網址：https://www.sealman.dev</li>
         <li>網站狀態：持續更新中</li>
       </ul>
       <h2>📎 License | 授權</h2>
