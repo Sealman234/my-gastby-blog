@@ -49,8 +49,10 @@ const Tags = ({ data }) => {
 
 export const query = graphql`
   query {
-    allMdx(filter: { fileAbsolutePath: { glob: "**/blog/**/*" } }) {
-      group(field: frontmatter___tags) {
+    allMdx(
+      filter: { internal: { contentFilePath: { glob: "**/blog/**/*" } } }
+    ) {
+      group(field: { frontmatter: { tags: SELECT } }) {
         tag: fieldValue
         totalCount
       }

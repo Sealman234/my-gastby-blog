@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { graphql, Link } from "gatsby";
-import { MDXRenderer } from "gatsby-plugin-mdx";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import styled from "styled-components";
 
@@ -40,7 +39,7 @@ const PostTags = styled.div`
   }
 `;
 
-const BlogPost = ({ data }) => {
+const BlogPost = ({ data, children }) => {
   const post = data.allMdx.nodes[0];
   const image = getImage(post.frontmatter.hero_image);
   const metaImage = image
@@ -58,7 +57,7 @@ const BlogPost = ({ data }) => {
         title={post.frontmatter.title}
         description={post.frontmatter.excerpt}
         image={metaImage}
-        pathname={post.slug}
+        pathname={post.fields.slug}
       />
       <article className="blog-post">
         <PostTitle>{post.frontmatter.title}</PostTitle>
@@ -87,7 +86,7 @@ const BlogPost = ({ data }) => {
           </Fragment>
         )}
         <ToC toc={tableOfContents} />
-        <MDXRenderer>{post.body}</MDXRenderer>
+        {children}
       </article>
     </Layout>
   );
@@ -96,12 +95,16 @@ const BlogPost = ({ data }) => {
 export const query = graphql`
   query ($id: String) {
     allMdx(
-      filter: { fileAbsolutePath: { glob: "**/blog/**/*" }, id: { eq: $id } }
+      filter: {
+        internal: { contentFilePath: { glob: "**/blog/**/*" } }
+        id: { eq: $id }
+      }
     ) {
       nodes {
         id
-        slug
-        body
+        fields {
+          slug
+        }
         frontmatter {
           title
           date(formatString: "YYYY-MM-DD")

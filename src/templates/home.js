@@ -97,11 +97,11 @@ const Home = ({ data, pageContext }) => {
       {data.allMdx.nodes.map((node) => (
         <Post key={node.id}>
           <PostTitle>
-            <Link to={`/${node.slug}`}>{node.frontmatter.title}</Link>
+            <Link to={`${node.fields.slug}`}>{node.frontmatter.title}</Link>
           </PostTitle>
           <PostDate>{node.frontmatter.date}</PostDate>
           <PostExcerpt>
-            <Link to={`/${node.slug}`}>{node.frontmatter.excerpt}</Link>
+            <Link to={`${node.fields.slug}`}>{node.frontmatter.excerpt}</Link>
           </PostExcerpt>
           <PostTags>
             {node.frontmatter.tags.length > 0 &&
@@ -135,14 +135,12 @@ const Home = ({ data, pageContext }) => {
 
 export const query = graphql`
   query ($skip: Int!, $limit: Int!) {
-    allMdx(
-      sort: { fields: frontmatter___date, order: DESC }
-      limit: $limit
-      skip: $skip
-    ) {
+    allMdx(sort: { frontmatter: { date: DESC } }, limit: $limit, skip: $skip) {
       nodes {
         id
-        slug
+        fields {
+          slug
+        }
         frontmatter {
           title
           date(formatString: "YYYY-MM-DD")

@@ -37,11 +37,11 @@ const Archives = ({ data }) => {
                 node.frontmatter.year === year && (
                   <li key={node.id} style={{ marginBottom: "0.25rem" }}>
                     <span>{node.frontmatter.month}</span>{" "}
-                    <PostLink to={`/${node.slug}`}>
+                    <PostLink to={`${node.fields.slug}`}>
                       {node.frontmatter.title}
                     </PostLink>
                   </li>
-                )
+                ),
             )}
           </ul>
         </div>
@@ -52,10 +52,12 @@ const Archives = ({ data }) => {
 
 export const query = graphql`
   query {
-    allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+    allMdx(sort: { frontmatter: { date: DESC } }) {
       nodes {
         id
-        slug
+        fields {
+          slug
+        }
         frontmatter {
           title
           month: date(formatString: "MMM")
