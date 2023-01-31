@@ -17,7 +17,7 @@ function SEO({ description, lang, image: metaImage, title, pathname }) {
           }
         }
       }
-    `
+    `,
   );
 
   const metaDescription = description || site.siteMetadata.description;
@@ -115,7 +115,7 @@ function SEO({ description, lang, image: metaImage, title, pathname }) {
                 name: "twitter:card",
                 content: "summary",
               },
-            ]
+            ],
       )}
     />
   );
