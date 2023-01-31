@@ -1,4 +1,5 @@
 import React from "react";
+
 import * as Style from "./style";
 
 const ToC = ({ toc = {} }) => {

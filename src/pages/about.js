@@ -1,7 +1,8 @@
-import React from "react";
-import { useStaticQuery, graphql } from "gatsby";
+import { graphql,useStaticQuery } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
+import React from "react";
 import styled from "styled-components";
+
 import Layout from "../components/Layout";
 import Seo from "../components/seo";
 

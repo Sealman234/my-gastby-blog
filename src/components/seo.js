@@ -1,7 +1,8 @@
-import React from "react";
+import { graphql,useStaticQuery } from "gatsby";
 import PropTypes from "prop-types";
+import React from "react";
 import { Helmet } from "react-helmet";
-import { useStaticQuery, graphql } from "gatsby";
+
 import StaticAvatar from "../../static/avatar.jpeg";
 
 function SEO({ description, lang, image: metaImage, title, pathname }) {
