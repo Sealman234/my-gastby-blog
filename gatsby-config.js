@@ -4,6 +4,8 @@ module.exports = {
     description: "Sealman's first homepage",
     author: "Sealman",
     siteUrl: "https://www.sealman.dev",
+    image: `/avatar.jpeg`,
+    twitterUsername: `@castle2668`,
   },
   trailingSlash: "never",
   plugins: [

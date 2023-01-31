@@ -76,11 +76,11 @@ const tag = ({ data, pageContext }) => {
       {posts.map((post) => (
         <Post key={post.id}>
           <PostTitle>
-            <Link to={`/${post.slug}`}>{post.frontmatter.title}</Link>
+            <Link to={`${post.fields.slug}`}>{post.frontmatter.title}</Link>
           </PostTitle>
           <PostDate>{post.frontmatter.date}</PostDate>
           <PostExcerpt>
-            <Link to={`/${post.slug}`}>{post.frontmatter.excerpt}</Link>
+            <Link to={`${post.fields.slug}`}>{post.frontmatter.excerpt}</Link>
           </PostExcerpt>
           <PostTags>
             {post.frontmatter.tags.length > 0 &&
@@ -100,14 +100,16 @@ export const query = graphql`
   query ($tag: String!) {
     allMdx(
       filter: {
-        fileAbsolutePath: { glob: "**/blog/**/*" }
+        internal: { contentFilePath: { glob: "**/blog/**/*" } }
         frontmatter: { tags: { in: [$tag] } }
       }
-      sort: { fields: frontmatter___date, order: DESC }
+      sort: { frontmatter: { date: DESC } }
     ) {
       nodes {
         id
-        slug
+        fields {
+          slug
+        }
         frontmatter {
           title
           date(formatString: "YYYY-MM-DD")
