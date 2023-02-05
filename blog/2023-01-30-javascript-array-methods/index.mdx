@@ -16,7 +16,7 @@ date: "2023-01-30"
 
 ## forEach
 
-> [Array.prototype.forEach() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
+> [Array.prototype.forEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
 
 將陣列裡的每個元素傳入，並「執行」給定的函式一次。
 
@@ -32,7 +32,7 @@ array1.forEach((element) => console.log(element));
 
 ## map
 
-> [Array.prototype.map()](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+> [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
 
 原陣列的每一個元素經過指定的函式「運算」後，回傳新的結果陣列。
 
@@ -48,7 +48,7 @@ console.log(result);
 
 ## filter
 
-> [Array.prototype.filter() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+> [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
 
 原陣列經過指定的函式「過濾」後，回傳新的結果陣列。
 
@@ -65,7 +65,7 @@ console.log(result);
 
 合併兩個或多個陣列，回傳一個新的陣列。
 
-> [Array.prototype.concat() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/concat)
+> [Array.prototype.concat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat)
 
 ```javascript
 const array1 = ["a", "b", "c"];
@@ -78,7 +78,7 @@ console.log(array3);
 
 ## some
 
-> [Array.prototype.some() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/some)
+> [Array.prototype.some()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some)
 
 測試陣列中，是否有「至少一個」元素符合指定的條件函式，是的話會回傳 `true` 否則回傳 `false`。
 
@@ -94,7 +94,7 @@ console.log(array1.some(isEven));
 
 ## every
 
-> [Array.prototype.every() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
+> [Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
 
 回傳是否陣列中的「所有」元素都符合條件。
 
@@ -110,7 +110,7 @@ console.log(array1.every(areEven));
 
 ## includes
 
-> [Array.prototype.includes() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/includes)
+> [Array.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find)
 
 回傳陣列是否「包含」指定的元素。
 
@@ -126,7 +126,7 @@ console.log(pets.includes("pig"));
 
 ## find
 
-> [Array.prototype.find() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/find)
+> [Array.prototype.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find)
 
 回傳「第一個」滿足條件的元素，如果通通不符合則回傳 `undefined`。
 
@@ -141,7 +141,7 @@ console.log(found);
 
 ## findIndex
 
-> [Array.prototype.findIndex() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
+> [Array.prototype.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
 
 回傳「第一個」滿足條件的元素之「索引」，如果找不到則回傳 `-1`。
 
@@ -156,7 +156,7 @@ console.log(array1.findIndex(isLargeNumber));
 
 ## indexOf
 
-> [Array.prototype.indexOf() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf)
+> [Array.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf)
 
 回傳「指定的元素」在陣列中「第一個」被找到的「索引」，如果找不到則回傳 `-1`。
 
@@ -176,7 +176,7 @@ console.log(beasts.indexOf("pig"));
 
 ## reduce
 
-> [Array.prototype.reduce() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+> [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 
 將陣列中的每一項元素「由左至右」傳入「累加器」，最後回傳一個值。
 
@@ -187,7 +187,7 @@ const array1 = [1, 2, 3, 4];
 const initialValue = 0;
 const sumWithInitial = array1.reduce(
   (accumulator, currentValue) => accumulator + currentValue,
-  initialValue
+  initialValue,
 );
 
 console.log(sumWithInitial);
@@ -196,7 +196,7 @@ console.log(sumWithInitial);
 
 ## unshift
 
-> [Array.prototype.unshift() - JavaScript | MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift)
+> [Array.prototype.unshift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift)
 
 `unshift()` 會增加一個或多個元素到陣列的開頭，並且回傳陣列的新長度。
 
