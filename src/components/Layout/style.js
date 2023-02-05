@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
+
 import footerImage from "../../images/footer-ground.png";
 
 // Global Style

@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
 import { Link } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
+import React, { Fragment } from "react";
+
 import * as Style from "./style";
 
 const Layout = ({ children }) => {

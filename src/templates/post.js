@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
 import { graphql, Link } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 
 import Layout from "../components/Layout";
