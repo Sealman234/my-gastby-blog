@@ -1,0 +1,149 @@
+---
+title: "砍掉重練 React Router 全面升級"
+excerpt: "這個團隊真的不斷在更新，上次才升級第六版，沒想到馬上又迎來一次全面升級。但是不得不說，這次改版確實新增了許多功能，其中 Loader 是讓我最驚豔的功能，很值得給它升級一波。"
+tags: ["React", "React Router"]
+date: "2023-03-01"
+---
+
+廢話不多說，我們重新開始吧，從建立路由開始 ⋯⋯ ( Ꙭ)🥕
+
+## 資料夾結構 - Folder Structure
+
+> 聲明：以下命名我 OK 你隨意。
+
+首先，你的 React 專案內會有一個 `src` 資料夾，第一層裡面的 `App.js(x)` 或是 `main.js(x)` 就是你的進入點 (Entry)。
+
+然後，在 `src` 下建立名為 `pages` 或是 `routes` 的資料夾，用途為放置 Page-Level Components。
+
+## 建立路由 - createBrowserRouter
+
+打開進入點的檔案，我們要在這裡宣告路由。
+
+透過 `createBrowserRouter()` 方法，傳入由物件所組成的陣列，每個物件就是一組路由，最後把回傳的值用 `router` 接起來，傳入 `RouterProvider`。
+
+```javascript
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import HomePage from "@/routes/Home";
+import ProductsPage from "@/routes/Products";
+
+const router = createBrowserRouter([
+  { path: "/", element: <HomePage /> },
+  { path: "/products", element: <ProductsPage /> },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
+);
+```
+
+補充一下，有些人會把這個 `App.js(x)` 只當作宣告路由的元件，再把 `RouterProvider` 匯出去給額外的進入點像是 `index.js(x)` 使用，效果都是一樣的，我只是不想要有那麼多檔案。
+
+> 至於另一種建立方法 `createRoutesFromElement` 我覺得寫起來很冗長，跟以前使用 JSX 的寫法很像，個人不喜歡所以就不介紹了。
+
+## 路由鏈結 - Link 與 NavLink
+
+如何切換這些路由，達到換頁的作用呢？我們不是使用原生的 `<a>` 標籤而是使用 React Router 提供的 `<Link>` 來跳轉頁面。
+
+```javascript
+import { Link, NavLink } from "react-router-dom";
+
+<Link to="/products">Products Page</Link>;
+```
+
+還有另一種是 `<NavLink>`，作用一樣，但是內建提供了 `isActive`與`isPending` 兩個狀態，可以藉由判斷路由的狀態，動態地處理樣式。
+
+```javascript
+const getNavLinkClass = ({ isActive, isPending }) => {
+  if (isActive) {
+    return "active";
+  }
+  if (isPending) {
+    return "pending";
+  }
+  return "";
+};
+
+<NavLink to="/products" className={getNavLinkClass}>
+  Products Page
+</NavLink>;
+```
+
+## Root Layout - children 與 Outlet
+
+一個網站通常會有一個共用的外框，像是上方或左側的導覽列、網站的商標、頁尾的版權宣告等等，這些內容會全部放在一個 Layout 元件當中。
+
+路由配置上，這個 Layout 就是一個 Parent Route，藉由 `children` 可以去配置裡面的子頁面，也就是 Children Routes。
+
+```javascript
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/products", element: <ProductsPage /> },
+    ],
+  },
+]);
+```
+
+以下是一個簡易的 Layout 元件，子頁面 `children` 的內容會顯示在 `<Outlet />` 的位置。
+
+```javascript
+import { Outlet } from "react-router-dom";
+
+const RootLayout = () => {
+  return (
+    <>
+      <h1>Root Layout</h1>
+      <Outlet />
+    </>
+  );
+};
+
+export default RootLayout;
+```
+
+## 錯誤頁面 - errorElement
+
+如果進入一個沒有被定義的路由，當然就會出現 404 的畫面，上面可能會有一些錯誤訊息等等。通常你不會想要直接用 React Router 幫你做的 Error 頁面，因此我們來新增自己的 Error Page。
+
+```javascript
+import { useRouteError } from "react-router-dom";
+
+const ErrorPage = () => {
+  const error = useRouteError();
+  console.error(error);
+
+  return (
+    <div id="error-page">
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+      <p>
+        <i>{error.statusText || error.message}</i>
+      </p>
+    </div>
+  );
+};
+
+export default ErrorPage;
+```
+
+在完成一個簡單的 404 頁面後，可以透過 `errorElement` 來配置這個錯誤處理的專屬頁面。
+
+```javascript
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />, // catch any errors
+    children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/products", element: <ProductsPage /> },
+    ],
+  },
+]);
+```
