@@ -152,6 +152,8 @@ export const SiteAvatar = styled.div`
   }
 `;
 export const SiteDescription = styled.p`
+  font-family: kurewa, sans-serif;
+  letter-spacing: 2px;
   color: #efefef;
   text-align: center;
   font-style: italic;
@@ -225,11 +227,12 @@ export const Footer = styled.footer`
   align-items: center;
 `;
 export const Copyright = styled.div`
+  font-family: kurewa, sans-serif;
   font-size: 0.875rem;
   font-weight: bold;
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
   font-style: italic;
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
   color: #fff;
   background: #332200;
   text-align: center;
