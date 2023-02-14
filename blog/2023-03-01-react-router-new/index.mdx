@@ -53,7 +53,7 @@ import { Link, NavLink } from "react-router-dom";
 <Link to="/products">Products Page</Link>;
 ```
 
-還有另一種是 `<NavLink>`，作用一樣，但是內建提供了 `isActive`與`isPending` 兩個狀態，可以藉由判斷路由的狀態，動態地處理樣式。
+還有另一種是 `<NavLink>`，作用一樣，但是內建提供了 `isActive`與`isPending` 兩個狀態，你可以把他們解構出來，用於判斷路由的狀態，並且動態地處理樣式。
 
 ```javascript
 const getNavLinkClass = ({ isActive, isPending }) => {
@@ -69,6 +69,19 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 <NavLink to="/products" className={getNavLinkClass}>
   Products Page
 </NavLink>;
+```
+
+在 `<NavLink>` 使用 `end` 這個 prop 的話，會確保這一個 NavLink 不會因為進入子路由，而 Match 到 `isActive` 等狀態。
+
+例如：
+
+- Home 只會對應到網站的 Root Route (`'/'`) 也就是後面不帶任何路徑的時候
+- Blog 只會對應到 `/blog`，當進入 `/blog/hello-world` 頁面時不會有 `isActive` 狀態
+
+```javascript
+<NavLink to="/" end>Home</NavLink>
+<NavLink to="/blog" end>Blog</NavLink>
+<NavLink to={`/blog/hello-world`}>Hello World</NavLink>
 ```
 
 ## Root Layout - children 與 Outlet
