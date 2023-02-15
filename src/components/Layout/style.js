@@ -4,11 +4,6 @@ import footerImage from "../../images/footer-ground.png";
 
 // Global Style
 export const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: kurewa;
-    src: url(https://cdn.jsdelivr.net/gh/max32002/kurewa-gothic@1.071/webfont/CJK%20TC/KurewaGothicCjkTc-Regular.woff2) format("woff2");
-  }
-
   * {
     box-sizing: border-box;
   }
