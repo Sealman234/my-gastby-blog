@@ -1,6 +1,6 @@
 ---
 title: "砍掉重練 React Router 全面升級"
-excerpt: "這個團隊真的不斷在更新，上次才升級第六版，沒想到馬上又迎來一次全面升級。但是不得不說，這次改版確實新增了許多功能，其中 Loader 是讓我最驚豔的功能，很值得給它升級一波。"
+excerpt: "這個團隊一直在更新耶，才剛升級到第六版，現在又來了一次全面升級。但是不得不說，這次改版確實新增了許多功能，其中 Loader 是讓我最驚豔的功能，很值得給它升級上去，而且他們文件寫得很好，基本上 Tutorial 跟著操作一遍，就能掌握 V6 的大致功能了，這一點真希望 React 本體也能好好跟上。"
 tags: ["React", "React Router"]
 date: "2023-03-01"
 ---
@@ -159,4 +159,28 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+```
+
+## 程式化導頁 - useNavigate
+
+除了可以使用 Link 來換頁，我們也可以手動去執行路由跳轉的動作，例如在送出表單或按下按鈕後導頁。
+
+透過 `react-router-dom` 提供的 `useNavigate` 函式，就可以執行程式化導頁。
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+const Home = ({ film }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/products");
+  };
+
+  return (
+    <div>
+      <button onClick={handleNavigate}>Navigate to Products Page</button>
+    </div>
+  );
+};
 ```
