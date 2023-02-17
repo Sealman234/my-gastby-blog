@@ -1,29 +1,24 @@
 ---
-title: "砍掉重練 React Router 全面升級"
-excerpt: "這個團隊一直在更新耶，才剛升級到第六版，現在又來了一次全面升級。但是不得不說，這次改版確實新增了許多功能，其中 Loader 是讓我最驚豔的功能，很值得給它升級上去，而且他們文件寫得很好，基本上 Tutorial 跟著操作一遍，就能掌握 V6 的大致功能了，這一點真希望 React 本體也能好好跟上。"
+title: "全面升級：重新學習 React Router"
+excerpt: "React Router 團隊最近又來一次全面升級，新增了許多功能，特別是 Loader 功能讓人驚豔。他們的文件也寫得相當好，基本上跟著一遍 Tutorial 就能掌握 React Router V6 的大致功能。"
 tags: ["React", "React Router"]
 date: "2023-03-01"
 ---
 
-廢話不多說，我們重新開始吧，從建立路由開始 ⋯⋯ ( Ꙭ)🥕
+不多說，讓我們重新開始，就從建立路由開始吧 ⋯⋯ ( Ꙭ)🥕
 
 ## 資料夾結構 - Folder Structure
 
-> 聲明：以下命名我 OK 你隨意。
+首先，你的 React 專案會有一個 `src` 資料夾，裡面的 `App.js(x)` 或 `main.js(x)` 就是你的進入點 (Entry)。
 
-首先，你的 React 專案內會有一個 `src` 資料夾，第一層裡面的 `App.js(x)` 或是 `main.js(x)` 就是你的進入點 (Entry)。
-
-然後，在 `src` 下建立名為 `pages` 或是 `routes` 的資料夾，用途為放置 Page-Level Components。
+接下來，在 `src` 下建立名為 `pages` 或 `routes` 的資料夾，用途是放置 Page-Level Components。
 
 ## 建立路由 - createBrowserRouter
 
-打開進入點的檔案，我們要在這裡宣告路由。
-
-透過 `createBrowserRouter()` 方法，傳入由物件所組成的陣列，每個物件就是一組路由，最後把回傳的值用 `router` 接起來，傳入 `RouterProvider`。
+在進入點檔案中，我們需要宣告路由。透過 `createBrowserRouter()` 方法，傳入由物件組成的陣列，每個物件就是一組路由，最後把回傳的值用 `router` 接起來，傳入 `RouterProvider。`
 
 ```javascript
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import HomePage from "@/routes/Home";
 import ProductsPage from "@/routes/Products";
 
@@ -41,19 +36,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 補充一下，有些人會把這個 `App.js(x)` 只當作宣告路由的元件，再把 `RouterProvider` 匯出去給額外的進入點像是 `index.js(x)` 使用，效果都是一樣的，我只是不想要有那麼多檔案。
 
-> 至於另一種建立方法 `createRoutesFromElement` 我覺得寫起來很冗長，跟以前使用 JSX 的寫法很像，個人不喜歡所以就不介紹了。
+> 至於另一種建立方法 `createRoutesFromElement` 較為冗長，跟以前使用 JSX 的寫法相似，這裡不予介紹。
 
 ## 路由鏈結 - Link 與 NavLink
 
-如何切換這些路由，達到換頁的作用呢？我們不是使用原生的 `<a>` 標籤而是使用 React Router 提供的 `<Link>` 來跳轉頁面。
+在 React Router 中，要實現頁面跳轉的功能，我們並不使用原生的 `<a>` 標籤，而是使用 React Router 提供的 `<Link>` 元件。
 
 ```javascript
 import { Link, NavLink } from "react-router-dom";
-
 <Link to="/products">Products Page</Link>;
 ```
 
-還有另一種是 `<NavLink>`，作用一樣，但是內建提供了 `isActive`與`isPending` 兩個狀態，你可以把他們解構出來，用於判斷路由的狀態，並且動態地處理樣式。
+還有另一種路由鏈結是 `<NavLink>`，它與 `<Link>` 的作用相同，但內建了 `isActive` 和 `isPending` 兩個狀態屬性。你可以將它們解構出來，用於判斷當前路由的狀態，並動態地設置樣式。
 
 ```javascript
 const getNavLinkClass = ({ isActive, isPending }) => {
@@ -71,11 +65,11 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 </NavLink>;
 ```
 
-在 `<NavLink>` 使用 `end` 這個 prop 的話，會確保這一個 NavLink 不會因為進入子路由，而 Match 到 `isActive` 等狀態。
+在 `<NavLink>` 使用 `end` 屬性，可以確保該元件不會在進入子路由時，被匹配為 `isActive` 等狀態。
 
 例如：
 
-- Home 只會對應到網站的 Root Route (`'/'`) 也就是後面不帶任何路徑的時候
+- Home 只會對應到網站的根路由 (`'/'`)，也就是後面不帶任何路徑時
 - Blog 只會對應到 `/blog`，當進入 `/blog/hello-world` 頁面時不會有 `isActive` 狀態
 
 ```javascript
@@ -84,11 +78,11 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 <NavLink to={`/blog/hello-world`}>Hello World</NavLink>
 ```
 
-## Root Layout - children 與 Outlet
+## 共用外框 - children 與 Outlet
 
-一個網站通常會有一個共用的外框，像是上方或左側的導覽列、網站的商標、頁尾的版權宣告等等，這些內容會全部放在一個 Layout 元件當中。
+一個網站通常會有一個共用的外框，例如上方或左側的導覽列、商標、版權宣告等等，這些內容會全部放在一個 Layout 元件當中。
 
-路由配置上，這個 Layout 就是一個 Parent Route，藉由 `children` 可以去配置裡面的子頁面，也就是 Children Routes。
+在路由配置中，這個 Root Layout 元件就是一個父路由，使用 `children` 配置子頁面，即子路由。
 
 ```javascript
 const router = createBrowserRouter([
@@ -103,7 +97,7 @@ const router = createBrowserRouter([
 ]);
 ```
 
-以下是一個簡易的 Layout 元件，子頁面 `children` 的內容會顯示在 `<Outlet />` 的位置。
+以下是一個簡單的 Layout 元件，子頁面 `children` 的內容會顯示在 `<Outlet />` 這個輸出點的位置。
 
 ```javascript
 import { Outlet } from "react-router-dom";
@@ -122,7 +116,7 @@ export default RootLayout;
 
 ## 錯誤頁面 - errorElement
 
-如果進入一個沒有被定義的路由，當然就會出現 404 的畫面，上面可能會有一些錯誤訊息等等。通常你不會想要直接用 React Router 幫你做的 Error 頁面，因此我們來新增自己的 Error Page。
+如果進入一個未定義的路由，通常會顯示 404 錯誤頁面，上面可能會有一些錯誤訊息。但通常你不會想要直接使用 React Router 內建的錯誤頁面，因此我們來建立自己的錯誤頁面。
 
 ```javascript
 import { useRouteError } from "react-router-dom";
@@ -145,7 +139,7 @@ const ErrorPage = () => {
 export default ErrorPage;
 ```
 
-在完成一個簡單的 404 頁面後，可以透過 `errorElement` 來配置這個錯誤處理的專屬頁面。
+完成了這個簡單的 404 頁面後，可以透過 `errorElement` 來配置這個錯誤處理的專屬頁面。
 
 ```javascript
 const router = createBrowserRouter([
@@ -163,7 +157,7 @@ const router = createBrowserRouter([
 
 ## 程式化導頁 - useNavigate
 
-除了可以使用 Link 來換頁，我們也可以手動去執行路由跳轉的動作，例如在送出表單或按下按鈕後導頁。
+除了使用 Link 來換頁，我們也可以手動執行路由跳轉的動作，例如在表單送出或按下按鈕後導頁。
 
 透過 `react-router-dom` 提供的 `useNavigate` 函式，就可以執行程式化導頁。
 
@@ -179,7 +173,7 @@ const Home = ({ film }) => {
 
   return (
     <div>
-      <button onClick={handleNavigate}>Navigate to Products Page</button>
+      <button onClick={handleNavigate}>前往產品頁面</button>
     </div>
   );
 };
