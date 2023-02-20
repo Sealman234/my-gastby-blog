@@ -1,13 +1,13 @@
 ---
 title: "全面升級：重新學習 React Router"
-excerpt: "React Router 團隊最近又來一次全面升級，新增了許多功能，特別是 Loader 功能讓人驚豔。他們的文件也寫得相當好，基本上跟著一遍 Tutorial 就能掌握 React Router V6 的大致功能。"
+excerpt: "React Router 團隊最近又來一次全面升級，新增了許多功能，特別是 Loader 功能讓人驚豔。他們的文件也寫得相當好，基本上跟著走一遍 Tutorial 就能掌握 React Router V6 的大致功能哩。"
 tags: ["React", "React Router"]
 date: "2023-03-01"
 ---
 
 不多說，讓我們重新開始，就從建立路由開始吧 ⋯⋯ ( Ꙭ)🥕
 
-## 資料夾結構 - Folder Structure
+## 資料夾結構
 
 首先，你的 React 專案會有一個 `src` 資料夾，裡面的 `App.js(x)` 或 `main.js(x)` 就是你的進入點 (Entry)。
 
@@ -15,9 +15,9 @@ date: "2023-03-01"
 
 ## 建立路由 - createBrowserRouter
 
-在進入點檔案中，我們需要宣告路由。透過 `createBrowserRouter()` 方法，傳入由物件組成的陣列，每個物件就是一組路由，最後把回傳的值用 `router` 接起來，傳入 `RouterProvider。`
+在進入點檔案中，我們需要宣告路由。透過 `createBrowserRouter()` 方法，傳入由物件組成的陣列，每個物件就是一組路由，最後把回傳的值用 `router` 接起來，傳入 `RouterProvider`。
 
-```javascript
+```jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "@/routes/Home";
 import ProductsPage from "@/routes/Products";
@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 ```
 
-補充一下，有些人會把這個 `App.js(x)` 只當作宣告路由的元件，再把 `RouterProvider` 匯出去給額外的進入點像是 `index.js(x)` 使用，效果都是一樣的，我只是不想要有那麼多檔案。
+> 補充一下，有些人會把這個 `App.js(x)` 只當作宣告路由的元件，再把 `RouterProvider` 匯出去給額外的進入點像是 `index.js(x)` 使用，效果都是一樣的，我只是不想要有那麼多檔案。
 
 > 至於另一種建立方法 `createRoutesFromElement` 較為冗長，跟以前使用 JSX 的寫法相似，這裡不予介紹。
 
@@ -42,14 +42,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 在 React Router 中，要實現頁面跳轉的功能，我們並不使用原生的 `<a>` 標籤，而是使用 React Router 提供的 `<Link>` 元件。
 
-```javascript
+```jsx
 import { Link, NavLink } from "react-router-dom";
 <Link to="/products">Products Page</Link>;
 ```
 
 還有另一種路由鏈結是 `<NavLink>`，它與 `<Link>` 的作用相同，但內建了 `isActive` 和 `isPending` 兩個狀態屬性。你可以將它們解構出來，用於判斷當前路由的狀態，並動態地設置樣式。
 
-```javascript
+```jsx
 const getNavLinkClass = ({ isActive, isPending }) => {
   if (isActive) {
     return "active";
@@ -72,7 +72,7 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 - Home 只會對應到網站的根路由 (`'/'`)，也就是後面不帶任何路徑時
 - Blog 只會對應到 `/blog`，當進入 `/blog/hello-world` 頁面時不會有 `isActive` 狀態
 
-```javascript
+```jsx
 <NavLink to="/" end>Home</NavLink>
 <NavLink to="/blog" end>Blog</NavLink>
 <NavLink to={`/blog/hello-world`}>Hello World</NavLink>
@@ -82,24 +82,9 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 
 一個網站通常會有一個共用的外框，例如上方或左側的導覽列、商標、版權宣告等等，這些內容會全部放在一個 Layout 元件當中。
 
-在路由配置中，這個 Root Layout 元件就是一個父路由，使用 `children` 配置子頁面，即子路由。
+以下的 RootLayout 元件就是一個父路由，我們會使用 `children` 配置子路由 (待會會看到)，而那些子頁面的內容就會顯示在 `<Outlet />` 這個輸出點的位置。
 
-```javascript
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    children: [
-      { path: "/", element: <HomePage /> },
-      { path: "/products", element: <ProductsPage /> },
-    ],
-  },
-]);
-```
-
-以下是一個簡單的 Layout 元件，子頁面 `children` 的內容會顯示在 `<Outlet />` 這個輸出點的位置。
-
-```javascript
+```jsx
 import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
@@ -114,11 +99,34 @@ const RootLayout = () => {
 export default RootLayout;
 ```
 
+## 巢狀路由的相對與絕對路徑
+
+路由配置上，使用 `"/"` 開頭的路徑為絕對路徑，通常父路由會使用絕對路徑，子路由使用相對路徑並且依賴於父路由。例如：父路由 `"/root"` 等於網址 `my-domain/root`，而子路由 `"products"` 的網址是 `/root/products`。
+
+接下來，還有一個小地方可以調整，那就是子路由的 HomePage 與父路由，其實是指向同一個路由。這種情況下，我們可以把 `path: ""` 改用 `index` 這個特殊的屬性去定義，明顯表示 HomePage 是一個 Index Route。
+
+```jsx
+const router = createBrowserRouter([
+  {
+    path: "/", // 絕對路徑
+    element: <RootLayout />,
+    children: [
+      // 相對路徑
+      // { path: "", element: <HomePage /> },
+      { index: true, element: <HomePage /> },
+      { path: "products", element: <ProductsPage /> },
+    ],
+  },
+]);
+```
+
+> Index Route 會讓程式的語意更加明確，但是不使用也沒關係喔。
+
 ## 錯誤頁面 - errorElement
 
 如果進入一個未定義的路由，通常會顯示 404 錯誤頁面，上面可能會有一些錯誤訊息。但通常你不會想要直接使用 React Router 內建的錯誤頁面，因此我們來建立自己的錯誤頁面。
 
-```javascript
+```jsx
 import { useRouteError } from "react-router-dom";
 
 const ErrorPage = () => {
@@ -141,15 +149,15 @@ export default ErrorPage;
 
 完成了這個簡單的 404 頁面後，可以透過 `errorElement` 來配置這個錯誤處理的專屬頁面。
 
-```javascript
+```jsx
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
     errorElement: <ErrorPage />, // catch any errors
     children: [
-      { path: "/", element: <HomePage /> },
-      { path: "/products", element: <ProductsPage /> },
+      { index: true, element: <HomePage /> },
+      { path: "products", element: <ProductsPage /> },
     ],
   },
 ]);
@@ -161,7 +169,7 @@ const router = createBrowserRouter([
 
 透過 `react-router-dom` 提供的 `useNavigate` 函式，就可以執行程式化導頁。
 
-```javascript
+```jsx
 import { useNavigate } from "react-router-dom";
 
 const Home = ({ film }) => {
@@ -177,4 +185,56 @@ const Home = ({ film }) => {
     </div>
   );
 };
+```
+
+## 動態路由與 useParams
+
+動態路由在許多網站中都很常見，例如電商網站的所有商品頁面，點擊任一商品後便會進入商品明細頁。
+
+在 React Router 中，使用冒號 (`:`) 代表該片段屬於一個動態路由。
+
+```jsx
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "products", element: <ProductsPage /> },
+      { path: "products/:productId", element: <ProductDetailPage /> },
+    ],
+  },
+]);
+```
+
+我們可以透過 React Router 提供的 `useParams` Hook 去取得這個動態路由片段的資訊物件。
+
+這裡的 Identifier (`productId`) 是來自於路由設定裡的 `/product/:productId`，因此如果路由配置更改，這裡取得的 Identifier 也會跟著改變。
+
+```jsx
+import { useParams, Link } from "react-router-dom";
+
+const DUMMY_PRODUCTS = [
+  { id: "1", title: "Product 1" },
+  { id: "2", title: "Product 2" },
+];
+
+const ProductDetailPage = () => {
+  const params = useParams();
+
+  return (
+    <div>
+      <h1>Product Detail</h1>
+      <p>{params.productId}</p>
+      {DUMMY_PRODUCTS.map((product) => (
+        <li key={product.id}>
+          <Link to={`/products/${product.id}`}>{product.title}</Link>
+        </li>
+      ))}
+    </div>
+  );
+};
+
+export default ProductDetailPage;
 ```
