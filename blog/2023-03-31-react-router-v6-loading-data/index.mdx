@@ -123,7 +123,7 @@ const router = createBrowserRouter([
 
 這個機制的優點是能夠確保你已經取得資料，接著才去渲染畫面。但缺點是，使用者在切換路由時可能會出現延遲，搞不好還會因此以為網頁壞掉了。
 
-我們可以透過 `useNavigation` 的 `state` 去判斷該路由的狀態，並根據狀態加上 Loading 樣式。
+關於這個問題，我們可以透過 `useNavigation` 的 `state` 去判斷該路由的狀態，並根據狀態加上 Loading 樣式。
 
 ```jsx
 const RootLayout = () => {
@@ -140,3 +140,136 @@ const RootLayout = () => {
   );
 };
 ```
+
+提醒一下，`loader()` 是在 Browser 環境執行，而非在 Server 執行。
+
+另外，雖然是在 Browser 執行，但是 `loader()` 裡面不能使用像是 `useState` 等 React Hooks。
+
+## Throw Responses and Catch Errors with useRouteError
+
+在上一篇 React Router Setup 的文章裡，我們使用 `errorElement` 來指定當路由導向發生錯誤時，應該渲染的頁面或元件。而這個 Error 頁面除了用在處理錯誤的路由，同樣也能用來處理錯誤的 API 回應。
+
+範例：首先，在父路由（也就是最外層）設置錯誤頁面。
+
+```jsx
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <Error />, // catch any errors
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: "events",
+        element: <EventRootLayout />,
+        children: [
+          {
+            index: true,
+            element: <Events />,
+            loader: eventsLoader,
+          },
+        ],
+      },
+    ],
+  },
+]);
+```
+
+> 根據需求，你可以在父子路由個別設置 `errorElement`，但如果子路由沒有設置，那麼子路由的 Error 就會 Bubble Up 至父路由。
+
+接下來我們用 `throw new Response()` 的方式拋出錯誤，這是一個近期比較推薦的做法，因為這樣可以讓前端依照不同的 `status` 顯示不同資訊給使用者。
+
+```jsx
+// Events.js
+
+const EventsPage = () => {
+  const data = useLoaderData();
+  const events = data.events;
+
+  return <EventsList events={events} />;
+};
+
+export default EventsPage;
+
+export const loader = async () => {
+  const response = await fetch("http://localhost:8080/events");
+  if (!response.ok) {
+    throw new Response(JSON.stringify({ message: "Could not fetch events" }), {
+      status: 500,
+    });
+  } else {
+    return response;
+  }
+};
+```
+
+定義好錯誤訊息後，我們透過 React Router V6 提供的 `useRouteError` 去取得錯誤訊息。
+
+當我們是 Throw Responses 的時候，`useRouteError` 能透過 `JSON.parse(error.data)` 去取得回傳資料，以及透過 `error.status` 取得不同的狀態。
+
+```jsx
+// Error.js
+
+const Error = () => {
+  const error = useRouteError();
+
+  let title = "Oops!";
+  let message = "Sorry, an unexpected error has occurred.";
+
+  // API Error
+  if (error.status === 500) {
+    message = JSON.parse(error.data).message;
+  }
+
+  // Path Error
+  if (error.status === 404) {
+    title = "Not Found!";
+    message = "Could not find resource or page.";
+  }
+
+  return (
+    <PageContent title={title}>
+      <p>{message}</p>
+    </PageContent>
+  );
+};
+```
+
+> 如果你是回傳一般物件，像是 `return {message: "error"}`，那麼這個 `error` 就會是那個物件本身了。
+
+## The Utility Function: json()
+
+我必須承認，我自己看到回傳 Responses 的作法時覺得很麻煩，雖然遵循這個方式可以定義不同的錯誤狀態，以給予更好的使用者體驗，但是這讓 Code 變得複雜許多啊！
+
+還好！或許是因為 React Router V6 團隊也覺得很繁瑣，所以他們準備了一個 Utility Function 叫做 `json()` 讓我們使用 🥺
+
+總之，你剛剛上面那一大串，可以變成以下這樣。
+
+```jsx
+// Events.js
+
+export const loader = async () => {
+  const response = await fetch("http://localhost:8080/events22");
+  if (!response.ok) {
+    // throw new Response(JSON.stringify({ message: "Could not fetch events" }), {
+    //   status: 500,
+    // });
+    throw json({ message: "Could not fetch events" }, { status: 500 });
+  } else {
+    return response;
+  }
+};
+```
+
+與此同時，你用 `useRouteError` 取得 `error.data` 後也不需要再做 `JSON.parse()` 了。
+
+```jsx
+// Error.js
+
+if (error.status === 500) {
+  // message = JSON.parse(error.data).message;
+  message = error.data.message;
+}
+```
+
+可喜可賀 🍻
