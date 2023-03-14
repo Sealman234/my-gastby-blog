@@ -1,8 +1,8 @@
 ---
-title: "全面升級：重新學習 React Router"
+title: "React Router V6 - Setup"
 excerpt: "React Router 團隊最近又來一次全面升級，新增了許多功能，特別是 Loader 功能讓人驚豔。他們的文件也寫得相當好，基本上跟著走一遍 Tutorial 就能掌握 React Router V6 的大致功能哩。"
 tags: ["React", "React Router"]
-date: "2023-03-01"
+date: "2023-03-14"
 ---
 
 不多說，讓我們重新開始，就從建立路由開始吧 ⋯⋯ ( Ꙭ)🥕
@@ -34,9 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 ```
 
-> 補充一下，有些人會把這個 `App.js(x)` 只當作宣告路由的元件，再把 `RouterProvider` 匯出去給額外的進入點像是 `index.js(x)` 使用，效果都是一樣的，我只是不想要有那麼多檔案。
-
-> 至於另一種建立方法 `createRoutesFromElement` 較為冗長，跟以前使用 JSX 的寫法相似，這裡不予介紹。
+> 另一種建立方法 `createRoutesFromElement` 較為冗長，跟以前使用 JSX 的寫法相似，這裡不予介紹。
 
 ## 路由鏈結 - Link 與 NavLink
 
@@ -65,7 +63,7 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 </NavLink>;
 ```
 
-在 `<NavLink>` 使用 `end` 屬性，可以確保該元件不會在進入子路由時，被匹配為 `isActive` 等狀態。
+此外，在 `<NavLink>` 使用 `end` 屬性，可以確保該元件不會在進入子路由時，被匹配為 `isActive` 等狀態。
 
 例如：
 
@@ -82,7 +80,7 @@ const getNavLinkClass = ({ isActive, isPending }) => {
 
 一個網站通常會有一個共用的外框，例如上方或左側的導覽列、商標、版權宣告等等，這些內容會全部放在一個 Layout 元件當中。
 
-以下的 RootLayout 元件就是一個父路由，我們會使用 `children` 配置子路由 (待會會看到)，而那些子頁面的內容就會顯示在 `<Outlet />` 這個輸出點的位置。
+以下的 RootLayout 元件是一個父路由，我們會使用 `children` 配置子路由 (下面會介紹到)，而那些子頁面的內容就會顯示在 `<Outlet />` 這個輸出點的位置。
 
 ```jsx
 import { Outlet } from "react-router-dom";
@@ -103,7 +101,7 @@ export default RootLayout;
 
 路由配置上，使用 `"/"` 開頭的路徑為絕對路徑，通常父路由會使用絕對路徑，子路由使用相對路徑並且依賴於父路由。例如：父路由 `"/root"` 等於網址 `my-domain/root`，而子路由 `"products"` 的網址是 `/root/products`。
 
-接下來，還有一個小地方可以調整，那就是子路由的 HomePage 與父路由，其實是指向同一個路由。這種情況下，我們可以把 `path: ""` 改用 `index` 這個特殊的屬性去定義，明顯表示 HomePage 是一個 Index Route。
+接下來，還有一個小地方可以調整，可以看到子路由的 HomePage 與父路由其實是指向同一個路由，這種情況下，我們可以把 `path: ""` 改用 `index` 這個特殊的屬性去定義，明顯表示 HomePage 是一個 Index Route。
 
 ```jsx
 const router = createBrowserRouter([
@@ -191,10 +189,10 @@ const Home = ({ film }) => {
 
 動態路由在許多網站中都很常見，例如電商網站的所有商品頁面，點擊任一商品後便會進入商品明細頁。
 
-在 React Router 中，使用冒號 (`:`) 代表該片段屬於一個動態路由。
+在 React Router 中可以使用冒號 (`:`) 代表該片段屬於一個動態路由。
 
 ```jsx
-const router = createBrowserRouter([
+const router = "createBrowserRouter"([
   {
     path: "/",
     element: <RootLayout />,
@@ -238,3 +236,9 @@ const ProductDetailPage = () => {
 
 export default ProductDetailPage;
 ```
+
+## 回顧
+
+看完這篇文章，我們認識了 React Router V6 的基礎架構，瞭解如何用它來建立一套路由系統，並且能實際應用在專案上。
+
+下一篇文章會介紹 React Router V6 提供的全新功能 `Loader`，讓我們的路由系統更加全面。

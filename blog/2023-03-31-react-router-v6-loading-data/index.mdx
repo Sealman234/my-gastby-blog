@@ -1,0 +1,142 @@
+---
+title: "React Router V6 - Loading Data"
+excerpt: "上一篇介紹了 React Router V6 的基本架構，包含導頁、動態路由與巢狀路由，本文則會介紹 V6 全新的重要功能 Loader，來體驗一下它的威力吧！"
+tags: ["React", "React Router"]
+date: "2023-03-31"
+---
+
+## What's New in React Router v6
+
+「進入畫面後，需要 Call API 取得初始資料！」
+
+這個需求應該不陌生吧？許多頁面都有這個動作，例如：一進到商品頁，先取得商品資料。
+
+這麼做並沒錯，但是這在使用者體驗上較差，因爲當 User 進入頁面時，畫面或許還沒渲染完成。
+
+針對這一點，React Router V6 提供了 `loader` 這項功能，讓資料可以透過路由系統先行處理，在渲染前先 Loading Data。
+
+## 使用 loader 與 useLoaderData 獲取資料
+
+可以為路由定義 `loader` 參數，值為一個函式，並且預期會 Return 資料，讓我們在元件中取用。
+
+我們在 `loader` 使用 Async/Await 去呼叫 API，雖然這會回傳一個 Promise，但是 React Router 會確保 API 資料已經回傳，讓我們能夠在元件中取得 `resData.events` 的資料。
+
+```jsx
+// App.js
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        path: "events",
+        element: <EventRootLayout />,
+        children: [
+          {
+            index: true,
+            element: <Events />,
+            loader: async () => {
+              const response = await fetch("http://localhost:8080/events");
+              if (!response.ok) {
+                // Handle Error...
+              } else {
+                const resData = await response.json();
+                return resData.events;
+              }
+            },
+          },
+        ],
+      },
+    ],
+  },
+]);
+```
+
+然後我們就可以很輕鬆自在地，直接到元件裡面，透過 `useLoaderData` 取得 Events 資料。
+
+```jsx
+// Events.js
+
+const EventsPage = () => {
+  const events = useLoaderData();
+
+  return <EventsList events={events} />;
+};
+
+export default EventsPage;
+```
+
+嗯 ⋯⋯ 但是如果我們在 `App.js` 這類定義路由的檔案寫一堆 `loader`，那這個檔案不就會變得超大一包嗎？
+
+沒錯喔，所以建議的做法還是將 Loader 寫在 Page Component 裡面再 `export` 到路由裡面定義。
+
+```jsx
+// Events.js
+
+// ...
+export default EventsPage;
+
+export const loader = async () => {
+  const response = await fetch("http://localhost:8080/events");
+  if (!response.ok) {
+    // Handle Error...
+  } else {
+    const resData = await response.json();
+    return resData.events;
+  }
+};
+```
+
+在路由中 `import` 定義的 `loader` 時，可以用 alias 定義不同 Page 的 `loader` 名稱，例如 `Events` 就是 `eventsLoader`。
+
+```jsx
+// App.js
+
+import Events, { loader as eventsLoader } from "./pages/Events";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      ,
+      {
+        path: "events",
+        element: <EventRootLayout />,
+        children: [
+          {
+            index: true,
+            element: <Events />,
+            loader: eventsLoader,
+          },
+        ],
+      },
+    ],
+  },
+]);
+```
+
+## Behind The Scenes: When Are loader() Functions Executed
+
+如果你的 API 回傳時間較長，或是刻意讓 API 延遲回傳，就可以發現 Router 的跳轉，其實是等到 `loader` 取得資料後才執行。
+
+這個機制的優點是能夠確保你已經取得資料，接著才去渲染畫面。但缺點是，使用者在切換路由時可能會出現延遲，搞不好還會因此以為網頁壞掉了。
+
+我們可以透過 `useNavigation` 的 `state` 去判斷該路由的狀態，並根據狀態加上 Loading 樣式。
+
+```jsx
+const RootLayout = () => {
+  const navigation = useNavigation();
+
+  return (
+    <>
+      <MainNavigation />
+      <main>
+        {navigation.state === "loading" && <p>Loading...</p>}
+        <Outlet />
+      </main>
+    </>
+  );
+};
+```
