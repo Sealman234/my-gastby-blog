@@ -143,7 +143,7 @@ const RootLayout = () => {
 
 提醒一下，`loader()` 是在 Browser 環境執行，而非在 Server 執行。
 
-另外，雖然是在 Browser 執行，但是 `loader()` 裡面不能使用像是 `useState` 等 React Hooks。
+另外，雖然是在 Browser 執行，但是 `loader()` 裡面「不能」使用像是 `useState` 與 `useParams` 等 React Hooks。
 
 ## Throw Responses and Catch Errors with useRouteError
 
@@ -273,3 +273,94 @@ if (error.status === 500) {
 ```
 
 可喜可賀 🍻
+
+## 使用 loader() 的參數
+
+`loader` 自帶兩個參數 `request` 與 `params`：
+
+- `request` 為一個 Request 的 Standard Web Object，可以存取像是 URL 等資訊
+- `params` 為 Route Parameters，也就是動態路由冒號後面的 Segments
+
+例如：位於 `/events/:eventId` 頁面時，`loader()` 可以透過 `params.eventId` 取得動態路由的片段，進而取得活動的詳細資料。
+
+```jsx
+// EventDetail.js
+
+export const loader = async ({ request, params }) => {
+  const id = params.eventId;
+  const response = await fetch(`http://localhost:8080/events/${id}`);
+  if (!response.ok) {
+    throw json(
+      { message: "Could not fetch details for the selected event" },
+      {
+        status: 500,
+      },
+    );
+  } else {
+    return response;
+  }
+};
+```
+
+## 通過 useRouteLoaderData() 在子路由之間分享 loader
+
+如果當前的路由需要的 Loader 已經在其他路由定義過，我們就不用重複撰寫一次，可以經由 useRouteLoaderData Hook 來存取這份 Loader。
+
+路由之間想要分享同一份 Loader 時必須是子路由，我們可以新增一層父路由，不給予 `element` 而是只定義 `loader`，同時賦予一個 `id`，這樣裡面的子路由就能透過 `useRouteLoaderData(id)` 取得資料。
+
+範例：當 EditEvent 頁面也需要使用 EventDetail 頁面的 Loader 時，首先重新配置路由，將它們放在同一個父路由底下。
+
+```jsx
+// App.js
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    children: [
+      {
+        path: "events",
+        element: <EventRootLayout />,
+        children: [
+          {
+            path: ":eventId",
+            id: "event-detail", // 記得加上 ID
+            loader: eventDetailLoader, // 共用的 Loader
+            children: [
+              {
+                index: true,
+                element: <EventDetail />,
+              },
+              { path: "edit", element: <EditEvent /> },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);
+```
+
+在 EventDetail 頁面中，原本的 `useLoaderData` 改為使用 `useRouteLoaderData`。而 EditEvent 頁面也使用 `useRouteLoaderData("event-detail")` 取得 Loader 資料。
+
+```jsx
+// EventDetail.js
+const EventDetail = () => {
+  const data = useRouteLoaderData("event-detail");
+
+  return <EventItem event={data.event} />;
+};
+
+// EditEvent.js
+const EditEvent = () => {
+  const data = useRouteLoaderData("event-detail");
+
+  return (
+    <>
+      <h1>EditEvent</h1>
+      <EventForm event={data.event} />
+    </>
+  );
+};
+```
+
+> 注意：`useRouteLoaderData` 必須接收 Routes ID 這一個參數才能運作喔。
