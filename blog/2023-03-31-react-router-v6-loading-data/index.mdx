@@ -1,6 +1,6 @@
 ---
-title: "React Router V6 - Loading Data"
-excerpt: "上一篇介紹了 React Router V6 的基本架構，包含導頁、動態路由與巢狀路由，本文則會介紹 V6 全新的重要功能 Loader，來體驗一下它的威力吧！"
+title: "React Router V6 - Loading and Sending Data"
+excerpt: "上一篇介紹了 React Router V6 的基本架構，包含導頁、動態路由與巢狀路由，本文則會介紹 V6 全新的重要功能 Loader 以及 Action。"
 tags: ["React", "React Router"]
 date: "2023-03-31"
 ---
@@ -364,3 +364,61 @@ const EditEvent = () => {
 ```
 
 > 注意：`useRouteLoaderData` 必須接收 Routes ID 這一個參數才能運作喔。
+
+## Use Action to Send Form Data
+
+在 React 中，如果要提交表單，我們不會用原生的提交方式，可能會用 State 去管理表單資料，建立 Function 去 Call API 送出表單，最後再加上 Loading、錯誤提示與跳轉頁面等等。
+
+React Router V6 新增了 `action` 與 `<Form>` 元件，它會幫我們阻止原生的表單行為，並在 Route 中處理表單送出的動作。
+
+在使用 React Router 的 `<Form>` 時，要記得在輸入的欄位加上 `name` 這個 Prop。
+
+```jsx
+import { Form } from "react-router-dom";
+
+const EventForm = () => {
+  return (
+    <Form method="post">
+      <label htmlFor="title">Title</label>
+      <input id="title" type="text" name="title" />
+    </Form>
+  );
+};
+
+export default EventForm;
+```
+
+現在我們來建立 `action`。
+
+Action 與 Loader 一樣有 `request` 與 `params` 兩個參數，我們可以使用 `request` 提供的 `formData()` 方法，取得提交的 Form 資料。
+
+取得表單資料後，透過原生 FormData 提供的 `get(name)` 方法，去取得對應到的 name prop 的 value。
+
+```jsx
+export const action = async ({ request, params }) => {
+  const data = await request.formData();
+
+  const eventData = {
+    title: data.get("title"), // get() 對應到 name prop
+    image: data.get("image"),
+    date: data.get("date"),
+    description: data.get("description"),
+  };
+
+  const response = fetch("http://localhost:8080/events", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(eventData),
+  });
+
+  if (!response.ok) {
+    throw json({ message: "Could not send event" }, { status: 500 });
+  }
+
+  return redirect("/events");
+};
+```
+
+最後我們加上了 `return redirect("/events")`，這個 `redirect()` 也是 React Router 提供的函式，參數直接放上路由，就能做到重新導頁。
