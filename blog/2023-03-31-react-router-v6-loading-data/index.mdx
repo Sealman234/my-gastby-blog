@@ -365,13 +365,13 @@ const EditEvent = () => {
 
 > 注意：`useRouteLoaderData` 必須接收 Routes ID 這一個參數才能運作喔。
 
-## Use Action to Send Form Data
+## Use action() to Send Form Data
 
-在 React 中，如果要提交表單，我們不會用原生的提交方式，可能會用 State 去管理表單資料，建立 Function 去 Call API 送出表單，最後再加上 Loading、錯誤提示與跳轉頁面等等。
+在 React 中，如果要提交表單，我們通常不會採取原生的提交方式，而是利用 State 去管理表單資料，並建立 Function 去串接 API 以送出表單，可能還會加上 Loading 效果、處理 Error 與 Redirect 等等。
 
-React Router V6 新增了 `action` 與 `<Form>` 元件，它會幫我們阻止原生的表單行為，並在 Route 中處理表單送出的動作。
+React Router V6 新增了 `action` 與 `<Form>` 元件，它們會阻止原生的表單行為，並且在 Route 中處理表單送出的動作。
 
-在使用 React Router 的 `<Form>` 時，要記得在輸入的欄位加上 `name` 這個 Prop。
+以下是一個簡單的範例，在使用 React Router 的 `<Form>` 時，要記得在輸入的欄位加上 `name` 這個 Prop。
 
 ```jsx
 import { Form } from "react-router-dom";
@@ -388,18 +388,18 @@ const EventForm = () => {
 export default EventForm;
 ```
 
-現在我們來建立 `action`。
+接著我們建立 `action` 來做送出表單的行為。
 
-Action 與 Loader 一樣有 `request` 與 `params` 兩個參數，我們可以使用 `request` 提供的 `formData()` 方法，取得提交的 Form 資料。
+Action 與 Loader 一樣擁有 `request` 與 `params` 這兩個參數，我們可以使用 `request` 提供的 `formData()` 方法，取得提交的 Form 資料。
 
-取得表單資料後，透過原生 FormData 提供的 `get(name)` 方法，去取得對應到的 name prop 的 value。
+取得表單資料後，可以再透過原生 FormData 提供的 `get(name)` 方法，取得對應到的 name prop 的 value。
 
 ```jsx
 export const action = async ({ request, params }) => {
   const data = await request.formData();
 
   const eventData = {
-    title: data.get("title"), // get() 對應到 name prop
+    title: data.get("title"), // get("title") 對應到 name＝"title" 的 input
     image: data.get("image"),
     date: data.get("date"),
     description: data.get("description"),
@@ -421,4 +421,6 @@ export const action = async ({ request, params }) => {
 };
 ```
 
-最後我們加上了 `return redirect("/events")`，這個 `redirect()` 也是 React Router 提供的函式，參數直接放上路由，就能做到重新導頁。
+最後，我們透過 React Router 提供 `redirect()` 函式來重新導頁。我們傳入目標路由作為參數，並且選擇在成功取得回應後，透過 `return redirect("/events")` 讓 Router 執行導頁的動作。
+
+這麼一來，我們就可以在正確送出表單後回到指定的路由，而非傻傻地待在原頁囉。
