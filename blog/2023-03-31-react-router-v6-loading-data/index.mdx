@@ -405,7 +405,7 @@ export const action = async ({ request, params }) => {
     description: data.get("description"),
   };
 
-  const response = fetch("http://localhost:8080/events", {
+  const response = await fetch("http://localhost:8080/events", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -424,3 +424,61 @@ export const action = async ({ request, params }) => {
 最後，我們透過 React Router 提供 `redirect()` 函式來重新導頁。我們傳入目標路由作為參數，並且選擇在成功取得回應後，透過 `return redirect("/events")` 讓 Router 執行導頁的動作。
 
 這麼一來，我們就可以在正確送出表單後回到指定的路由，而非傻傻地待在原頁囉。
+
+## 使用 useSubmit 程式化提交表單
+
+結合 `react-router-dom` 提供的 `useSubmit` Hook 以及 `action()` 函式，我們也可以不使用 `<Form>` 元件，直接以程式化的方式去執行表單的送出與後續處理。
+
+以下範例中，我們希望用程式化的方式執行刪除功能，而非使用送出表單的方式。
+
+首先給刪除按鈕綁定 `startDeleteHandler` 函式，這個函式在執行後，會先出現 Confirm 提示，確認後會執行 `useSubmit` Hook 的功能。
+
+這個 `submit()` 函式可以放入兩個參數，第一個參數是 FormData 的物件，第二個參數是 Form 表單元素的 Properties。
+
+```jsx
+import { useSubmit } from "react-router-dom";
+
+const EventItem = ({ event }) => {
+  const submit = useSubmit();
+
+  const startDeleteHandler = () => {
+    const proceed = window.confirm("Are you sure you want to delete");
+
+    if (proceed) {
+      // params: FormData Object, Form Properties
+      submit(null, { method: "delete" });
+    }
+  };
+
+  return (
+    <article>
+      {/* ... */}
+      <button onClick={startDeleteHandler}>Delete</button>
+    </article>
+  );
+};
+
+export default EventItem;
+```
+
+按下送出後，`useSubmit` 會跟送出表單一樣觸發 Route 裡面所定義的 `action()`，所以我們要在負責執行刪除行為的路由元件中，定義 `action()` 的內容。
+
+當 `useSubmit` 觸發時，會執行 `action()` 去呼叫刪除的 API，並且 `useSubmit` 所定義的參數，也會一併傳入 `request` 當中。
+
+因此，在我們的範例中，撰寫 `fetch()` 的 `method` 時，就可以放入 `request.method` 哩。
+
+```jsx
+export const action = async ({ request, params }) => {
+  const eventId = params.eventId;
+
+  const response = await fetch(`http://localhost:8080/events/${eventId}`, {
+    method: request.method, // submit(null, { method: "delete" });
+  });
+
+  if (!response.ok) {
+    throw json({ message: "Could not delete event" }, { status: 500 });
+  }
+
+  return redirect("/events");
+};
+```
