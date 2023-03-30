@@ -25,7 +25,7 @@ const Projects = () => {
       <Heading>Projects</Heading>
       <ProjectTitle>
         <a
-          href="https://sealman234.github.io/MapleStoryShopV4"
+          href="https://sealman234.github.io/maplestory-shop"
           target="_blank"
           rel="noreferrer noopener"
         >
@@ -38,7 +38,7 @@ const Projects = () => {
       </p>
       <ProjectTitle>
         <a
-          href="https://sealman234.github.io/MaskMapV4"
+          href="https://sealman234.github.io/mask-map"
           target="_blank"
           rel="noreferrer noopener"
         >
