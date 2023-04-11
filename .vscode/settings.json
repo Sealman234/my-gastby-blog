@@ -1,12 +1,5 @@
 {
-  "git.ignoreLimitWarning": true,
-  "cSpell.words": [
-    "frontmatter",
-    "noopener",
-    "noreferrer",
-    "nowrap",
-    "Sealman"
-  ],
+  // Format Code Action
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
