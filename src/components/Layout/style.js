@@ -19,6 +19,9 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .blog-post {
+    animation-name: open-post;
+    animation-duration: 1s;
+
     h2 {
       padding-bottom: 0.3rem;
       border-bottom: 1px solid #eee;
@@ -106,6 +109,15 @@ export const GlobalStyle = createGlobalStyle`
     ul li {
       margin-top: 0.25rem;
       margin-bottom: 0.25rem;
+    }
+  }
+
+  @keyframes open-post {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
     }
   }
 `;
