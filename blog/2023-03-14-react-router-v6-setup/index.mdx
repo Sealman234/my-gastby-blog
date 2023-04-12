@@ -17,11 +17,9 @@ Folder Structure 其實沒有什麼特殊的變更，直接開始建立路由吧
 
 ## 建立路由 - createBrowserRouter
 
-在進入點檔案中，我們需要宣告路由。
+React Router v6.4 新增的 [Data APIs](https://reactrouter.com/en/main/routers/picking-a-router#using-v64-data-apis) 提供了幾個創建路由的新方式，我們使用其中的 `createBrowserRouter()` 方法來建立路由系統。
 
-透過 `createBrowserRouter()` 方法，傳入由物件組成的陣列，每一個物件就是一組路由。
-
-最後把回傳值用 `router` 接起來，並傳入 `RouterProvider` 中使用。
+此方法需要傳入一個由物件所組成的陣列（每一個物件就是一組路由），然後把回傳值提供給 `RouterProvider`。
 
 ```jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -171,7 +169,7 @@ const router = createBrowserRouter([
 
 ## 程式化導頁 - useNavigate
 
-除了使用 Link 來換頁，我們也可以手動地去執行路由跳轉的動作，例如：在表單送出或按下按鈕後導頁。
+除了使用 `<Link>` 來換頁，我們也可以手動地去執行路由跳轉的動作，例如：在表單送出或按下按鈕後導頁。
 
 透過 react-router-dom 提供的 `useNavigate` 函式，就可以執行程式化導頁。
 
