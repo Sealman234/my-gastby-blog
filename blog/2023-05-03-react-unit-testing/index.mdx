@@ -1,0 +1,24 @@
+---
+title: "Write Unit Tests with Jest and React Testing Library"
+excerpt: "本篇文章會介紹在 React 撰寫 Unit Test 的方式，主要包含 Jest 與 React Testing Library 這兩個測試工具。"
+tags: ["React", "Unit Testing", "Jest", "React Testing Library"]
+date: "2023-05-03"
+---
+
+## Setup
+
+1. 安裝 Jest: `jest`
+2. 安裝 React Testing Library: `jest-environment-jsdom`、`@testing-library/react`、`@testing-library/jest-dom`、`@testing-library/user-event`
+3. 安裝 Babel: `babel-jest`、`babel-loader`
+
+## Configuration
+
+1. 調整 Babel 配置: 修改 babel.config.js
+2. 調整 ESLint 配置: 安裝 `eslint-plugin-jest`、`eslint-plugin-jest-dom`，修改 .eslintrc
+3. 調整 Jest 配置: 安裝 `jest-transform-stub` 與 `jest-canvas-mock`，新增 setupTests.js，修改 jest.config.js
+4. 調整 JS 配置: 修改 jsconfig.json
+
+## Mock
+
+1. 新增 **mocks** 資料夾，模擬 `axios` 等套件結果
+2. 使用到 `react-router`、`react-i18next` 與 Context API 時的 Mock 寫法
