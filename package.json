@@ -19,7 +19,7 @@
     "@mdx-js/react": "^2.2.1",
     "babel-plugin-styled-components": "^2.0.7",
     "caniuse-lite": "^1.0.30001449",
-    "gatsby": "^5.10.0",
+    "gatsby": "^5.13.7",
     "gatsby-plugin-google-gtag": "^5.9.0",
     "gatsby-plugin-image": "^3.5.0",
     "gatsby-plugin-manifest": "^5.5.0",
